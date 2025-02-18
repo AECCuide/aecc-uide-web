@@ -1,16 +1,17 @@
 import Image from "next/image";
+import getConfig from 'next/config';
 
-
+const { basePath } = getConfig().publicRuntimeConfig || {}; // Fallback en caso de que no esté definido
 
 export default function Home() {
-  const { basePath } = require("next/config").default().publicRuntimeConfig;
+
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
-          src={`${basePath}/public/next.svg`}  // Correcto para producción y desarrollo
+          src={`${basePath}/next.svg`}  // Correcto para producción y desarrollo
           alt="Next.js logo"
           width={180}
           height={38}
@@ -62,7 +63,8 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="@/public/file.svg"
+            src={`${basePath}/file.svg`}  
+            
             alt="File icon"
             width={16}
             height={16}
@@ -92,7 +94,7 @@ export default function Home() {
         >
           <Image
             aria-hidden
-            src="@/public/globe.svg"
+            src={`${basePath}/globe.svg`} 
             alt="Globe icon"
             width={16}
             height={16}
