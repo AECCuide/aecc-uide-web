@@ -1,7 +1,6 @@
 import Image from 'next/image';
-import getConfig from 'next/config';
 
-const { basePath } = getConfig().publicRuntimeConfig || {}; // Fallback en caso de que no esté definido
+const imagePath: string = '/aecc-uide-web'; // Asegúrate de que la ruta sea correcta
 
 export default function Home() {
 	return (
@@ -9,7 +8,7 @@ export default function Home() {
 			<main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
 				<Image
 					className="dark:invert"
-					src="./next.svg"
+					src={`${imagePath}/next.svg`}
 					alt="Next.js logo"
 					width={180}
 					height={38}
@@ -35,7 +34,7 @@ export default function Home() {
 					>
 						<Image
 							className="dark:invert"
-							src="./vercel.svg"
+							src={`${imagePath}/vercel.svg`}
 							alt="Vercel logomark"
 							width={20}
 							height={20}
@@ -61,7 +60,7 @@ export default function Home() {
 				>
 					<Image
 						aria-hidden
-						src="./file.svg"
+						src={`${imagePath}/file.svg`}
 						alt="File icon"
 						width={16}
 						height={16}
@@ -76,7 +75,7 @@ export default function Home() {
 				>
 					<Image
 						aria-hidden
-						src="./window.svg" // Usando basePath correctamente
+						src={`${imagePath}/window.svg`}
 						alt="Window icon"
 						width={16}
 						height={16}
@@ -91,7 +90,7 @@ export default function Home() {
 				>
 					<Image
 						aria-hidden
-						src="./globe.svg"
+						src={`${imagePath}/globe.svg`}
 						alt="Globe icon"
 						width={16}
 						height={16}
