@@ -1,65 +1,8 @@
 'use client';
 
-import React, { JSX } from 'react';
+import React from 'react';
 import { useTheme } from 'next-themes';
-import { Facebook, Twitter, Instagram } from 'lucide-react';
-
-export interface Social {
-	icon: JSX.Element;
-	href: string;
-}
-export interface Authors {
-	id: number;
-	perfilGithub: string;
-	name: string;
-	href: string;
-}
-
-export interface FooterData {
-	title: string;
-	titleFollow: string;
-	authors: Authors[];
-	socials: Social[];
-}
-
-const footerData: FooterData = {
-	title: 'Autores',
-	authors: [
-		{
-			id: 1,
-			perfilGithub: 'https://avatars.githubusercontent.com/u/155678368?v=4',
-			name: 'Auca',
-			href: 'https://github.com/Auc4',
-		},
-		{
-			id: 2,
-			perfilGithub: 'https://avatars.githubusercontent.com/u/199831834?v=4',
-			name: 'Melqp',
-			href: 'https://github.com/Melqp',
-		},
-		{
-			id: 3,
-			perfilGithub: 'https://avatars.githubusercontent.com/u/70347526?v=4',
-			name: 'fait-arch',
-			href: 'https://github.com/fait-arch',
-		},
-	],
-	titleFollow: 'Redes Sociales',
-	socials: [
-		{
-			icon: <Facebook className="text-blue-600" />,
-			href: 'https://facebook.com',
-		},
-		{
-			icon: <Twitter className="text-blue-400" />,
-			href: 'https://twitter.com',
-		},
-		{
-			icon: <Instagram className="text-pink-500" />,
-			href: 'https://instagram.com',
-		},
-	],
-};
+import footerData from './footerData';
 
 export default function CustomFooter() {
 	const { theme } = useTheme();
@@ -67,7 +10,7 @@ export default function CustomFooter() {
 
 	return (
 		<div
-			className="py-6 px-40 transition-colors border"
+			className="py-6 px-4 sm:px-8 md:px-16 lg:px-40 transition-colors border"
 			style={{
 				backgroundColor: isDarkTheme ? 'var(--background)' : 'var(--card)',
 				color: 'var(--foreground)',
@@ -92,7 +35,6 @@ export default function CustomFooter() {
 						))}
 					</div>
 				</div>
-
 				{/* Logo */}
 				<div
 					className="text-2xl font-bold"
@@ -101,10 +43,8 @@ export default function CustomFooter() {
 					AECC
 				</div>
 			</div>
-
 			{/* Línea divisoria */}
 			<hr className="my-4" style={{ borderColor: 'var(--border)' }} />
-
 			{/* Segunda fila */}
 			<div className="flex items-center gap-6">
 				<h3 className="font-bold text-lg">{footerData.title}</h3>
@@ -118,11 +58,7 @@ export default function CustomFooter() {
 								className="w-6 h-6 bg-cover bg-center rounded-full"
 								style={{ backgroundImage: `url(${author.perfilGithub})` }}
 							></div>
-							<a
-								href={author.href} // Aquí va el link del perfil de GitHub
-								target="_blank" // Para abrir el enlace en una nueva pestaña
-								rel="noopener noreferrer" // Mejor seguridad cuando abres enlaces externos
-							>
+							<a href={author.href} target="_blank" rel="noopener noreferrer">
 								<p className="text-sm">{author.name}</p>
 							</a>
 						</div>
