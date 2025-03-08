@@ -5,7 +5,8 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import type React from 'react';
 import { RenderMounted } from '@/components/render-mounted';
-import { MenuBar } from '@/components/menu-bar';
+import { MenuBar } from '@/modules/customer/home/components/menu-bar';
+import Footer from '@/modules/customer/home/components/footer/footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
 					>
 						<MenuBar />
 						{children}
+						<Footer />
 					</ThemeProvider>
 				</RenderMounted>
 			</body>
