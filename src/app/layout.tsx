@@ -17,13 +17,13 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				<title>ShipModule</title>
+				<title>AECC</title>
 			</head>
 			<body className={inter.className}>
 				<RenderMounted>
 					<ThemeProvider
 						attribute="class"
-						defaultTheme="light"
+						defaultTheme="dark"
 						enableSystem={false}
 					>
 						<MenuBar />

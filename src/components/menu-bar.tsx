@@ -96,7 +96,7 @@ export function MenuBar() {
 
 	return (
 		<motion.nav
-			className="p-2 rounded-2xl bg-gradient-to-b from-background/80 to-background/40 backdrop-blur-lg border border-border/40 shadow-lg relative overflow-hidden"
+			className="p-2 bg-gradient-to-b from-background/80 to-background/40 backdrop-blur-lg border border-border/40 shadow-lg relative overflow-hidden "
 			initial="initial"
 			whileHover="hover"
 		>
@@ -108,7 +108,11 @@ export function MenuBar() {
 				} to-transparent rounded-3xl z-0 pointer-events-none`}
 				variants={navGlowVariants}
 			/>
-			<ul className="flex items-center gap-2 relative z-10">
+			<div className="flex justify-center">Logo</div>
+			<ThemeToggle />
+
+			<ul className="hidden sm:flex items-center gap-2 relative z-10 justify-center">
+				<div>Logo</div>
 				{menuItems.map((item, index) => (
 					<motion.li key={item.label} className="relative">
 						<motion.div

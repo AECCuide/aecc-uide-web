@@ -9,7 +9,6 @@ export default function Page() {
 			<Button
 				variant="default"
 				size="default"
-				className="mb-4"
 				onClick={() => console.log('Click')}
 			>
 				Default
