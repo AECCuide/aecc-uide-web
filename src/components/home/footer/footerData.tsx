@@ -28,15 +28,15 @@ const footerData: FooterData = {
 	titleFollow: 'Redes Sociales',
 	socials: [
 		{
-			icon: <Facebook className="text-red-300" />,
+			icon: <Facebook />,
 			href: 'https://facebook.com',
 		},
 		{
-			icon: <Twitter className="text-red-300" />,
+			icon: <Twitter />,
 			href: 'https://twitter.com',
 		},
 		{
-			icon: <Instagram className="text-red-300" />,
+			icon: <Instagram />,
 			href: 'https://instagram.com',
 		},
 	],

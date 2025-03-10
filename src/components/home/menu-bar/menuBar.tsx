@@ -12,7 +12,7 @@ import {
 	navGlowVariants,
 	sharedTransition,
 } from './menuBarData';
-import { AlignJustify } from 'lucide-react';
+//import { AlignJustify } from 'lucide-react';
 
 export function MenuBar() {
 	const { theme } = useTheme();
@@ -35,15 +35,19 @@ export function MenuBar() {
 
 			{/* Vista de la barra de navegación en celular */}
 			<div className="sm:hidden flex justify-between items-center px-4 w-full">
-				<AlignJustify className="h-6 w-6" />
+				{/* <AlignJustify className="h-6 w-6" /> */}
 				<div className="flex justify-center w-full">
-					<div className="text-lg font-bold">AECC</div>
+					<div className="text-lg font-bold">
+						<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
+					</div>
 				</div>
 			</div>
 
 			{/*Vista de la barra de navegación en computadora*/}
 			<ul className="hidden sm:flex items-center gap-2 relative z-10 justify-center">
-				<div>AECC</div>
+				<div className="text-lg font-bold">
+					<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
+				</div>
 				{menuItems.map((item) => (
 					<motion.li key={item.label} className="relative">
 						<motion.div

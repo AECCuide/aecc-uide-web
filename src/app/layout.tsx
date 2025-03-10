@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import type React from 'react';
 import { RenderMounted } from '@/components/render-mounted';
-import { MenuBar } from '@/modules/customer/home/menu-bar/menuBar';
-import Footer from '@/modules/customer/home/footer/footer';
+import { MenuBar } from '@/components/home/menu-bar/menuBar';
+import Footer from '@/components/home/footer/footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
