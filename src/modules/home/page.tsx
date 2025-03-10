@@ -1,6 +1,6 @@
 'use client';
 import { useTheme } from 'next-themes';
-import Logo from './icon/aeccIcon.tsx';
+import Logo from './icon/aeccIcon';
 
 export default function Home() {
 	const { theme } = useTheme(); // Obtiene el tema actual
