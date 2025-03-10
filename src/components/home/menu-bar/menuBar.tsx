@@ -34,16 +34,16 @@ export function MenuBar() {
 			/>
 
 			{/* Vista de la barra de navegación en celular */}
-			<div className="sm:hidden flex justify-between items-center px-4 w-full">
-				{/* <AlignJustify className="h-6 w-6" /> */}
-				<div className="flex justify-center w-full">
-					<div className="text-lg font-bold">
-						<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
-					</div>
-				</div>
-			</div>
+<div className="sm:hidden flex justify-between items-center w-full px-4">
+  <div className="text-lg font-bold">
+    <a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
+  </div>
+  <div>
+    <ThemeToggle />
+  </div>
+</div>
 
-			{/*Vista de la barra de navegación en computadora*/}
+      {/*Vista de la barra de navegación en computadora*/}
 			<ul className="hidden sm:flex items-center gap-2 relative z-10 justify-center">
 				<div className="text-lg font-bold">
 					<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
