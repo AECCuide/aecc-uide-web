@@ -45,7 +45,8 @@
 /* Modo oscuro: sobrescribe las variables con colores oscuros */
 .dark {
 	--text-color: rgb(255, 212, 42);
-	--background: oklch(0.145 0 0);
+	--background: rgb(24, 24, 24);
+	--background-bar: rgb(14, 14, 14);
 	--foreground: oklch(0.985 0 0);
 	--card: oklch(0.145 0 0);
 	--card-foreground: oklch(0.985 0 0);

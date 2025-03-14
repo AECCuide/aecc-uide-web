@@ -10,7 +10,7 @@ export default function CustomFooter() {
 
 	return (
 		<div
-			className="py-6 px-4 sm:px-8 md:px-16 lg:px-40 transition-colors border"
+			className="py-6 px-4 sm:px-8 md:px-26 lg:px-40 transition-colors border"
 			style={{
 				backgroundColor: isDarkTheme ? 'var(--background)' : 'var(--card)',
 				color: 'var(--foreground)',

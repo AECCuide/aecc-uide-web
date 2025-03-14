@@ -20,7 +20,7 @@ export function MenuBar() {
 
 	return (
 		<motion.nav
-			className="p-2 bg-gradient-to-b from-background/80 to-background/40 backdrop-blur-lg border border-border/40 shadow-lg relative overflow-hidden "
+className="p-1 lg:flex lg:min-h-12 lg:gap-sm lg:bg-manitoulinBlack lg:px-4 from-background/80 to-background/40 backdrop-blur-lg border border-border/40 shadow-lg relative overflow-hidden bg-(--background-bar) fixed top-0 left-0 right-0 z-50"
 			initial="initial"
 			whileHover="hover"
 		>
@@ -34,24 +34,27 @@ export function MenuBar() {
 			/>
 
 			{/* Vista de la barra de navegación en celular */}
-<div className="sm:hidden flex justify-between items-center w-full px-4">
-  <div className="text-lg font-bold">
-    <a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
-  </div>
-  <div>
-    <ThemeToggle />
-  </div>
-</div>
+			<div className="sm:hidden flex justify-between items-center px-4 w-full">
+				{/* <AlignJustify className="h-6 w-6" /> */}
+				<div className="flex justify-center w-full">
+					<div className="text-lg font-bold ">
+						<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
+					</div>
 
-      {/*Vista de la barra de navegación en computadora*/}
+					<ThemeToggle />
+				</div>
+			</div>
+
+			{/*Vista de la barra de navegación en computadora*/}
 			<ul className="hidden sm:flex items-center gap-2 relative z-10 justify-center">
-				<div className="text-lg font-bold">
+				<div className="text-lg font-bold ">
 					<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
 				</div>
+        <div className="ml-8 sm:flex items-center  ">
 				{menuItems.map((item) => (
 					<motion.li key={item.label} className="relative">
 						<motion.div
-							className="block rounded-xl overflow-visible group relative"
+							className=" block rounded-xl overflow-visible group relative"
 							style={{ perspective: '600px' }}
 							whileHover="hover"
 							initial="initial"
@@ -67,7 +70,7 @@ export function MenuBar() {
 							/>
 							<motion.a
 								href={item.href}
-								className="flex items-center gap-2 px-4 py-2 relative z-10 bg-transparent text-muted-foreground group-hover:text-foreground transition-colors rounded-xl"
+								className="flex items-center gap-2 px-4  relative z-10 bg-transparent text-muted-foreground group-hover:text-foreground transition-colors rounded-xl"
 								variants={itemVariants}
 								transition={sharedTransition}
 								style={{
@@ -103,7 +106,10 @@ export function MenuBar() {
 						</motion.div>
 					</motion.li>
 				))}
-				<ThemeToggle />
+        </div> 
+        <div className="flex w-full items-center justify-end gap-sm md:gap-md">
+          <ThemeToggle />
+        </div>
 			</ul>
 		</motion.nav>
 	);
