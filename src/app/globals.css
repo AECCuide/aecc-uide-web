@@ -1,11 +1,24 @@
 /* Importa Tailwind CSS para utilizar su sistema de clases y estilos */
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate'; /* Agrega el plugin 'tailwindcss-animate' para animaciones en Tailwind */
 /*Define una variante personalizada llamada 'dark' que se aplica a elementos dentro de .dark */
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-TitleH1: "Roboto", sans-serif; 
+  
+}
+
+.title-h1 {
+  font-family: var(--font-TitleH1);
+  font-size: 32px; /* Aumenta el tamaño a 32px o lo que prefieras */
+  font-weight: bold;
+}
+
 /* Define variables CSS personalizadas para la paleta de colores en modo claro */
 :root {
+  
 	--text-color: rgb(255, 212, 42);
 	--background: rgb(255, 255, 255);
 	--foreground: rgb(37, 37, 37);
