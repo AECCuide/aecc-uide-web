@@ -18,7 +18,7 @@
 
 /* Define variables CSS personalizadas para la paleta de colores en modo claro */
 :root {
-  
+  --color:  rgb(255, 212, 42); 
 	--text-color: rgb(255, 212, 42);
 	--background: rgb(255, 255, 255);
 	--foreground: rgb(37, 37, 37);
