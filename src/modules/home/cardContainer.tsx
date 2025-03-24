@@ -1,4 +1,4 @@
-// components/CardContainer.tsx
+//src/modules/home/CardContainer
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 
@@ -10,6 +10,7 @@ interface CardData {
 	title?: string;
 	description?: string;
 	tags?: string[];
+	url?: string;
 }
 
 interface CardContainerProps {
@@ -27,11 +28,23 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 		}
 	}, [cardsData]);
 
+	// Función para manejar el clic en una card
+	const handleCardClick = (url?: string) => {
+		if (url) {
+			window.open(url, '_blank'); // Abre en una nueva pestaña
+			// Alternativa: window.location.href = url; // Abre en la misma pestaña
+		}
+	};
+
 	return (
 		<div className="w-full overflow-x-auto">
 			<div className="flex gap-4 pb-4">
 				{visibleCards.map((cardData, index) => (
-					<div key={`card-${index}`} className="flex-shrink-0">
+					<div
+						key={`card-${index}`}
+						className="flex-shrink-0 cursor-pointer"
+						onClick={() => handleCardClick(cardData.url)}
+					>
 						<Card cardData={cardData} />
 					</div>
 				))}

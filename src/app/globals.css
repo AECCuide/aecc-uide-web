@@ -1,24 +1,23 @@
 /* Importa Tailwind CSS para utilizar su sistema de clases y estilos */
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate'; /* Agrega el plugin 'tailwindcss-animate' para animaciones en Tailwind */
 /*Define una variante personalizada llamada 'dark' que se aplica a elementos dentro de .dark */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-TitleH1: "Roboto", sans-serif; 
-  
+	--font-TitleH1: 'Roboto', sans-serif;
 }
 
 .title-h1 {
-  font-family: var(--font-TitleH1);
-  font-size: 32px; /* Aumenta el tamaño a 32px o lo que prefieras */
-  font-weight: bold;
+	font-family: var(--font-TitleH1);
+	font-size: 32px; /* Aumenta el tamaño a 32px o lo que prefieras */
+	font-weight: bold;
 }
 
 /* Define variables CSS personalizadas para la paleta de colores en modo claro */
 :root {
-  --color:  rgb(255, 212, 42); 
+	--color: rgb(255, 212, 42);
 	--text-color: rgb(255, 212, 42);
 	--background: rgb(255, 255, 255);
 	--foreground: rgb(37, 37, 37);
@@ -39,11 +38,6 @@
 	--border: rgb(235, 235, 235);
 	--input: rgb(235, 235, 235);
 	--ring: rgb(181, 181, 181);
-	--chart-1: rgb(255, 170, 0);
-	--chart-2: rgb(76, 197, 255);
-	--chart-3: rgb(93, 124, 255);
-	--chart-4: rgb(190, 255, 76);
-	--chart-5: rgb(219, 255, 76);
 	--radius: 0.625rem;
 	--sidebar: rgb(251, 251, 251);
 	--sidebar-foreground: rgb(37, 37, 37);
@@ -58,38 +52,33 @@
 /* Modo oscuro: sobrescribe las variables con colores oscuros */
 .dark {
 	--text-color: rgb(255, 212, 42);
-	--background: rgb(24, 24, 24);
-	--background-bar: rgb(14, 14, 14);
+	--background: #181818; /* Fondo principal */
+	--background-bar: #0e0e0e; /* Barra de fondo */
 	--foreground: oklch(0.985 0 0);
-	--card: oklch(0.145 0 0);
+	--card: #202020; /* Fondo de tarjetas */
 	--card-foreground: oklch(0.985 0 0);
-	--popover: oklch(0.145 0 0);
+	--popover: #202020; /* Fondo de popovers */
 	--popover-foreground: oklch(0.985 0 0);
 	--primary: oklch(0.985 0 0);
-	--primary-foreground: oklch(0.205 0 0);
-	--secondary: oklch(0.269 0 0);
+	--primary-foreground: #343434; /* Fondo para elementos primarios */
+	--secondary: #4d4d4d; /* Fondo para elementos secundarios */
 	--secondary-foreground: oklch(0.985 0 0);
-	--muted: oklch(0.269 0 0);
+	--muted: #4d4d4d; /* Fondo para elementos muted */
 	--muted-foreground: oklch(0.708 0 0);
-	--accent: oklch(0.269 0 0);
+	--accent: #4d4d4d; /* Fondo para elementos de acento */
 	--accent-foreground: oklch(0.985 0 0);
 	--destructive: oklch(0.396 0.141 25.723);
 	--destructive-foreground: oklch(0.637 0.237 25.331);
-	--border: oklch(0.269 0 0);
-	--input: oklch(0.269 0 0);
+	--border: #4d4d4d; /* Color del borde */
+	--input: #4d4d4d; /* Fondo de inputs */
 	--ring: oklch(0.439 0 0);
-	--chart-1: oklch(0.488 0.243 264.376);
-	--chart-2: oklch(0.696 0.17 162.48);
-	--chart-3: oklch(0.769 0.188 70.08);
-	--chart-4: oklch(0.627 0.265 303.9);
-	--chart-5: oklch(0.645 0.246 16.439);
-	--sidebar: oklch(0.205 0 0);
+	--sidebar: #0e0e0e; /* Fondo de la barra lateral */
 	--sidebar-foreground: oklch(0.985 0 0);
 	--sidebar-primary: oklch(0.488 0.243 264.376);
 	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.269 0 0);
+	--sidebar-accent: #4d4d4d; /* Fondo de acento en la barra lateral */
 	--sidebar-accent-foreground: oklch(0.985 0 0);
-	--sidebar-border: oklch(0.269 0 0);
+	--sidebar-border: #4d4d4d; /* Borde de la barra lateral */
 	--sidebar-ring: oklch(0.439 0 0);
 }
 
