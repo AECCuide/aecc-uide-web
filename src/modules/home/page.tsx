@@ -38,18 +38,16 @@ export default function Home() {
 			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
 				<div className="mb-3">
 					<h1 className="title-h1">Titulo </h1>
-					<p>Texto generico de saludo</p>
 				</div>
 				<CardContainer cardsData={cardsData} />
 			</div>
 
-			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
+			<hr
+				className="mx-8 sm:mx-8 md:mx-16 lg:mx-20 xl:mx-20 my-20"
+				style={{ borderColor: 'var(--border)' }}
+			/>
+			<div className=" px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
 				{/* Línea divisoria */}
-				<hr className="my-4" style={{ borderColor: 'var(--border)' }} />
-				<div className="mb-3">
-					<h1 className="title-h1">Titulo</h1>
-					<p>Texto generico de saludo</p>
-				</div>
 				<YearlyTimeline />
 			</div>
 		</div>
