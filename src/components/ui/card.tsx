@@ -30,15 +30,13 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 		<div className="w-80">
 			{/* Image visualization */}
 			<div className="relative bg-[var(--color-card)] rounded-3xl overflow-hidden">
-				{/* Contenedor de la imagen con ancho fijo */}
-				<div className="w-full flex justify-center">
-					<div className="w-72 h-32 flex-shrink-0">
-						<img
-							src={image || '/api/placeholder/300/120'}
-							alt={title || 'Network visualization'}
-							className="w-full h-full object-cover"
-						/>
-					</div>
+				{/* Contenedor de la imagen ajustado */}
+				<div className="w-full h-32 relative">
+					<img
+						src={image || '/api/placeholder/300/120'}
+						alt={title || 'Network visualization'}
+						className="absolute inset-0 w-full h-full object-cover"
+					/>
 				</div>
 
 				{/* Badge overlay - solo se muestra si hay un badge */}

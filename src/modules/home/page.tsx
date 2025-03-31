@@ -6,23 +6,25 @@ import { YearlyTimeline } from './components/timeLine/index.tsx';
 
 const cardsData = [
 	{
-		image: '/api/placeholder/300/120',
+		image:
+			'https://i.pinimg.com/736x/83/70/f6/8370f63ff294a7582c596621c28a6de8.jpg',
 		badge: 'RUN ANYWHERE',
 		provider: 'deepseek-ai',
 		title: 'deepseek-r1',
 		description:
 			'State-of-the-art, high-efficiency LLM excelling in reasoning, math, and coding.',
 		tags: ['math', 'advanced reasoning', 'chat'],
-		url: 'https://www.deepseek-ai.com/deepseek-r1',
+		slug: 'ceramic-vase',
 	},
 	{
-		image: '/api/placeholder/300/120',
+		image:
+			'https://i.pinimg.com/736x/88/98/65/889865e2df8b49c05875c62cf9c5670f.jpg',
 		badge: 'NEW',
 		provider: 'anthropic',
 		title: 'claude-3',
 		description: 'Advanced language model with strong reasoning capabilities.',
 		tags: ['reasoning', 'chat', 'document analysis', 'reasoning', 'reasoning'],
-		url: 'https://www.anthropic.com/claude-3',
+		slug: 'ceramic-vase',
 	},
 
 	// Puedes añadir más objetos para crear más tarjetas
