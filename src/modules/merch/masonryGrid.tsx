@@ -67,7 +67,7 @@ const TrueMasonryGallery: React.FC<MasonryGalleryProps> = ({
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 	return (
 		<div className="group relative overflow-hidden bg-card rounded-md shadow-sm transition-all duration-300 hover:shadow-md">
-			<Link href={`/aecc-uide-web/products/${product.slug}`}>
+			<Link href={`/products/${product.slug}`}>
 				{/* Contenedor que mantiene la relación de aspecto */}
 				<div className="relative w-full">
 					<img
