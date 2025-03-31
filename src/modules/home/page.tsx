@@ -3,7 +3,7 @@
 import { useTheme } from 'next-themes';
 import Logo from './icon/aeccIcon';
 import CardContainer from './cardContainer.tsx';
-import { YearlyTimeline } from './TimeLine/yearlyTimeLine.tsx';
+import { YearlyTimeline } from './timeLine/yearlyTimeLine.tsx';
 
 const cardsData = [
 	{
@@ -47,7 +47,7 @@ export default function Home() {
 				style={{ borderColor: 'var(--border)' }}
 			/>
 			<div className=" px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
-				{/* Línea divisoria */}
+				<h1 className="title-h1">Titulo </h1>
 				<YearlyTimeline />
 			</div>
 		</div>
