@@ -21,7 +21,7 @@ export default function CustomFooter() {
 				{/* Redes Sociales */}
 				<div className="flex flex-col gap-2">
 					<h3 className="font-bold text-lg">{footerData.titleFollow}</h3>
-					<div className="mx-4 flex gap-3">
+					<div className="flex gap-3">
 						{footerData.socials.map((social, index) => (
 							<a
 								key={index}

@@ -1,9 +1,8 @@
 // app/page.tsx
 'use client';
-import { useTheme } from 'next-themes';
-import Logo from './icon/aeccIcon';
-import CardContainer from './cardContainer.tsx';
-import { YearlyTimeline } from './TimeLine/yearlyTimeLine.tsx';
+import Logo from './components/aeccIcon.tsx';
+import CardContainer from './components/cardContainer.tsx';
+import { YearlyTimeline } from './components/timeLine/index.tsx';
 
 const cardsData = [
 	{
@@ -33,23 +32,21 @@ export default function Home() {
 	return (
 		<div className="min-h-screen flex flex-col">
 			<div className="flex justify-center">
-				<Logo className="w-50 h-100 sm:w-100 sm:h-100 md:w-100 md:h-100 lg:w-180 lg:h-180" />
+				<Logo className="w-50 h-70 sm:w-100 sm:h-100 md:w-100 md:h-100 lg:w-140 lg:h-140" />
 			</div>
 			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
 				<div className="mb-3">
 					<h1 className="title-h1">Titulo </h1>
-					<p>Texto generico de saludo</p>
 				</div>
 				<CardContainer cardsData={cardsData} />
 			</div>
 
+			<hr
+				className="mx-8 sm:mx-8 md:mx-16 lg:mx-20 xl:mx-20 my-20"
+				style={{ borderColor: 'var(--border)' }}
+			/>
 			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
-				{/* Línea divisoria */}
-				<hr className="my-4" style={{ borderColor: 'var(--border)' }} />
-				<div className="mb-3">
-					<h1 className="title-h1">Titulo</h1>
-					<p>Texto generico de saludo</p>
-				</div>
+				<h1 className="title-h1">Titulo </h1>
 				<YearlyTimeline />
 			</div>
 		</div>

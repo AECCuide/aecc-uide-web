@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Home, Settings, Bell, User } from 'lucide-react';
+import { Bell, Shirt } from 'lucide-react';
 import { MenuItem } from './menuBarTypes';
 
 export const menuItems: MenuItem[] = [
 	{
-		icon: <Bell className="h-5 w-5" />,
-		label: 'Notifications',
-		href: '#',
+		icon: <Shirt className="h-5 w-5" />,
+		label: 'Merch',
+		href: '/merch',
 		gradient:
 			'radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)',
 		iconColor: 'text-orange-500',
