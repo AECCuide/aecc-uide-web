@@ -28,7 +28,7 @@ export default function CustomFooter() {
 								href={social.href}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-xl text-(--text-color)"
+								className="text-xl text-(--text-color-icon)"
 							>
 								{social.icon}
 							</a>

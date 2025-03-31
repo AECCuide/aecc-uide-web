@@ -14,7 +14,7 @@ export function MenuBarDesktop() {
 		<ul className="hidden sm:flex items-center gap-2 relative z-10 px-4 justify-between w-full">
 			<div className="flex items-center">
 				<div className="text-lg font-bold">
-					<a href="/">AECC</a>
+					<a href="/aecc-uide-web">AECC</a>
 				</div>
 
 				<div className="ml-8 flex items-center">

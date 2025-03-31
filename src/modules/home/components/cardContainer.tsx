@@ -1,4 +1,3 @@
-//src/modules/home/CardContainer
 import React, { useState, useEffect } from 'react';
 import Card from '@/components/ui/card';
 
@@ -10,29 +9,27 @@ interface CardData {
 	title?: string;
 	description?: string;
 	tags?: string[];
-	url?: string;
+	slug?: string; // Usamos slug en lugar de url
 }
 
 interface CardContainerProps {
 	cardsData: CardData[];
 }
 
-// Componente contenedor con scroll horizontal normal
 const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 	const [visibleCards, setVisibleCards] = useState<CardData[]>([]);
 
-	// Cargar todos los productos al inicio
 	useEffect(() => {
 		if (cardsData.length > 0) {
-			setVisibleCards(cardsData); // Cargar todos los datos
+			setVisibleCards(cardsData);
 		}
 	}, [cardsData]);
 
 	// Función para manejar el clic en una card
-	const handleCardClick = (url?: string) => {
-		if (url) {
-			window.open(url, '_blank'); // Abre en una nueva pestaña
-			// Alternativa: window.location.href = url; // Abre en la misma pestaña
+	const handleCardClick = (slug?: string) => {
+		if (slug) {
+			const fullUrl = `/aecc-uide-web/details/${slug}`; // Construimos la URL
+			window.open(fullUrl, '_blank'); // Abre en una nueva pestaña
 		}
 	};
 
@@ -43,7 +40,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 					<div
 						key={`card-${index}`}
 						className="flex-shrink-0 cursor-pointer"
-						onClick={() => handleCardClick(cardData.url)}
+						onClick={() => handleCardClick(cardData.slug)}
 					>
 						<Card cardData={cardData} />
 					</div>
