@@ -8,7 +8,7 @@ export const menuItems: MenuItem[] = [
 	{
 		icon: <Shirt className="h-5 w-5" />,
 		label: 'Merch',
-		href: '/merch',
+		href: '/aecc-uide-web/merch',
 		gradient:
 			'radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)',
 		iconColor: 'text-orange-500',

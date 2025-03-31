@@ -9,7 +9,7 @@ export function MenuBarMobile() {
 			<div className="flex justify-between w-full items-center">
 				{/* Nombre en la izquierda */}
 				<div className="text-lg font-bold">
-					<a href="https://aeccuide.github.io/aecc-uide-web/">AECC</a>
+					<a href="/">AECC</a>
 				</div>
 
 				{/* Botón y color a la derecha */}
