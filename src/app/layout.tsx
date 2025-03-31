@@ -28,7 +28,8 @@ export default function RootLayout({
 						enableSystem={false}
 					>
 						<MenuBar />
-						{children}
+						<div className="mt-8">{children}</div>
+
 						<Footer />
 					</ThemeProvider>
 				</RenderMounted>

@@ -1,4 +1,3 @@
-// components.tsx - Componentes visuales individuales
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { getDotColor, getCategoryColor } from './timeLineUtils';

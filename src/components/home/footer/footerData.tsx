@@ -1,7 +1,26 @@
 'use client';
 
-import { Facebook, Twitter, Instagram } from 'lucide-react';
-import { FooterData } from './footerTypes';
+import { Facebook, Instagram } from 'lucide-react';
+import { JSX } from 'react';
+
+export interface Social {
+	icon: JSX.Element;
+	href: string;
+}
+
+export interface Authors {
+	id: number;
+	perfilGithub: string;
+	name: string;
+	href: string;
+}
+
+export interface FooterData {
+	title: string;
+	titleFollow: string;
+	authors: Authors[];
+	socials: Social[];
+}
 
 const footerData: FooterData = {
 	title: 'Autores',
@@ -25,19 +44,16 @@ const footerData: FooterData = {
 			href: 'https://github.com/fait-arch',
 		},
 	],
+
 	titleFollow: 'Redes Sociales',
 	socials: [
 		{
 			icon: <Facebook />,
-			href: 'https://facebook.com',
-		},
-		{
-			icon: <Twitter />,
-			href: 'https://twitter.com',
+			href: 'https://www.facebook.com/people/AECCuide/61569555116398/?rdid=dvSy2n1kfelpaXXl&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1A7yUoEArc%2F',
 		},
 		{
 			icon: <Instagram />,
-			href: 'https://instagram.com',
+			href: 'https://www.instagram.com/aeccuide/profilecard/?igsh=cGhtNTI3aWxlNTM0',
 		},
 	],
 };
