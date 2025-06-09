@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'export', // 👈 Esto es CRUCIAL para GitHub Pages
-  basePath: '/aecc-uide-web',
+  basePath: '/aecc',
   trailingSlash: true, // Recomendado para GitHub Pages
   images: {
     unoptimized: true, // Necesario para exportación estática
