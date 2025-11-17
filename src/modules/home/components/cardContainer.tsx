@@ -28,7 +28,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 	// Función para manejar el clic en una card
 	const handleCardClick = (slug?: string) => {
 		if (slug) {
-			const fullUrl = `/aecc-uide-web/details/${slug}`; // Construimos la URL
+			const fullUrl = `/aecc/details/${slug}`; // Construimos la URL
 			window.open(fullUrl, '_blank'); // Abre en una nueva pestaña
 		}
 	};
@@ -39,7 +39,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 				{visibleCards.map((cardData, index) => (
 					<div
 						key={`card-${index}`}
-						className="flex-shrink-0 cursor-pointer"
+						className="cursor-pointer"
 						onClick={() => handleCardClick(cardData.slug)}
 					>
 						<Card cardData={cardData} />
