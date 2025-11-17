@@ -159,6 +159,22 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 			<div className="content">{children}</div>
 
 			<style>{`
+				:root {
+					--card-bg: white;
+					--card-border: #333;
+					--card-shadow: rgba(0, 0, 0, 0.4);
+					--text-color-dark: #000;
+					--text-color-red: #e63946;
+				}
+
+				.dark {
+					--card-bg: #2d3748; /* gray-800 */
+					--card-border: #a0aec0; /* gray-400 */
+					--card-shadow: rgba(0, 0, 0, 0.6);
+					--text-color-dark: #f7fafc; /* gray-100 */
+					--text-color-red: #f56565; /* red-400 */
+				}
+
 				.scroll-container {
 					min-height: 400vh;
 					position: relative;
@@ -179,9 +195,9 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 					position: absolute;
 					width: 100px;
 					height: 140px;
-					background: white;
+					background: var(--card-bg);
 					border-radius: 8px;
-					box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+					box-shadow: 0 10px 30px var(--card-shadow);
 					will-change: transform;
 					backface-visibility: hidden;
 				}
@@ -191,9 +207,9 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 					height: 100%;
 					padding: 8px;
 					position: relative;
-					background: white;
+					background: var(--card-bg);
 					border-radius: 8px;
-					border: 2px solid #333;
+					border: 2px solid var(--card-border);
 				}
 
 				.card-corner {
