@@ -28,7 +28,7 @@ export default function RootLayout({
 						enableSystem={false}
 					>
 						<MenuBar />
-						<div className="mt-8">{children}</div>
+						<div className="mt-10">{children}</div>
 
 						<Footer />
 					</ThemeProvider>
