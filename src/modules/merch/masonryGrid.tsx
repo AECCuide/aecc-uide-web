@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
 	Product,
 	ProductCardProps,
@@ -29,7 +30,9 @@ const TrueMasonryGallery: React.FC<MasonryGalleryProps> = ({
 
 		handleResize();
 		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
 	}, [initialColumns]);
 
 	// Distribuir productos en columnas para Masonry Grid
@@ -69,10 +72,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 		<div className="group relative overflow-hidden bg-card rounded-md shadow-sm transition-all duration-300 hover:shadow-md">
 			<Link href={`/products/${product.slug}`}>
 				{/* Contenedor que mantiene la relación de aspecto */}
-				<div className="relative w-full">
-					<img
+				<div className="relative">
+					<Image
 						src={product.image}
 						alt={product.name}
+						width={800}
+						height={600}
 						className="object-cover w-full h-auto transition-all duration-300 group-hover:opacity-75"
 					/>
 

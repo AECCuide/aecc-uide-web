@@ -2,7 +2,6 @@
 'use client';
 import Logo from './components/aeccIcon.tsx';
 import CardContainer from './components/cardContainer.tsx';
-import { YearlyTimeline } from './components/timeLine/index.tsx';
 
 const cardsData = [
 	{
