@@ -20,10 +20,10 @@ export function MenuBar() {
 			<motion.div
 				className={`absolute -inset-2 bg-gradient-radial from-transparent ${
 					isDarkTheme
-						? 'via-purple-400/20 via-10%'
-						: 'via-purple-400/15 via-10%'
+						? 'via-purple-400/20 via-40%'
+						: 'via-purple-400/15 via-40%'
 				} to-transparent rounded-3xl z-0 pointer-events-none`}
-				variants={navGlowVariants as any}
+				variants={navGlowVariants}
 			/>
 
 			{/* Borde inferior sutil con degradado */}

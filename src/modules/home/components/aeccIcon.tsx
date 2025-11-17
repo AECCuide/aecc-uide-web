@@ -24,13 +24,13 @@ const InlineSVGComponent: React.FC<SVGProps> = ({
 
 	// Define colores basados en el tema, con opción de anularlos con props
 	const fillColor =
-		overrideFillColor || (theme === 'dark' ? '#ffffff' : '#000000');
+		overrideFillColor ?? (theme === 'dark' ? '#ffffff' : '#000000');
 	const strokeColor =
-		overrideStrokeColor || (theme === 'dark' ? '#ffffff' : '#000000');
+		overrideStrokeColor ?? (theme === 'dark' ? '#ffffff' : '#000000');
 	const glassesColor =
-		overrideGlassesColor || (theme === 'dark' ? '#ffd42a' : '#ffd42a');
+		overrideGlassesColor ?? (theme === 'dark' ? '#ffd42a' : '#ffd42a');
 	const glassesReflectionColor =
-		overrideGlassesReflectionColor ||
+		overrideGlassesReflectionColor ??
 		(theme === 'dark' ? '#ffffff' : '#ffffff');
 
 	return (

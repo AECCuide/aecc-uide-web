@@ -52,7 +52,7 @@ export default function CustomFooter() {
 					{footerData.authors.map((author, index) => (
 						<div
 							className="flex items-center gap-2"
-							key={`${author.name}-${index}`}
+							key={`${author.name}-${String(index)}`}
 						>
 							<div
 								className="w-6 h-6 bg-cover bg-center rounded-full"

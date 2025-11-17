@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, type Transition, type Variants } from 'framer-motion';
 import { ThemeToggle } from '@/components/theme-toggle';
 import {
 	menuItems,
@@ -27,7 +27,7 @@ export function MenuBarDesktop() {
 							>
 								<motion.div
 									className="absolute inset-0 z-0 pointer-events-none"
-									variants={glowVariants as any}
+									variants={glowVariants as Variants}
 									style={{
 										background: item.gradient,
 										opacity: 0,
@@ -38,7 +38,7 @@ export function MenuBarDesktop() {
 									href={item.href}
 									className="flex items-center gap-2 px-4 relative z-10 bg-transparent text-muted-foreground group-hover:text-foreground transition-colors rounded-xl"
 									variants={itemVariants}
-									transition={sharedTransition as any}
+									transition={sharedTransition as Transition}
 									style={{
 										transformStyle: 'preserve-3d',
 										transformOrigin: 'center bottom',
@@ -55,7 +55,7 @@ export function MenuBarDesktop() {
 									href={item.href}
 									className="flex items-center gap-2 px-4 py-2 absolute inset-0 z-10 bg-transparent text-muted-foreground group-hover:text-foreground transition-colors rounded-xl"
 									variants={backVariants}
-									transition={sharedTransition as any}
+									transition={sharedTransition as Transition}
 									style={{
 										transformStyle: 'preserve-3d',
 										transformOrigin: 'center top',
