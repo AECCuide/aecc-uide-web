@@ -1,4 +1,3 @@
-// ParticipantCard.tsx
 'use client';
 
 import React, { useEffect, useRef } from 'react';
@@ -17,6 +16,17 @@ const COURSES = [
 	'4to B',
 	'5to A',
 ];
+
+// Estilos globales centralizados
+const StylesTextForms = {
+	icon: 'w-6 h-6 shrink-0 text-stone-400',
+	text: 'text-stone-100',
+	textSecondary: 'text-stone-400',
+	placeholder: 'placeholder-stone-400',
+	textSize: 'text-base',
+	input: 'w-full bg-transparent focus:outline-none',
+	container: 'flex items-center gap-3',
+} as const;
 
 // --- Types ---
 export interface Participant {
@@ -67,7 +77,6 @@ const Dropdown = ({
 				onToggle();
 			}
 		};
-
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
@@ -78,14 +87,16 @@ const Dropdown = ({
 		<div className="relative w-full" ref={dropdownRef}>
 			<button
 				onClick={onToggle}
-				className="w-full text-left bg-transparent text-base focus:outline-none flex items-center justify-between"
+				className={`w-full text-left bg-transparent ${StylesTextForms.textSize} focus:outline-none flex items-center justify-between`}
 			>
 				<span
-					className={`truncate ${value ? 'text-stone-100' : 'text-stone-400'}`}
+					className={`truncate ${value ? StylesTextForms.text : StylesTextForms.textSecondary}`}
 				>
 					{value || placeholder}
 				</span>
-				<ChevronDown className="w-5 h-5 shrink-0 text-stone-400" />
+				<ChevronDown
+					className={`w-5 h-5 shrink-0 ${StylesTextForms.textSecondary}`}
+				/>
 			</button>
 			{isOpen && (
 				<div className="absolute left-0 right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 max-h-48 overflow-y-auto">
@@ -95,7 +106,7 @@ const Dropdown = ({
 							onClick={() => {
 								onSelect(option);
 							}}
-							className="w-full px-4 py-3 text-left text-stone-100 text-base hover:text-stone-400 transition-colors"
+							className={`w-full px-4 py-3 text-left ${StylesTextForms.text} ${StylesTextForms.textSize} hover:${StylesTextForms.textSecondary} transition-colors`}
 						>
 							{option}
 						</button>
@@ -119,8 +130,8 @@ const InputField = ({
 	placeholder: string;
 	type?: string;
 }) => (
-	<div className="flex items-center gap-3">
-		<Icon className="w-6 h-6 text-stone-400 shrink-0" />
+	<div className={StylesTextForms.container}>
+		<Icon className={StylesTextForms.icon} />
 		<input
 			type={type}
 			value={value}
@@ -128,7 +139,7 @@ const InputField = ({
 				onChange(e.target.value);
 			}}
 			placeholder={placeholder}
-			className="w-full bg-transparent text-stone-100 text-base focus:outline-none placeholder-stone-500"
+			className={`${StylesTextForms.input} ${StylesTextForms.text} ${StylesTextForms.textSize} ${StylesTextForms.placeholder}`}
 		/>
 	</div>
 );
@@ -141,38 +152,36 @@ export default function ParticipantCard({
 	onFieldChange,
 	onDropdownToggle,
 }: ParticipantCardProps) {
+	const pairNumber = index + 1;
+
 	return (
 		<FormField>
-			<div className="space-y-5 ">
-				<div className="flex items-center gap-4 ">
-					<div className="flex items-center gap-3 w-full">
-						<InputField
-							icon={Users}
-							value={participant.name}
-							onChange={(value) => {
-								onFieldChange('name', value);
-							}}
-							placeholder={`Nombre de la pareja ${(index + 1).toString()}`}
-						/>
-					</div>
-					<div className="flex items-center gap-3 w-full">
-						<InputField
-							icon={Phone}
-							value={participant.phone}
-							onChange={(value) => {
-								onFieldChange('phone', value);
-							}}
-							placeholder="Celular"
-							type="tel"
-						/>
-					</div>
+			<div className="space-y-5">
+				<div className="flex items-center gap-4">
+					<InputField
+						icon={Users}
+						value={participant.name}
+						onChange={(value) => {
+							onFieldChange('name', value);
+						}}
+						placeholder={`Nombre de la pareja ${String(pairNumber)}`}
+					/>
+					<InputField
+						icon={Phone}
+						value={participant.phone}
+						onChange={(value) => {
+							onFieldChange('phone', value);
+						}}
+						placeholder="Celular"
+						type="tel"
+					/>
 				</div>
-				<div className="flex items-center gap-3">
-					<School className="w-6 h-6 text-stone-400 shrink-0" />
+				<div className={StylesTextForms.container}>
+					<School className={StylesTextForms.icon} />
 					<Dropdown
 						options={COURSES}
 						value={participant.course}
-						placeholder={`Curso de la pareja ${(index + 1).toString()}`}
+						placeholder={`Curso de la pareja ${String(pairNumber)}`}
 						isOpen={isDropdownOpen}
 						onToggle={onDropdownToggle}
 						onSelect={(value) => {
