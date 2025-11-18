@@ -90,7 +90,7 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 					trigger: containerRef.current,
 					start: `top+=${String(index * 50)} top`,
 					end: 'bottom bottom',
-					scrub: 1,
+					scrub: 0.5,
 					onEnter: () => {
 						gsap.to(card, {
 							opacity: 1,
