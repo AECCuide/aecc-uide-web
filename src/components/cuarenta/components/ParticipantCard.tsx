@@ -45,6 +45,8 @@ interface ParticipantCardProps {
 	isDropdownOpen: boolean;
 	onFieldChange: (field: keyof Participant, value: string) => void;
 	onDropdownToggle: () => void;
+	onErrorsChange?: (errors: ParticipantErrors) => void;
+	externalErrors?: ParticipantErrors;
 }
 
 // --- Reusable Sub-components ---
@@ -98,14 +100,17 @@ const Dropdown = ({
 				}`}
 			>
 				<span
-					className={`truncate ${value ? StylesTextForms.text : StylesTextForms.textSecondary}`}
+					className={`truncate ${value ? StylesTextForms.text : error ? 'text-red-400' : StylesTextForms.textSecondary}`}
 				>
 					{value || placeholder}
 				</span>
 				<ChevronDown
-					className={`w-5 h-5 shrink-0 ${StylesTextForms.textSecondary}`}
+					className={`w-5 h-5 shrink-0 ${error ? 'text-red-500' : StylesTextForms.textSecondary}`}
 				/>
 			</button>
+			{error && (
+				<span className="text-red-500 text-xs mt-1 block">{error}</span>
+			)}
 			{isOpen && (
 				<div className="absolute left-0 right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 max-h-48 overflow-y-auto">
 					{options.map((option) => (
@@ -114,7 +119,7 @@ const Dropdown = ({
 							onClick={() => {
 								onSelect(option);
 							}}
-							className={`w-full px-4 py-3 text-left ${StylesTextForms.text} ${StylesTextForms.textSize} hover:${StylesTextForms.textSecondary} transition-colors`}
+							className={`w-full px-4 py-3 text-left ${StylesTextForms.text} ${StylesTextForms.textSize} hover:bg-amber-700/80 transition-colors`}
 						>
 							{option}
 						</button>
@@ -140,22 +145,26 @@ const InputField = ({
 	type?: string;
 	error?: string;
 }) => (
-	<div className={StylesTextForms.container}>
-		<Icon className={StylesTextForms.icon} />
-		<input
-			type={type}
-			value={value}
-			onChange={(e) => {
-				onChange(e.target.value);
-			}}
-			placeholder={placeholder}
-			className={`${StylesTextForms.input} ${StylesTextForms.text} ${StylesTextForms.textSize} ${StylesTextForms.placeholder} ${
-				error ? 'placeholder-red-400' : ''
-			}`}
-		/>
-		{error && (
-			<span className="text-red-500 text-xs absolute mt-12">{error}</span>
-		)}
+	<div className="relative flex-1">
+		<div className={StylesTextForms.container}>
+			<Icon
+				className={`${StylesTextForms.icon} ${error ? 'text-red-500' : ''}`}
+			/>
+			<input
+				type={type}
+				value={value}
+				onChange={(e) => {
+					onChange(e.target.value);
+				}}
+				placeholder={placeholder}
+				className={`${StylesTextForms.input} ${StylesTextForms.text} ${StylesTextForms.textSize} ${
+					error
+						? 'placeholder-red-400 text-red-500'
+						: StylesTextForms.placeholder
+				}`}
+			/>
+		</div>
+		{error && <span className="text-red-500 text-xs block mt-1">{error}</span>}
 	</div>
 );
 
@@ -166,22 +175,47 @@ export default function ParticipantCard({
 	isDropdownOpen,
 	onFieldChange,
 	onDropdownToggle,
+	onErrorsChange,
+	externalErrors = {},
 }: ParticipantCardProps) {
 	const pairNumber = index + 1;
-	const [errors, setErrors] = useState<ParticipantErrors>({});
+	const [localErrors, setLocalErrors] = useState<ParticipantErrors>({});
+
+	// Combinar errores locales y externos
+	const errors = { ...localErrors, ...externalErrors };
 
 	const validateField = (field: keyof Participant, value: string) => {
 		try {
 			participantSchema.shape[field].parse(value);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			setErrors(({ [field]: _, ...rest }) => rest);
+			// Limpiar error si la validación pasa
+			setLocalErrors((prev) => {
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { [field]: _, ...rest } = prev;
+				return rest;
+			});
+
+			// Notificar al padre
+			if (onErrorsChange) {
+				const updatedErrors = { ...localErrors };
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { [field]: _, ...rest } = updatedErrors;
+				onErrorsChange(rest);
+			}
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				const message = error.issues[0]?.message ?? 'Invalid';
-				setErrors((prev) => ({
+				setLocalErrors((prev) => ({
 					...prev,
 					[field]: message,
 				}));
+
+				// Notificar al padre
+				if (onErrorsChange) {
+					onErrorsChange({
+						...localErrors,
+						[field]: message,
+					});
+				}
 			}
 		}
 	};
@@ -194,7 +228,7 @@ export default function ParticipantCard({
 	return (
 		<FormField>
 			<div className="space-y-5">
-				<div className="flex items-center gap-4">
+				<div className="flex items-start gap-4">
 					<InputField
 						icon={Users}
 						value={participant.name}
@@ -216,7 +250,9 @@ export default function ParticipantCard({
 					/>
 				</div>
 				<div className={StylesTextForms.container}>
-					<School className={StylesTextForms.icon} />
+					<School
+						className={`${StylesTextForms.icon} ${errors.course ? 'text-red-500' : ''}`}
+					/>
 					<Dropdown
 						options={COURSES}
 						value={participant.course}
