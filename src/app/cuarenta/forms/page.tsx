@@ -3,7 +3,9 @@
 import React from 'react';
 import { useReducer, Reducer } from 'react';
 import { CreditCard, ChevronDown } from 'lucide-react';
-import ParticipantCard from '@/components/cuarenta/components/ParticipantCard';
+import ParticipantCard from '@/components/cuarenta/components/ParticipantCard'; // Asumo que este es el componente correcto
+import SubmitButton from '@/components/cuarenta/components/SubmitButton';
+import { validateCuarentaForm } from '@/components/cuarenta/hooks/validation';
 
 // --- Constants ---
 const PAYMENT_METHODS = ['Efectivo', 'Transferencia'];
@@ -20,6 +22,15 @@ interface State {
 	participants: [Participant, Participant];
 	paymentMethod: string;
 	activeDropdown: string | null;
+	errors: {
+		teamName?: string;
+		participants: [
+			Partial<Record<keyof Participant, string>>,
+			Partial<Record<keyof Participant, string>>,
+		];
+	};
+	touched: boolean;
+	showConfetti: boolean;
 }
 
 type Action =
@@ -29,7 +40,17 @@ type Action =
 			payload: { index: number; field: keyof Participant; value: string };
 	  }
 	| { type: 'SET_PAYMENT_METHOD'; payload: string }
-	| { type: 'TOGGLE_DROPDOWN'; payload: string | null };
+	| { type: 'TOGGLE_DROPDOWN'; payload: string | null }
+	| { type: 'SET_ERRORS'; payload: State['errors'] }
+	| {
+			type: 'SET_PARTICIPANT_ERRORS';
+			payload: {
+				index: number;
+				errors: Partial<Record<keyof Participant, string>>;
+			};
+	  }
+	| { type: 'SET_TOUCHED'; payload: boolean }
+	| { type: 'SET_SHOW_CONFETTI'; payload: boolean };
 
 // --- Reducer ---
 const initialState: State = {
@@ -40,6 +61,11 @@ const initialState: State = {
 	],
 	paymentMethod: 'Efectivo',
 	activeDropdown: null,
+	errors: {
+		participants: [{}, {}],
+	},
+	touched: false,
+	showConfetti: false,
 };
 
 const registrationReducer: Reducer<State, Action> = (state, action) => {
@@ -63,6 +89,17 @@ const registrationReducer: Reducer<State, Action> = (state, action) => {
 				activeDropdown:
 					state.activeDropdown === action.payload ? null : action.payload,
 			};
+		case 'SET_ERRORS':
+			return { ...state, errors: action.payload };
+		case 'SET_PARTICIPANT_ERRORS': {
+			const newErrors = { ...state.errors };
+			newErrors.participants[action.payload.index] = action.payload.errors;
+			return { ...state, errors: newErrors };
+		}
+		case 'SET_TOUCHED':
+			return { ...state, touched: action.payload };
+		case 'SET_SHOW_CONFETTI':
+			return { ...state, showConfetti: action.payload };
 		default:
 			return state;
 	}
@@ -85,26 +122,55 @@ export default function TeamRegistration() {
 			type: 'SET_PARTICIPANT_FIELD',
 			payload: { index, field, value },
 		});
-
-		// Log para ver los cambios en tiempo real
-		console.log(`Participante ${(index + 1).toString()} - ${field}:`, value);
 	};
 
-	const handleSubmit = () => {
-		const registrationData = {
+	const handleParticipantErrors = (
+		index: number,
+		errors: Partial<Record<keyof Participant, string>>
+	) => {
+		dispatch({
+			type: 'SET_PARTICIPANT_ERRORS',
+			payload: { index, errors },
+		});
+	};
+
+	const validateForm = (): boolean => {
+		dispatch({ type: 'SET_TOUCHED', payload: true });
+
+		const result = validateCuarentaForm({
+			teamName: state.teamName,
+			participants: state.participants,
+		});
+
+		if (result.success) {
+			dispatch({
+				type: 'SET_ERRORS',
+				payload: { participants: [{}, {}] },
+			});
+			return true;
+		} else {
+			dispatch({
+				type: 'SET_ERRORS',
+				payload: result.errors ?? { participants: [{}, {}] },
+			});
+			return false;
+		}
+	};
+
+	const getRegistrationData = () => {
+		return {
 			teamName: state.teamName,
 			participants: {
 				participant1: state.participants[0],
 				participant2: state.participants[1],
 			},
 			paymentMethod: state.paymentMethod,
+			timestamp: new Date().toISOString(),
 		};
-		console.log('Registration Data:', registrationData);
-		alert('Registro completado! Revisa la consola para ver los datos.');
 	};
 
 	return (
-		<div className="min-h-screen  from-zinc-900 via-neutral-900 to-stone-900 p-0">
+		<div className="min-h-screen from-zinc-900 via-neutral-900 to-stone-900 p-0">
 			<div className="max-w-2xl mx-auto">
 				{/* Team Name */}
 				<div className="px-6 py-8">
@@ -115,8 +181,17 @@ export default function TeamRegistration() {
 							dispatch({ type: 'SET_TEAM_NAME', payload: e.target.value });
 						}}
 						placeholder="Nombre del Equipo"
-						className="w-full bg-transparent border-none text-3xl md:text-4xl font-bold tracking-wider text-stone-400 placeholder-stone-600 focus:outline-none"
+						className={`w-full bg-transparent border-none text-3xl md:text-4xl font-bold tracking-wider placeholder-stone-600 focus:outline-none ${
+							state.errors.teamName && state.touched
+								? 'text-stone-100'
+								: 'text-stone-400'
+						}`}
 					/>
+					{state.errors.teamName && state.touched && (
+						<p className="text-red-500 text-sm mt-2 px-1">
+							{state.errors.teamName}
+						</p>
+					)}
 				</div>
 
 				<div className="px-6 py-6 space-y-6">
@@ -143,6 +218,12 @@ export default function TeamRegistration() {
 											payload: `course${(index + 1).toString()}`,
 										});
 									}}
+									onErrorsChange={(errors) => {
+										handleParticipantErrors(index, errors);
+									}}
+									externalErrors={
+										state.touched ? state.errors.participants[index] : {}
+									}
 								/>
 							))}
 						</div>
@@ -193,14 +274,12 @@ export default function TeamRegistration() {
 					</div>
 
 					{/* Submit Button */}
-					<div className="pt-6 pb-8">
-						<button
-							onClick={handleSubmit}
-							className="w-full py-4 bg-white text-stone-900 rounded-2xl font-medium hover:bg-stone-100 transition-colors shadow-lg"
-						>
-							Registrar equipo
-						</button>
-					</div>
+					<SubmitButton
+						validateForm={validateForm}
+						getRegistrationData={getRegistrationData}
+					>
+						Registrar equipo
+					</SubmitButton>
 				</div>
 			</div>
 		</div>
