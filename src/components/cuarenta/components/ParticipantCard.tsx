@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Users, Phone, ChevronDown, School } from 'lucide-react';
+import { z } from 'zod';
+import { participantSchema } from '../hooks/validation';
 
 // --- Constants ---
 const COURSES = [
@@ -35,6 +37,8 @@ export interface Participant {
 	phone: string;
 }
 
+type ParticipantErrors = Partial<Record<keyof Participant, string>>;
+
 interface ParticipantCardProps {
 	participant: Participant;
 	index: number;
@@ -54,6 +58,7 @@ interface DropdownProps {
 	placeholder: string;
 	isOpen: boolean;
 	onToggle: () => void;
+	error?: string;
 	onSelect: (value: string) => void;
 }
 
@@ -64,6 +69,7 @@ const Dropdown = ({
 	isOpen,
 	onToggle,
 	onSelect,
+	error,
 }: DropdownProps) => {
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +93,9 @@ const Dropdown = ({
 		<div className="relative w-full" ref={dropdownRef}>
 			<button
 				onClick={onToggle}
-				className={`w-full text-left bg-transparent ${StylesTextForms.textSize} focus:outline-none flex items-center justify-between`}
+				className={`w-full text-left bg-transparent ${StylesTextForms.textSize} focus:outline-none flex items-center justify-between ${
+					error ? 'text-red-500' : ''
+				}`}
 			>
 				<span
 					className={`truncate ${value ? StylesTextForms.text : StylesTextForms.textSecondary}`}
@@ -123,12 +131,14 @@ const InputField = ({
 	onChange,
 	placeholder,
 	type = 'text',
+	error,
 }: {
 	icon: React.ElementType;
 	value: string;
 	onChange: (value: string) => void;
 	placeholder: string;
 	type?: string;
+	error?: string;
 }) => (
 	<div className={StylesTextForms.container}>
 		<Icon className={StylesTextForms.icon} />
@@ -139,8 +149,13 @@ const InputField = ({
 				onChange(e.target.value);
 			}}
 			placeholder={placeholder}
-			className={`${StylesTextForms.input} ${StylesTextForms.text} ${StylesTextForms.textSize} ${StylesTextForms.placeholder}`}
+			className={`${StylesTextForms.input} ${StylesTextForms.text} ${StylesTextForms.textSize} ${StylesTextForms.placeholder} ${
+				error ? 'placeholder-red-400' : ''
+			}`}
 		/>
+		{error && (
+			<span className="text-red-500 text-xs absolute mt-12">{error}</span>
+		)}
 	</div>
 );
 
@@ -153,6 +168,28 @@ export default function ParticipantCard({
 	onDropdownToggle,
 }: ParticipantCardProps) {
 	const pairNumber = index + 1;
+	const [errors, setErrors] = useState<ParticipantErrors>({});
+
+	const validateField = (field: keyof Participant, value: string) => {
+		try {
+			participantSchema.shape[field].parse(value);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			setErrors(({ [field]: _, ...rest }) => rest);
+		} catch (error) {
+			if (error instanceof z.ZodError) {
+				const message = error.issues[0]?.message ?? 'Invalid';
+				setErrors((prev) => ({
+					...prev,
+					[field]: message,
+				}));
+			}
+		}
+	};
+
+	const handleFieldChange = (field: keyof Participant, value: string) => {
+		onFieldChange(field, value);
+		validateField(field, value);
+	};
 
 	return (
 		<FormField>
@@ -162,18 +199,20 @@ export default function ParticipantCard({
 						icon={Users}
 						value={participant.name}
 						onChange={(value) => {
-							onFieldChange('name', value);
+							handleFieldChange('name', value);
 						}}
 						placeholder={`Nombre de la pareja ${String(pairNumber)}`}
+						error={errors.name}
 					/>
 					<InputField
 						icon={Phone}
 						value={participant.phone}
 						onChange={(value) => {
-							onFieldChange('phone', value);
+							handleFieldChange('phone', value);
 						}}
 						placeholder="Celular"
 						type="tel"
+						error={errors.phone}
 					/>
 				</div>
 				<div className={StylesTextForms.container}>
@@ -184,8 +223,9 @@ export default function ParticipantCard({
 						placeholder={`Curso de la pareja ${String(pairNumber)}`}
 						isOpen={isDropdownOpen}
 						onToggle={onDropdownToggle}
+						error={errors.course}
 						onSelect={(value) => {
-							onFieldChange('course', value);
+							handleFieldChange('course', value);
 							onDropdownToggle();
 						}}
 					/>
