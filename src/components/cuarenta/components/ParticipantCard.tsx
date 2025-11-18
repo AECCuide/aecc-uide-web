@@ -31,7 +31,7 @@ interface ParticipantCardProps {
 
 // --- Reusable Sub-components ---
 const FormField = ({ children }: { children: React.ReactNode }) => (
-	<div className="bg-zinc-800/40 rounded-2xl px-4 py-4">{children}</div>
+	<div className="bg-zinc-800/40 rounded-2xl px-5 py-5">{children}</div>
 );
 
 const Dropdown = ({
@@ -52,14 +52,14 @@ const Dropdown = ({
 	<div className="relative w-full">
 		<button
 			onClick={onToggle}
-			className="w-full text-left bg-transparent text-sm focus:outline-none flex items-center justify-between"
+			className="w-full text-left bg-transparent text-base focus:outline-none flex items-center justify-between"
 		>
 			<span
 				className={`truncate ${value ? 'text-stone-100' : 'text-stone-400'}`}
 			>
 				{value || placeholder}
 			</span>
-			<ChevronDown className="w-4 h-4 shrink-0 text-stone-400" />
+			<ChevronDown className="w-5 h-5 shrink-0 text-stone-400" />
 		</button>
 		{isOpen && (
 			<div className="absolute left-0 right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 max-h-48 overflow-y-auto">
@@ -69,7 +69,7 @@ const Dropdown = ({
 						onClick={() => {
 							onSelect(option);
 						}}
-						className="w-full px-4 py-2.5 text-left text-stone-100 text-sm hover:text-stone-400 transition-colors"
+						className="w-full px-4 py-3 text-left text-stone-100 text-base hover:text-stone-400 transition-colors"
 					>
 						{option}
 					</button>
@@ -93,7 +93,7 @@ const InputField = ({
 	type?: string;
 }) => (
 	<div className="flex items-center gap-3">
-		<Icon className="w-5 h-5 text-stone-400 shrink-0" />
+		<Icon className="w-6 h-6 text-stone-400 shrink-0" />
 		<input
 			type={type}
 			value={value}
@@ -101,7 +101,7 @@ const InputField = ({
 				onChange(e.target.value);
 			}}
 			placeholder={placeholder}
-			className="w-full bg-transparent text-stone-100 text-sm focus:outline-none placeholder-stone-500"
+			className="w-full bg-transparent text-stone-100 text-base focus:outline-none placeholder-stone-500"
 		/>
 	</div>
 );
@@ -116,7 +116,7 @@ export default function ParticipantCard({
 }: ParticipantCardProps) {
 	return (
 		<FormField>
-			<div className="space-y-4 ">
+			<div className="space-y-5 ">
 				<div className="flex items-center gap-4 ">
 					<div className="flex items-center gap-3 w-full">
 						<InputField
@@ -141,7 +141,7 @@ export default function ParticipantCard({
 					</div>
 				</div>
 				<div className="flex items-center gap-3">
-					<School className="w-5 h-5 text-stone-400 shrink-0" />
+					<School className="w-6 h-6 text-stone-400 shrink-0" />
 					<Dropdown
 						options={COURSES}
 						value={participant.course}
