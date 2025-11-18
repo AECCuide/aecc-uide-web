@@ -177,7 +177,7 @@ export default function CuarentaPage() {
 	};
 
 	return (
-		<FallingCardsAnimation cardCount={120}>
+		<FallingCardsAnimation cardCount={60}>
 			<div className="text-center text-gray-800 dark:text-white">
 				{/* Sección 1 - Información del Torneo */}
 				<section className="min-h-screen w-full flex flex-col items-center justify-center px-4 box-border overflow-hidden">
@@ -308,8 +308,7 @@ export default function CuarentaPage() {
 						🏆 Nos Vemos en el Torneo 🏆
 					</h2>
 					<p className="text-xl md:text-3xl max-w-2xl opacity-90">
-						Organizado por estudiantes de Ciencias de la Computación con mucho
-						❤️
+						Organizado por estudiantes de Ciencias de la Computación
 					</p>
 				</section>
 			</div>
