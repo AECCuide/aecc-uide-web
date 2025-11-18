@@ -187,34 +187,31 @@ export default function ParticipantCard({
 	const validateField = (field: keyof Participant, value: string) => {
 		try {
 			participantSchema.shape[field].parse(value);
-			// Limpiar error si la validación pasa
-			setLocalErrors((prev) => {
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const { [field]: _, ...rest } = prev;
-				return rest;
-			});
+
+			// Crear nuevo objeto sin el campo que queremos eliminar
+			const remainingErrors = Object.keys(
+				localErrors
+			).reduce<ParticipantErrors>((acc, key) => {
+				if (key !== field) {
+					acc[key as keyof Participant] = localErrors[key as keyof Participant];
+				}
+				return acc;
+			}, {});
+
+			setLocalErrors(remainingErrors);
 
 			// Notificar al padre
 			if (onErrorsChange) {
-				const updatedErrors = { ...localErrors };
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const { [field]: _, ...rest } = updatedErrors;
-				onErrorsChange(rest);
+				onErrorsChange(remainingErrors);
 			}
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				const message = error.issues[0]?.message ?? 'Invalid';
-				setLocalErrors((prev) => ({
-					...prev,
-					[field]: message,
-				}));
-
+				const newErrors = { ...localErrors, [field]: message };
+				setLocalErrors(newErrors);
 				// Notificar al padre
 				if (onErrorsChange) {
-					onErrorsChange({
-						...localErrors,
-						[field]: message,
-					});
+					onErrorsChange(newErrors);
 				}
 			}
 		}

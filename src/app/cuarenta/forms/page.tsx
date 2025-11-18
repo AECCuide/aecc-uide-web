@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useReducer, Reducer } from 'react';
 import { CreditCard, ChevronDown } from 'lucide-react';
-import ParticipantCard from '@/components/cuarenta/components/ParticipantCard';
-import { cuarentaFormSchema } from '@/components/cuarenta/hooks/validation';
-import { z } from 'zod';
-import Particles from 'react-tsparticles';
-import type { Engine } from 'tsparticles-engine';
-import { loadConfettiPreset } from 'tsparticles-preset-confetti';
+import ParticipantCard from '@/components/cuarenta/components/ParticipantCard'; // Asumo que este es el componente correcto
+import SubmitButton from '@/components/cuarenta/components/SubmitButton';
+import { validateCuarentaForm } from '@/components/cuarenta/hooks/validation';
 
 // --- Constants ---
 const PAYMENT_METHODS = ['Efectivo', 'Transferencia'];
@@ -116,10 +113,6 @@ const FormField = ({ children }: { children: React.ReactNode }) => (
 export default function TeamRegistration() {
 	const [state, dispatch] = useReducer(registrationReducer, initialState);
 
-	const particlesInit = useCallback(async (engine: Engine) => {
-		await loadConfettiPreset(engine);
-	}, []);
-
 	const handleParticipantChange = (
 		index: number,
 		field: keyof Participant,
@@ -142,63 +135,30 @@ export default function TeamRegistration() {
 	};
 
 	const validateForm = (): boolean => {
-		try {
-			// Validar todo el formulario
-			cuarentaFormSchema.parse({
-				teamName: state.teamName,
-				participants: state.participants,
-			});
+		dispatch({ type: 'SET_TOUCHED', payload: true });
 
-			// Si pasa la validación, limpiar errores
+		const result = validateCuarentaForm({
+			teamName: state.teamName,
+			participants: state.participants,
+		});
+
+		if (result.success) {
 			dispatch({
 				type: 'SET_ERRORS',
-				payload: {
-					participants: [{}, {}],
-				},
+				payload: { participants: [{}, {}] },
 			});
-
 			return true;
-		} catch (error) {
-			if (error instanceof z.ZodError) {
-				const newErrors: State['errors'] = {
-					participants: [{}, {}],
-				};
-
-				error.issues.forEach((err) => {
-					const path = err.path;
-
-					// Error en teamName
-					if (path[0] === 'teamName') {
-						newErrors.teamName = err.message;
-					}
-
-					// Error en participants
-					if (path[0] === 'participants' && typeof path[1] === 'number') {
-						const participantIndex = path[1];
-						const field = path[2] as keyof Participant;
-
-						newErrors.participants[participantIndex][field] = err.message;
-					}
-				});
-
-				dispatch({
-					type: 'SET_ERRORS',
-					payload: newErrors,
-				});
-			}
-
+		} else {
+			dispatch({
+				type: 'SET_ERRORS',
+				payload: result.errors ?? { participants: [{}, {}] },
+			});
 			return false;
 		}
 	};
 
-	const handleSubmit = () => {
-		dispatch({ type: 'SET_TOUCHED', payload: true });
-
-		if (!validateForm()) {
-			return;
-		}
-
-		const registrationData = {
+	const getRegistrationData = () => {
+		return {
 			teamName: state.teamName,
 			participants: {
 				participant1: state.participants[0],
@@ -207,37 +167,10 @@ export default function TeamRegistration() {
 			paymentMethod: state.paymentMethod,
 			timestamp: new Date().toISOString(),
 		};
-
-		// Imprimir JSON en la consola
-		console.log(JSON.stringify(registrationData, null, 2));
-
-		// Guardar JSON en localStorage
-		localStorage.setItem(
-			'lastRegistration',
-			JSON.stringify(registrationData, null, 2)
-		);
-
-		// Mostrar confeti
-		dispatch({ type: 'SET_SHOW_CONFETTI', payload: true });
-
-		// Ocultar confeti después de 5 segundos
-		setTimeout(() => {
-			dispatch({ type: 'SET_SHOW_CONFETTI', payload: false });
-		}, 5000);
 	};
 
 	return (
 		<div className="min-h-screen from-zinc-900 via-neutral-900 to-stone-900 p-0">
-			{state.showConfetti && (
-				<Particles
-					id="tsparticles"
-					init={particlesInit}
-					options={{
-						preset: 'confetti',
-						zIndex: { value: 9999 },
-					}}
-				/>
-			)}
 			<div className="max-w-2xl mx-auto">
 				{/* Team Name */}
 				<div className="px-6 py-8">
@@ -250,7 +183,7 @@ export default function TeamRegistration() {
 						placeholder="Nombre del Equipo"
 						className={`w-full bg-transparent border-none text-3xl md:text-4xl font-bold tracking-wider placeholder-stone-600 focus:outline-none ${
 							state.errors.teamName && state.touched
-								? 'text-red-500'
+								? 'text-stone-100'
 								: 'text-stone-400'
 						}`}
 					/>
@@ -341,14 +274,12 @@ export default function TeamRegistration() {
 					</div>
 
 					{/* Submit Button */}
-					<div className="pt-6 pb-8">
-						<button
-							onClick={handleSubmit}
-							className="w-full py-4 bg-white text-stone-900 rounded-2xl font-medium hover:bg-stone-100 transition-colors shadow-lg"
-						>
-							Registrar equipo
-						</button>
-					</div>
+					<SubmitButton
+						validateForm={validateForm}
+						getRegistrationData={getRegistrationData}
+					>
+						Registrar equipo
+					</SubmitButton>
 				</div>
 			</div>
 		</div>
