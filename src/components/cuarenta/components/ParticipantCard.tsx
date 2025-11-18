@@ -1,17 +1,21 @@
 // ParticipantCard.tsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Users, Phone, ChevronDown, School } from 'lucide-react';
 
 // --- Constants ---
 const COURSES = [
-	'1ro BGU A',
-	'1ro BGU B',
-	'2do BGU A',
-	'2do BGU B',
-	'3ro BGU A',
-	'3ro BGU B',
+	'1ro A',
+	'1ro B',
+	'1ro C',
+	'2do A',
+	'2do B',
+	'3ro A',
+	'3ro B',
+	'4to A',
+	'4to B',
+	'5to A',
 ];
 
 // --- Types ---
@@ -34,6 +38,15 @@ const FormField = ({ children }: { children: React.ReactNode }) => (
 	<div className="bg-zinc-800/40 rounded-2xl px-5 py-5">{children}</div>
 );
 
+interface DropdownProps {
+	options: readonly string[];
+	value: string;
+	placeholder: string;
+	isOpen: boolean;
+	onToggle: () => void;
+	onSelect: (value: string) => void;
+}
+
 const Dropdown = ({
 	options,
 	value,
@@ -41,43 +54,57 @@ const Dropdown = ({
 	isOpen,
 	onToggle,
 	onSelect,
-}: {
-	options: readonly string[];
-	value: string;
-	placeholder: string;
-	isOpen: boolean;
-	onToggle: () => void;
-	onSelect: (value: string) => void;
-}) => (
-	<div className="relative w-full">
-		<button
-			onClick={onToggle}
-			className="w-full text-left bg-transparent text-base focus:outline-none flex items-center justify-between"
-		>
-			<span
-				className={`truncate ${value ? 'text-stone-100' : 'text-stone-400'}`}
+}: DropdownProps) => {
+	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				isOpen &&
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target as Node)
+			) {
+				onToggle();
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [isOpen, onToggle]);
+
+	return (
+		<div className="relative w-full" ref={dropdownRef}>
+			<button
+				onClick={onToggle}
+				className="w-full text-left bg-transparent text-base focus:outline-none flex items-center justify-between"
 			>
-				{value || placeholder}
-			</span>
-			<ChevronDown className="w-5 h-5 shrink-0 text-stone-400" />
-		</button>
-		{isOpen && (
-			<div className="absolute left-0 right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 max-h-48 overflow-y-auto">
-				{options.map((option) => (
-					<button
-						key={option}
-						onClick={() => {
-							onSelect(option);
-						}}
-						className="w-full px-4 py-3 text-left text-stone-100 text-base hover:text-stone-400 transition-colors"
-					>
-						{option}
-					</button>
-				))}
-			</div>
-		)}
-	</div>
-);
+				<span
+					className={`truncate ${value ? 'text-stone-100' : 'text-stone-400'}`}
+				>
+					{value || placeholder}
+				</span>
+				<ChevronDown className="w-5 h-5 shrink-0 text-stone-400" />
+			</button>
+			{isOpen && (
+				<div className="absolute left-0 right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 max-h-48 overflow-y-auto">
+					{options.map((option) => (
+						<button
+							key={option}
+							onClick={() => {
+								onSelect(option);
+							}}
+							className="w-full px-4 py-3 text-left text-stone-100 text-base hover:text-stone-400 transition-colors"
+						>
+							{option}
+						</button>
+					))}
+				</div>
+			)}
+		</div>
+	);
+};
 
 const InputField = ({
 	icon: Icon,
