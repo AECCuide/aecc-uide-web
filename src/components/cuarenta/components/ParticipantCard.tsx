@@ -25,7 +25,7 @@ const StylesTextForms = {
 	text: 'text-stone-100',
 	textSecondary: 'text-stone-400',
 	placeholder: 'placeholder-stone-400',
-	textSize: 'text-base',
+	textSize: 'text-sm sm:text-sm',
 	input: 'w-full bg-transparent focus:outline-none',
 	container: 'flex items-center gap-3',
 } as const;
@@ -225,7 +225,7 @@ export default function ParticipantCard({
 	return (
 		<FormField>
 			<div className="space-y-5">
-				<div className="flex items-start gap-4">
+				<div className="flex flex-col sm:flex-row items-start gap-5 sm:gap-4">
 					<InputField
 						icon={Users}
 						value={participant.name}
