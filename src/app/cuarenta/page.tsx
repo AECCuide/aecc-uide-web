@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/all';
 import FallingCardsAnimation from '@/components/cuarenta/animation/animacionCartas';
+import { Button } from '@/components/ui/buttom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -178,14 +180,15 @@ export default function CuarentaPage() {
 
 	return (
 		<FallingCardsAnimation cardCount={60}>
-			<div className="text-center text-gray-800 dark:text-white">
+			<div className="text-center" style={{ color: 'var(--text-color)' }}>
 				{/* Sección 1 - Información del Torneo */}
 				<section className="min-h-screen w-full flex flex-col items-center justify-center px-4 box-border overflow-hidden">
 					<h1
 						ref={titleRef}
-						className="text-5xl md:text-8xl font-bold tracking-wider mb-8 text-gray-900 dark:text-white"
+						className="text-5xl md:text-8xl font-bold tracking-wider mb-8"
 						style={{
-							textShadow: '4px 4px 12px rgba(0,0,0,0.8)',
+							color: 'var(--text-color)',
+							textShadow: '4px 4px 12px rgba(0,0,0,0.3)',
 							fontFamily: 'serif',
 							perspective: '1000px',
 						}}
@@ -197,51 +200,91 @@ export default function CuarentaPage() {
 
 					<p
 						ref={subtitleRef}
-						className="text-xl md:text-3xl uppercase tracking-widest border-t-2 border-b-2 border-gray-800 dark:border-white py-3 px-6 md:px-8 mb-12"
+						className="text-xl md:text-3xl uppercase tracking-widest py-3 px-6 md:px-8 mb-12"
+						style={{
+							borderTop: '2px solid var(--border)',
+							borderBottom: '2px solid var(--border)',
+							color: 'var(--text-color)',
+						}}
 					>
 						Ciencias de la Computación
 					</p>
 
 					<div
 						ref={infoBoxRef}
-						className="bg-black/5 dark:bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-8 border-2 border-black/10 dark:border-white/30 max-w-full overflow-hidden"
+						className="backdrop-blur-md rounded-2xl p-4 sm:p-8 max-w-full overflow-hidden"
+						style={{
+							backgroundColor: 'var(--card)',
+							border: '2px solid var(--border)',
+						}}
 					>
 						<div className="flex items-center justify-center gap-2 sm:gap-10">
 							{/* Fecha */}
 							<div className="px-2 sm:px-4 text-center">
-								<div className="text-2xl sm:text-7xl font-bold mb-1">23</div>
-								<div className="text-sm sm:text-xl uppercase tracking-wider">
+								<div
+									className="text-2xl sm:text-7xl font-bold mb-1"
+									style={{ color: 'var(--text-color-icon)' }}
+								>
+									23
+								</div>
+								<div
+									className="text-sm sm:text-xl uppercase tracking-wider"
+									style={{ color: 'var(--text-color-secondary)' }}
+								>
 									Noviembre
 								</div>
 							</div>
 
 							{/* Separador */}
-							<div className="h-8 sm:h-16 w-px bg-black/20 dark:bg-white/30"></div>
+							<div
+								className="h-8 sm:h-16 w-px"
+								style={{ backgroundColor: 'var(--border)' }}
+							></div>
 
 							{/* Hora */}
 							<div className="px-2 sm:px-4 text-center">
-								<div className="text-xl sm:text-3xl font-bold mb-1">
+								<div
+									className="text-xl sm:text-3xl font-bold mb-1"
+									style={{ color: 'var(--text-color)' }}
+								>
 									9:00 AM
 								</div>
-								<div className="text-xs sm:text-lg uppercase tracking-wider">
+								<div
+									className="text-xs sm:text-lg uppercase tracking-wider"
+									style={{ color: 'var(--text-color-secondary)' }}
+								>
 									Coliseo
 								</div>
 							</div>
 
 							{/* Separador */}
-							<div className="h-8 sm:h-16 w-px bg-black/20 dark:bg-white/30"></div>
+							<div
+								className="h-8 sm:h-16 w-px"
+								style={{ backgroundColor: 'var(--border)' }}
+							></div>
 
 							{/* Precio */}
 							<div className="px-2 sm:px-4 text-center">
-								<div className="text-3xl sm:text-7xl font-bold mb-1">5$</div>
-								<div className="text-xs sm:text-lg uppercase tracking-wider">
+								<div
+									className="text-3xl sm:text-7xl font-bold mb-1"
+									style={{ color: 'var(--text-color-icon)' }}
+								>
+									5$
+								</div>
+								<div
+									className="text-xs sm:text-lg uppercase tracking-wider"
+									style={{ color: 'var(--text-color-secondary)' }}
+								>
 									Por Pareja
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<p className="mt-8 text-xl opacity-70 animate-bounce text-gray-700 dark:text-gray-300">
+					<p
+						className="mt-8 text-xl opacity-70 animate-bounce"
+						style={{ color: 'var(--text-color-muted)' }}
+					>
 						Desplázate hacia abajo para ver más ✨
 					</p>
 				</section>
@@ -251,8 +294,17 @@ export default function CuarentaPage() {
 					ref={section2Ref}
 					className="min-h-screen flex flex-col items-center justify-center px-4 box-border overflow-hidden"
 				>
-					<div className="w-full max-w-xl sm:max-w-3xl mx-auto bg-gray-200/70 dark:bg-linear-to-r dark:text-bl backdrop-blur-lg rounded-3xl p-4 sm:p-12 border-4 border-black/10 dark:border-white/20 shadow-2xl overflow-hidden">
-						<h2 className="text-2xl sm:text-6xl font-bold mb-6 text-center sm:text-left leading-tight wrap-break-word">
+					<div 
+						className="w-full max-w-xl sm:max-w-3xl mx-auto backdrop-blur-lg rounded-3xl p-4 sm:p-12 shadow-2xl overflow-hidden"
+						style={{
+							backgroundColor: 'var(--card)',
+							border: '4px solid var(--border)',
+						}}
+					>
+						<h2 
+							className="text-2xl sm:text-6xl font-bold mb-6 text-center sm:text-left leading-tight wrap-break-word"
+							style={{ color: 'var(--text-color)' }}
+						>
 							🃏 ¿Listo para Jugar?
 						</h2>
 						<div className="space-y-4 text-sm sm:text-2xl text-left">
@@ -289,14 +341,22 @@ export default function CuarentaPage() {
 					ref={section3Ref}
 					className="min-h-screen flex flex-col items-center justify-center px-4"
 				>
-					<div className="space-y-12">
-						<h2 className="text-4xl md:text-8xl font-bold mb-4">
+					<div className="space-y-12 flex flex-col items-center">
+						<h2
+							className="text-4xl md:text-8xl font-bold mb-8 text-center"
+							style={{ color: 'var(--text-color)' }}
+						>
 							{splitText('¡TE ESPERAMOS!')}
 						</h2>
-						<div className="bg-yellow-400 rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg dark:shadow-2xl">
-							INSCRÍBETE AHORA
-						</div>
-						<p className="text-xl md:text-2xl opacity-80 dark:opacity-90">
+						<Link href="/cuarenta/forms">
+							<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg">
+								INSCRÍBETE AHORA
+							</Button>
+						</Link>
+						<p
+							className="text-xl md:text-2xl text-center"
+							style={{ color: 'var(--text-color-secondary)' }}
+						>
 							Cupos limitados - No te quedes fuera
 						</p>
 					</div>
@@ -304,10 +364,16 @@ export default function CuarentaPage() {
 
 				{/* Sección Final */}
 				<section className="min-h-screen flex flex-col items-center justify-center px-4">
-					<h2 className="text-4xl md:text-7xl font-bold mb-8">
+					<h2
+						className="text-4xl md:text-7xl font-bold mb-8"
+						style={{ color: 'var(--text-color)' }}
+					>
 						🏆 Nos Vemos en el Torneo 🏆
 					</h2>
-					<p className="text-xl md:text-3xl max-w-2xl opacity-90">
+					<p
+						className="text-xl md:text-3xl max-w-2xl"
+						style={{ color: 'var(--text-color-secondary)' }}
+					>
 						Organizado por estudiantes de Ciencias de la Computación
 					</p>
 				</section>
