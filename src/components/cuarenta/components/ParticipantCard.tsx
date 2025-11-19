@@ -19,13 +19,13 @@ const COURSES = [
 	'5to A',
 ];
 
-// Estilos globales centralizados
+// Estilos globales centralizados usando variables CSS
 const StylesTextForms = {
-	icon: 'w-6 h-6 shrink-0 text-stone-400',
-	text: 'text-stone-100',
-	textSecondary: 'text-stone-400',
-	placeholder: 'placeholder-stone-400',
-	textSize: 'text-base',
+	icon: 'w-6 h-6 shrink-0 text-[var(--text-color-muted)]',
+	text: 'text-[var(--text-color)]',
+	textSecondary: 'text-[var(--text-color-secondary)]',
+	placeholder: 'placeholder-[var(--text-color-placeholder)]',
+	textSize: 'text-sm sm:text-sm',
 	input: 'w-full bg-transparent focus:outline-none',
 	container: 'flex items-center gap-3',
 } as const;
@@ -51,7 +51,9 @@ interface ParticipantCardProps {
 
 // --- Reusable Sub-components ---
 const FormField = ({ children }: { children: React.ReactNode }) => (
-	<div className="bg-zinc-800/40 rounded-2xl px-5 py-5">{children}</div>
+	<div className="bg-(--background-input) rounded-2xl px-5 py-5 transition-colors">
+		{children}
+	</div>
 );
 
 interface DropdownProps {
@@ -96,30 +98,40 @@ const Dropdown = ({
 			<button
 				onClick={onToggle}
 				className={`w-full text-left bg-transparent ${StylesTextForms.textSize} focus:outline-none flex items-center justify-between ${
-					error ? 'text-red-500' : ''
+					error ? 'text-(--text-color-error)' : ''
 				}`}
 			>
 				<span
-					className={`truncate ${value ? StylesTextForms.text : error ? 'text-red-400' : StylesTextForms.textSecondary}`}
+					className={`truncate ${
+						value
+							? StylesTextForms.text
+							: error
+								? 'text-(--text-color-error)'
+								: StylesTextForms.textSecondary
+					}`}
 				>
 					{value || placeholder}
 				</span>
 				<ChevronDown
-					className={`w-5 h-5 shrink-0 ${error ? 'text-red-500' : StylesTextForms.textSecondary}`}
+					className={`w-5 h-5 shrink-0 ${
+						error ? 'text-(--text-color-error)' : StylesTextForms.textSecondary
+					}`}
 				/>
 			</button>
 			{error && (
-				<span className="text-red-500 text-xs mt-1 block">{error}</span>
+				<span className="text-(--text-color-error) text-xs mt-1 block">
+					{error}
+				</span>
 			)}
 			{isOpen && (
-				<div className="absolute left-0 right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 max-h-48 overflow-y-auto">
+				<div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-zinc-800 rounded shadow-lg border border-stone-200 dark:border-zinc-700 overflow-hidden z-10 max-h-48 overflow-y-auto transition-colors">
 					{options.map((option) => (
 						<button
 							key={option}
 							onClick={() => {
 								onSelect(option);
 							}}
-							className={`w-full px-4 py-3 text-left ${StylesTextForms.text} ${StylesTextForms.textSize} hover:bg-amber-700/80 transition-colors`}
+							className={`w-full px-4 py-3 text-left ${StylesTextForms.text} ${StylesTextForms.textSize} hover:bg-(--hover-yellow) dark:hover:bg-(--hover-gray) transition-colors`}
 						>
 							{option}
 						</button>
@@ -148,7 +160,9 @@ const InputField = ({
 	<div className="relative flex-1">
 		<div className={StylesTextForms.container}>
 			<Icon
-				className={`${StylesTextForms.icon} ${error ? 'text-red-500' : ''}`}
+				className={`${StylesTextForms.icon} ${
+					error ? 'text-(--text-color-error)' : ''
+				}`}
 			/>
 			<input
 				type={type}
@@ -159,12 +173,16 @@ const InputField = ({
 				placeholder={placeholder}
 				className={`${StylesTextForms.input} ${StylesTextForms.text} ${StylesTextForms.textSize} ${
 					error
-						? 'placeholder-red-400 text-red-500'
+						? 'placeholder-(--text-color-error) text-(--text-color-error)'
 						: StylesTextForms.placeholder
 				}`}
 			/>
 		</div>
-		{error && <span className="text-red-500 text-xs block mt-1">{error}</span>}
+		{error && (
+			<span className="text-(--text-color-error) text-xs block mt-1">
+				{error}
+			</span>
+		)}
 	</div>
 );
 
@@ -181,14 +199,12 @@ export default function ParticipantCard({
 	const pairNumber = index + 1;
 	const [localErrors, setLocalErrors] = useState<ParticipantErrors>({});
 
-	// Combinar errores locales y externos
 	const errors = { ...localErrors, ...externalErrors };
 
 	const validateField = (field: keyof Participant, value: string) => {
 		try {
 			participantSchema.shape[field].parse(value);
 
-			// Crear nuevo objeto sin el campo que queremos eliminar
 			const remainingErrors = Object.keys(
 				localErrors
 			).reduce<ParticipantErrors>((acc, key) => {
@@ -200,7 +216,6 @@ export default function ParticipantCard({
 
 			setLocalErrors(remainingErrors);
 
-			// Notificar al padre
 			if (onErrorsChange) {
 				onErrorsChange(remainingErrors);
 			}
@@ -209,7 +224,6 @@ export default function ParticipantCard({
 				const message = error.issues[0]?.message ?? 'Invalid';
 				const newErrors = { ...localErrors, [field]: message };
 				setLocalErrors(newErrors);
-				// Notificar al padre
 				if (onErrorsChange) {
 					onErrorsChange(newErrors);
 				}
@@ -225,7 +239,7 @@ export default function ParticipantCard({
 	return (
 		<FormField>
 			<div className="space-y-5">
-				<div className="flex items-start gap-4">
+				<div className="flex flex-col sm:flex-row items-start gap-5 sm:gap-4">
 					<InputField
 						icon={Users}
 						value={participant.name}
@@ -248,7 +262,9 @@ export default function ParticipantCard({
 				</div>
 				<div className={StylesTextForms.container}>
 					<School
-						className={`${StylesTextForms.icon} ${errors.course ? 'text-red-500' : ''}`}
+						className={`${StylesTextForms.icon} ${
+							errors.course ? 'text-(--text-color-error)' : ''
+						}`}
 					/>
 					<Dropdown
 						options={COURSES}
