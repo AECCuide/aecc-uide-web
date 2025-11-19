@@ -1,8 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/all';
 import FallingCardsAnimation from '@/components/cuarenta/animation/animacionCartas';
 import { Button } from '@/components/ui/buttom';
 
@@ -347,9 +348,11 @@ export default function CuarentaPage() {
 						>
 							{splitText('¡TE ESPERAMOS!')}
 						</h2>
-						<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg">
-							INSCRÍBETE AHORA
-						</Button>
+						<Link href="/cuarenta/forms">
+							<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg">
+								INSCRÍBETE AHORA
+							</Button>
+						</Link>
 						<p
 							className="text-xl md:text-2xl text-center"
 							style={{ color: 'var(--text-color-secondary)' }}
