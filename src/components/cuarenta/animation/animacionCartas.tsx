@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, type ReactNode } from 'react';
+import React, { useEffect, useRef, useState, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -16,14 +16,18 @@ interface Card {
 interface FallingCardsAnimationProps {
 	children: ReactNode;
 	cardCount?: number;
+	mobileCardCount?: number;
 }
 
 const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 	children,
 	cardCount = 50,
+	mobileCardCount = 30,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const cardsContainerRef = useRef<HTMLDivElement>(null);
+	const [isMobile, setIsMobile] = useState(false);
+	const [cards, setCards] = useState<Card[]>([]);
 
 	// Palos y valores de las cartas
 	const suits = [
@@ -65,16 +69,32 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 		return cards;
 	};
 
-	const cards = generateCards(cardCount);
+	// Detectar cambios de tamaño de pantalla
+	useEffect(() => {
+		const handleResize = () => {
+			const mobile = window.innerWidth < 768;
+			setIsMobile(mobile);
+			setCards(generateCards(mobile ? mobileCardCount : cardCount));
+		};
+
+		// Inicializar
+		handleResize();
+
+		window.addEventListener('resize', handleResize);
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, [cardCount, mobileCardCount]);
 
 	useEffect(() => {
-		if (!cardsContainerRef.current) return;
+		if (!cardsContainerRef.current || cards.length === 0) return;
 
 		const cardElements = cardsContainerRef.current.querySelectorAll('.card');
 
 		// Configurar posiciones iniciales aleatorias
 		cardElements.forEach((card, index) => {
-			const randomX = Math.random() * window.innerWidth;
+			const cardWidth = isMobile ? 70 : 100;
+			const randomX = Math.random() * (window.innerWidth - cardWidth);
 			const randomRotation = Math.random() * 360;
 
 			gsap.set(card, {
@@ -83,6 +103,10 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 				rotation: randomRotation,
 				opacity: 0,
 			});
+
+			const horizontalMovement = isMobile
+				? window.innerWidth * 0.8
+				: window.innerWidth * 0.6;
 
 			// Animación de caída con scroll
 			gsap.to(card, {
@@ -100,7 +124,9 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 				},
 				y: window.innerHeight + 200,
 				rotation: randomRotation + (Math.random() * 720 - 360),
-				x: `+=${String(Math.random() * 400 - 200)}`,
+				x: `+=${String(
+					Math.random() * horizontalMovement - horizontalMovement / 2
+				)}`,
 				ease: 'none',
 			});
 
@@ -122,7 +148,7 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 				trigger.kill();
 			});
 		};
-	}, [cardCount]);
+	}, [cards, isMobile]);
 
 	return (
 		<div ref={containerRef} className="scroll-container">
@@ -168,11 +194,11 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 				}
 
 				.dark {
-					--card-bg: #2d3748; /* gray-800 */
-					--card-border: #a0aec0; /* gray-400 */
+					--card-bg: #2d3748;
+					--card-border: #a0aec0;
 					--card-shadow: rgba(0, 0, 0, 0.6);
-					--text-color-dark: #f7fafc; /* gray-100 */
-					--text-color-red: #f56565; /* red-400 */
+					--text-color-dark: #f7fafc;
+					--text-color-red: #f56565;
 				}
 
 				.scroll-container {
