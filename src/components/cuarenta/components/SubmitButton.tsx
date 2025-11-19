@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
+import { Button } from '@/components/ui/buttom';
 
 interface SubmitButtonProps {
 	validateForm: () => boolean;
@@ -85,13 +86,13 @@ export default function SubmitButton({
 
 	return (
 		<div className="pt-6 pb-8 relative">
-			<button
+			<Button
 				onClick={handleSubmit}
-				className="w-full py-4 bg-white text-stone-900 rounded-2xl font-medium hover:bg-stone-100 transition-colors shadow-lg transform active:scale-95 duration-150 disabled:bg-stone-400 disabled:cursor-not-allowed"
+				className="w-full py-4 rounded-2xl font-medium shadow-lg transform active:scale-95 duration-150 disabled:opacity-50 disabled:cursor-not-allowed ronded-lg"
 				disabled={isSubmitting}
 			>
 				{children}
-			</button>
+			</Button>
 		</div>
 	);
 }

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useReducer, Reducer } from 'react';
 import { CreditCard, ChevronDown } from 'lucide-react';
-import ParticipantCard from '@/components/cuarenta/components/ParticipantCard'; // Asumo que este es el componente correcto
+import ParticipantCard from '@/components/cuarenta/components/ParticipantCard';
 import SubmitButton from '@/components/cuarenta/components/SubmitButton';
 import { validateCuarentaForm } from '@/components/cuarenta/hooks/validation';
 
@@ -107,7 +107,9 @@ const registrationReducer: Reducer<State, Action> = (state, action) => {
 
 // --- Reusable Components ---
 const FormField = ({ children }: { children: React.ReactNode }) => (
-	<div className="bg-zinc-800/40 rounded-2xl px-4 py-4">{children}</div>
+	<div className="bg-(--background-input) rounded-2xl px-4 py-4 transition-colors">
+		{children}
+	</div>
 );
 
 export default function TeamRegistration() {
@@ -170,7 +172,7 @@ export default function TeamRegistration() {
 	};
 
 	return (
-		<div className="min-h-screen from-zinc-900 via-neutral-900 to-stone-900 p-0">
+		<div className="min-h-screen bg-linear-to-br from-stone-50 via-stone-100 to-stone-200 dark:from-zinc-900 dark:via-neutral-900 dark:to-stone-900 p-0 transition-colors">
 			<div className="max-w-2xl mx-auto">
 				{/* Team Name */}
 				<div className="px-6 py-8">
@@ -181,14 +183,14 @@ export default function TeamRegistration() {
 							dispatch({ type: 'SET_TEAM_NAME', payload: e.target.value });
 						}}
 						placeholder="Nombre del Equipo"
-						className={`w-full bg-transparent border-none text-3xl md:text-4xl font-bold tracking-wider placeholder-stone-600 focus:outline-none ${
-							state.errors.teamName && state.touched
-								? 'text-stone-100'
-								: 'text-stone-400'
+						className={`w-full bg-transparent border-none text-3xl md:text-4xl font-bold tracking-wider placeholder-(--text-color-placeholder) focus:outline-none transition-colors ${
+							state.teamName
+								? 'text-(--text-color)'
+								: 'text-(--text-color-placeholder)'
 						}`}
 					/>
 					{state.errors.teamName && state.touched && (
-						<p className="text-red-500 text-sm mt-2 px-1">
+						<p className="text-(--text-color-error) text-sm mt-2 px-1">
 							{state.errors.teamName}
 						</p>
 					)}
@@ -197,7 +199,7 @@ export default function TeamRegistration() {
 				<div className="px-6 py-6 space-y-6">
 					{/* Participants */}
 					<div>
-						<h3 className="text-stone-500 text-xs font-medium mb-3 px-1">
+						<h3 className="text-(--text-color-secondary) text-xs font-medium mb-3 px-1 transition-colors">
 							Participantes
 						</h3>
 						<div className="space-y-2">
@@ -231,27 +233,29 @@ export default function TeamRegistration() {
 
 					{/* Payment Method */}
 					<div>
-						<h3 className="text-stone-500 text-xs font-medium mb-3 px-1">
+						<h3 className="text-(--text-color-secondary) text-xs font-medium mb-3 px-1 transition-colors">
 							Información del registro
 						</h3>
 						<FormField>
 							<div className="flex items-center justify-between relative">
 								<div className="flex items-center gap-3">
-									<CreditCard className="w-5 h-5 text-stone-500" />
-									<span className="text-stone-400 text-sm">Método de pago</span>
+									<CreditCard className="w-5 h-5 text-(--text-color-muted) transition-colors" />
+									<span className="text-(--text-color-secondary) text-sm transition-colors">
+										Método de pago
+									</span>
 								</div>
 								<div className="relative">
 									<button
 										onClick={() => {
 											dispatch({ type: 'TOGGLE_DROPDOWN', payload: 'payment' });
 										}}
-										className="flex items-center gap-2 text-stone-500 text-sm"
+										className="flex items-center gap-2 text-(--text-color-secondary) text-sm transition-colors hover:text-(--text-color)"
 									>
 										<span>{state.paymentMethod}</span>
 										<ChevronDown className="w-4 h-4" />
 									</button>
 									{state.activeDropdown === 'payment' && (
-										<div className="absolute right-0 top-full mt-2 bg-zinc-800 rounded shadow-lg overflow-hidden z-10 min-w-[140px]">
+										<div className="absolute right-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded shadow-lg overflow-hidden z-10 min-w-[140px] transition-colors">
 											{PAYMENT_METHODS.map((method) => (
 												<button
 													key={method}
@@ -261,7 +265,7 @@ export default function TeamRegistration() {
 															payload: method,
 														});
 													}}
-													className="w-full px-4 py-2.5 text-left text-stone-300 text-sm hover:bg-amber-700/80 transition-colors"
+													className="w-full px-4 py-2.5 text-left text-(--text-color) text-sm hover:bg-(--hover-yellow) dark:hover:bg-(--hover-gray) transition-colors"
 												>
 													{method}
 												</button>
