@@ -28,7 +28,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 	// Función para manejar el clic en una card
 	const handleCardClick = (slug?: string) => {
 		if (slug) {
-			const fullUrl = `/aecc-uide-web//details/${slug}`; // Construimos la URL
+			const fullUrl = `/aecc-uide-web/${slug}`; // Construimos la URL
 			window.open(fullUrl, '_blank'); // Abre en una nueva pestaña
 		}
 	};
