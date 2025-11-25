@@ -24,7 +24,7 @@ const StylesTextForms = {
 	icon: 'w-6 h-6 shrink-0 text-[var(--text-color-muted)]',
 	text: 'text-[var(--text-color)]',
 	textSecondary: 'text-[var(--text-color-secondary)]',
-	placeholder: 'placeholder-[var(--text-color-placeholder)]',
+	placeholder: 'placeholder-[var(--text-color-secondary)]',
 	textSize: 'text-sm sm:text-sm',
 	input: 'w-full bg-transparent focus:outline-none',
 	container: 'flex items-center gap-3',

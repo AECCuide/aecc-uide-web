@@ -51,18 +51,12 @@ const footerData: FooterData = {
 	authors: [
 		{
 			id: 1,
-			perfilGithub: 'https://avatars.githubusercontent.com/u/155678368?v=4',
-			name: 'Auca',
-			href: 'https://github.com/Auc4',
+			perfilGithub: 'https://avatars.githubusercontent.com/u/185435926?v=4',
+			name: 'MasterPieceDR',
+			href: 'https://github.com/MasterPieceDR',
 		},
 		{
 			id: 2,
-			perfilGithub: 'https://avatars.githubusercontent.com/u/199831834?v=4',
-			name: 'Melqp',
-			href: 'https://github.com/Melqp',
-		},
-		{
-			id: 3,
 			perfilGithub: 'https://avatars.githubusercontent.com/u/70347526?v=4',
 			name: 'fait-arch',
 			href: 'https://github.com/fait-arch',
@@ -73,7 +67,7 @@ const footerData: FooterData = {
 	socials: [
 		{
 			icon: (
-				<FacebookIcon className="size-6 fill-yellow-500 hover:fill-black	 transition-colors" />
+				<FacebookIcon className="size-6 fill-yellow-500 hover:fill-black transition-colors" />
 			),
 			href: 'https://www.facebook.com/people/AECCuide/61569555116398/?rdid=dvSy2n1kfelpaXXl&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1A7yUoEArc%2F',
 		},
@@ -81,7 +75,7 @@ const footerData: FooterData = {
 			icon: (
 				<InstagramIcon className="size-6 fill-yellow-500 hover:fill-black transition-colors" />
 			),
-			href: 'https://www.instagram.com/aeccuide/profilecard/?igsh=cGhtNTI3aWxlNTM0',
+			href: 'https://www.instagram.com/aecc_uide/',
 		},
 	],
 };
