@@ -4,6 +4,14 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Button } from '@/components/ui/buttom';
 
+// Declaración para extender la interfaz global Window y añadir la propiedad dataLayer
+declare global {
+	interface Window {
+		dataLayer: Record<string, unknown>[];
+		gtag: (...args: unknown[]) => void;
+	}
+}
+
 interface SubmitButtonProps {
 	validateForm: () => boolean;
 	getRegistrationData: () => object;
@@ -65,6 +73,22 @@ export default function SubmitButton({
 		}
 
 		const registrationData = getRegistrationData();
+
+		// Envía el evento a Google Tag Manager
+		if (typeof window.dataLayer !== 'undefined') {
+			window.dataLayer.push({
+				event: 'form_submit',
+				// Opcional: puedes enviar los datos del formulario si los necesitas en GTM
+				// form_data: registrationData,
+			});
+		}
+
+		// Envía el evento a Google Analytics
+		if (typeof window.gtag === 'function') {
+			window.gtag('event', 'generate_lead', {
+				// Puedes añadir parámetros adicionales si los necesitas en Google Analytics
+			});
+		}
 
 		console.log(JSON.stringify(registrationData, null, 2));
 
