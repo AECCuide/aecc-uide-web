@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export interface ParticipantData {
 	name: string;
@@ -21,38 +22,54 @@ export interface TeamData {
 	timestamp: string;
 }
 
-export async function submitCuarentaRegistration(
-	registrationData: Omit<TeamData, 'id' | 'pagado' | 'timestamp' | 'ImageUrl'>
-): Promise<TeamData> {
-	// TODO: Reemplaza '/api/cuarenta/register' con tu endpoint real.
-	const endpoint = '/api/cuarenta/register';
-
-	const response = await fetch(endpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(registrationData),
-	});
-
-	if (!response.ok) {
-		const errorData = (await response.json()) as { message?: string };
-		throw new Error(
-			errorData.message ?? `Error en el servidor: ${response.statusText}`
-		);
-	}
-
-	return response.json() as Promise<TeamData>;
+// Interface for the raw data from Supabase to avoid using 'any'
+interface DbTeamRecord {
+	id: string;
+	team_name: string;
+	participant1_name: string;
+	participant1_course: string;
+	participant1_phone: string;
+	participant2_name: string;
+	participant2_course: string;
+	participant2_phone: string;
+	payment_method: string;
+	pagado: boolean;
+	image_url: string;
+	created_at: string;
 }
 
 async function fetchTeams(): Promise<TeamData[]> {
-	// TODO: Reemplaza '/api/cuarenta/teams' con tu endpoint real.
-	const endpoint = '/api/cuarenta/teams';
-	const response = await fetch(endpoint);
-	if (!response.ok) {
+	const { data, error } = await supabase
+		.from('cuarenta_registrations')
+		.select<'*', DbTeamRecord>('*')
+		.order('created_at', { ascending: false });
+
+	if (error) {
+		console.error('Error fetching teams:', error);
 		throw new Error('No se pudieron obtener los equipos');
 	}
-	return response.json() as Promise<TeamData[]>;
+
+	// Now 'data' is correctly typed as DbTeamRecord[]
+	return data.map((team) => ({
+		id: team.id,
+		teamName: team.team_name,
+		participants: {
+			participant1: {
+				name: team.participant1_name,
+				course: team.participant1_course,
+				phone: team.participant1_phone,
+			},
+			participant2: {
+				name: team.participant2_name,
+				course: team.participant2_course,
+				phone: team.participant2_phone,
+			},
+		},
+		paymentMethod: team.payment_method,
+		pagado: team.pagado,
+		ImageUrl: team.image_url,
+		timestamp: team.created_at,
+	}));
 }
 
 export const useGrup = () => {
@@ -77,31 +94,38 @@ export const useGrup = () => {
 		loadTeams();
 	}, [loadTeams]);
 
-	const togglePayment = async (id: string) => {
-		const team = teams.find((t) => t.id === id);
-		if (!team) return;
+	const togglePayment = async (id: string, currentStatus: boolean) => {
+		const { error } = await supabase
+			.from('cuarenta_registrations')
+			.update({ pagado: !currentStatus })
+			.eq('id', id)
+			.select<'*', DbTeamRecord>()
+			.single();
 
-		const response = await fetch(`/api/cuarenta/teams/${id}`, {
-			method: 'PATCH',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ pagado: !team.pagado }),
-		});
-
-		if (response.ok) {
-			const updatedTeam = (await response.json()) as TeamData;
-			setTeams((currentTeams) =>
-				currentTeams.map((t) => (t.id === id ? updatedTeam : t))
-			);
+		if (error) {
+			console.error('Error updating payment status:', error);
+			// Optionally, show an error to the user
+			return;
 		}
+
+		setTeams((currentTeams) =>
+			currentTeams.map((t) => (t.id === id ? { ...t, pagado: !t.pagado } : t))
+		);
 	};
 
 	const deleteTeam = async (id: string) => {
-		const response = await fetch(`/api/cuarenta/teams/${id}`, {
-			method: 'DELETE',
-		});
-		if (response.ok) {
-			setTeams((prevTeams) => prevTeams.filter((team) => team.id !== id));
+		const { error } = await supabase
+			.from('cuarenta_registrations')
+			.delete()
+			.eq('id', id);
+
+		if (error) {
+			console.error('Error deleting team:', error);
+			// Optionally, show an error to the user
+			return;
 		}
+
+		setTeams((prevTeams) => prevTeams.filter((team) => team.id !== id));
 	};
 
 	const formatDate = (timestamp: string) => {

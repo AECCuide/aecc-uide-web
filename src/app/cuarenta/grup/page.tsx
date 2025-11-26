@@ -1,10 +1,9 @@
-'use client';
-
+import Image from 'next/image';
 import React from 'react';
 import { Check, X, Trash2, Phone as PhoneIcon } from 'lucide-react';
 import { useGrup, TeamData } from './usegrup';
 
-// --- Componentes de Celdas Reutilizables ---
+// --- Utilidades ---
 
 const getInitials = (name: string) => {
 	const parts = name.split(' ');
@@ -26,6 +25,8 @@ const getAvatarColor = (name: string) => {
 	];
 	return colors[name.charCodeAt(0) % colors.length];
 };
+
+// --- Componentes de Celdas Reutilizables ---
 
 const TeamNameCell: React.FC<{ team: TeamData }> = ({ team }) => (
 	<div className="flex flex-col">
@@ -52,10 +53,8 @@ const ParticipantCell: React.FC<{ name: string }> = ({ name }) => (
 );
 
 const CourseCell: React.FC<{ course: string }> = ({ course }) => (
-	<span className="text-(--text-color-secondary) text-sm transition-colors">
-		<span className="text-text-color-secondary text-sm transition-colors">
-			{course}
-		</span>
+	<span className="text-text-color-secondary text-sm transition-colors">
+		{course}
 	</span>
 );
 
@@ -83,11 +82,11 @@ const DateCell: React.FC<{
 
 const StatusCell: React.FC<{
 	team: TeamData;
-	onToggle: (id: string) => void;
+	onToggle: (id: string, pagado: boolean) => void;
 }> = ({ team, onToggle }) => (
 	<button
 		onClick={() => {
-			onToggle(team.id);
+			onToggle(team.id, team.pagado);
 		}}
 		className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
 			team.pagado
@@ -109,13 +108,13 @@ const StatusCell: React.FC<{
 
 const ActionsCell: React.FC<{
 	team: TeamData;
-	onToggle: (id: string) => void;
+	onToggle: (id: string, pagado: boolean) => void;
 	onDelete: (id: string) => void;
 }> = ({ team, onToggle, onDelete }) => (
 	<div className="flex items-center justify-center gap-2">
 		<button
 			onClick={() => {
-				onToggle(team.id);
+				onToggle(team.id, team.pagado);
 			}}
 			className={`p-1.5 rounded-md transition-all ${
 				team.pagado
@@ -144,10 +143,110 @@ const ActionsCell: React.FC<{
 	</div>
 );
 
+// --- Tipos y Configuración ---
+
+interface ColumnConfig {
+	header: string;
+	cell: (team: TeamData) => React.ReactNode;
+	textAlign?: 'left' | 'center' | 'right';
+}
+
+interface ParticipantConfig {
+	key: 'participant1' | 'participant2';
+	label: string;
+}
+
 // --- Componente Principal ---
 
 export default function GrupManagement() {
 	const { teams, loading, togglePayment, deleteTeam, formatDate } = useGrup();
+
+	// Configuración de participantes (dinámico)
+	const participants: ParticipantConfig[] = [
+		{ key: 'participant1', label: 'Participante 1' },
+		{ key: 'participant2', label: 'Participante 2' },
+	];
+
+	// Generar columnas dinámicamente
+	const generateColumns = (): ColumnConfig[] => {
+		const columns: ColumnConfig[] = [
+			{
+				header: 'Equipo',
+				cell: (team) => <TeamNameCell team={team} />,
+			},
+		];
+
+		// Agregar columnas de participantes dinámicamente
+		participants.forEach((participant) => {
+			columns.push(
+				{
+					header: participant.label,
+					cell: (team) => (
+						<ParticipantCell name={team.participants[participant.key].name} />
+					),
+				},
+				{
+					header: 'Curso',
+					cell: (team) => (
+						<CourseCell course={team.participants[participant.key].course} />
+					),
+				},
+				{
+					header: 'Contacto',
+					cell: (team) => (
+						<ContactCell phone={team.participants[participant.key].phone} />
+					),
+				}
+			);
+		});
+
+		// Agregar columnas finales
+		columns.push(
+			{
+				header: 'Método',
+				cell: (team) => <PaymentMethodCell method={team.paymentMethod} />,
+			},
+			{
+				header: 'Imagen',
+				cell: (team) =>
+					team.ImageUrl ? (
+						<Image
+							src={team.ImageUrl}
+							alt="Team"
+							width={32}
+							height={32}
+							className="object-cover rounded-full"
+						/>
+					) : null,
+			},
+			{
+				header: 'Fecha',
+				cell: (team) => (
+					<DateCell timestamp={team.timestamp} formatDate={formatDate} />
+				),
+			},
+			{
+				header: 'Estado',
+				cell: (team) => <StatusCell team={team} onToggle={togglePayment} />,
+				textAlign: 'center',
+			},
+			{
+				header: 'Acciones',
+				cell: (team) => (
+					<ActionsCell
+						team={team}
+						onToggle={togglePayment}
+						onDelete={deleteTeam}
+					/>
+				),
+				textAlign: 'center',
+			}
+		);
+
+		return columns;
+	};
+
+	const columns = generateColumns();
 
 	if (loading) {
 		return (
@@ -158,76 +257,6 @@ export default function GrupManagement() {
 			</div>
 		);
 	}
-
-	const columns: {
-		header: string;
-		cell: (team: TeamData) => React.ReactNode;
-		textAlign?: 'left' | 'center' | 'right';
-	}[] = [
-		{ header: 'Equipo', cell: (team) => <TeamNameCell team={team} /> },
-		{
-			header: 'Participante 1',
-			cell: (team) => (
-				<ParticipantCell name={team.participants.participant1.name} />
-			),
-		},
-		{
-			header: 'Curso',
-			cell: (team) => (
-				<CourseCell course={team.participants.participant1.course} />
-			),
-		},
-		{
-			header: 'Contacto',
-			cell: (team) => (
-				<ContactCell phone={team.participants.participant1.phone} />
-			),
-		},
-		{
-			header: 'Participante 2',
-			cell: (team) => (
-				<ParticipantCell name={team.participants.participant2.name} />
-			),
-		},
-		{
-			header: 'Curso',
-			cell: (team) => (
-				<CourseCell course={team.participants.participant2.course} />
-			),
-		},
-		{
-			header: 'Contacto',
-			cell: (team) => (
-				<ContactCell phone={team.participants.participant2.phone} />
-			),
-		},
-		{
-			header: 'Método',
-			cell: (team) => <PaymentMethodCell method={team.paymentMethod} />,
-		},
-		{
-			header: 'Fecha',
-			cell: (team) => (
-				<DateCell timestamp={team.timestamp} formatDate={formatDate} />
-			),
-		},
-		{
-			header: 'Estado',
-			cell: (team) => <StatusCell team={team} onToggle={togglePayment} />,
-			textAlign: 'center',
-		},
-		{
-			header: 'Acciones',
-			cell: (team) => (
-				<ActionsCell
-					team={team}
-					onToggle={togglePayment}
-					onDelete={deleteTeam}
-				/>
-			),
-			textAlign: 'center',
-		},
-	];
 
 	return (
 		<div className="min-h-screen bg-stone-50 dark:bg-zinc-950 p-6 transition-colors">
@@ -265,7 +294,7 @@ export default function GrupManagement() {
 								{teams.length === 0 ? (
 									<tr>
 										<td
-											colSpan={11}
+											colSpan={columns.length}
 											className="px-6 py-12 text-center text-text-color-secondary transition-colors"
 										>
 											No hay equipos registrados
