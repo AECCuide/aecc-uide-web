@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import React from 'react';
 import { Check, X, Trash2, Phone as PhoneIcon } from 'lucide-react';
