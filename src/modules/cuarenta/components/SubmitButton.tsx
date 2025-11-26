@@ -1,16 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import confetti from 'canvas-confetti';
+import React from 'react';
 import { Button } from '@/components/ui/buttom';
-
-// Declaración para extender la interfaz global Window y añadir la propiedad dataLayer
-declare global {
-	interface Window {
-		dataLayer: Record<string, unknown>[];
-		gtag: (...args: unknown[]) => void;
-	}
-}
+import {
+	useCuarentaRegistration,
+	SubmissionStatus,
+} from '../hooks/useCuarentaRegistration';
 
 interface SubmitButtonProps {
 	validateForm: () => boolean;
@@ -23,99 +18,32 @@ export default function SubmitButton({
 	getRegistrationData,
 	children,
 }: SubmitButtonProps) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { status, isSubmitting, handleRegistration } = useCuarentaRegistration({
+		validateForm,
+		getRegistrationData,
+	});
 
-	const triggerConfetti = () => {
-		const defaults = {
-			spread: 360,
-			ticks: 100,
-			gravity: 0,
-			decay: 0.94,
-			startVelocity: 30,
-			origin: { x: 0.5, y: 0.5 },
-		};
-
-		// 1. Disparo de formas geométricas (Esto ya funcionaba)
-		confetti({
-			...defaults,
-			particleCount: 30,
-			scalar: 1.2,
-			shapes: ['circle', 'square'],
-			colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#F7DC6F'],
-		});
-
-		// 2. Disparo de Emojis
-		const emojis = ['🃏', '♠️', '♥️', '♦️', '♣️', ' 🎉', '🎊', '✨'];
-
-		// Convertimos cada emoji en una "forma" de canvas
-		const emojiShapes = emojis.map((emoji) =>
-			confetti.shapeFromText({ text: emoji, scalar: 3 })
-		);
-
-		confetti({
-			...defaults,
-			particleCount: 25, // Cantidad de emojis
-			scalar: 3, // Tamaño de los emojis
-			shapes: emojiShapes, // Pasamos las formas creadas arriba
-		});
-	};
-
-	const handleSubmit = () => {
-		if (isSubmitting) {
-			return;
+	const getButtonContent = (status: SubmissionStatus) => {
+		switch (status) {
+			case 'submitting':
+				return 'Enviando...';
+			case 'success':
+				return '¡Registrado!';
+			case 'error':
+				return 'Inténtalo de nuevo';
+			default:
+				return children;
 		}
-
-		setIsSubmitting(true);
-
-		if (!validateForm()) {
-			setIsSubmitting(false);
-			return;
-		}
-
-		const registrationData = getRegistrationData();
-
-		// Envía el evento a Google Tag Manager
-		if (typeof window.dataLayer !== 'undefined') {
-			window.dataLayer.push({
-				event: 'form_submit',
-				// Opcional: puedes enviar los datos del formulario si los necesitas en GTM
-				// form_data: registrationData,
-			});
-		}
-
-		// Envía el evento a Google Analytics
-		if (typeof window.gtag === 'function') {
-			window.gtag('event', 'generate_lead', {
-				// Puedes añadir parámetros adicionales si los necesitas en Google Analytics
-			});
-		}
-
-		console.log(JSON.stringify(registrationData, null, 2));
-
-		localStorage.setItem(
-			'lastRegistration',
-			JSON.stringify(registrationData, null, 2)
-		);
-
-		// Disparamos el confeti
-		triggerConfetti();
-		setTimeout(triggerConfetti, 100);
-		setTimeout(triggerConfetti, 200);
-
-		// Reactivar el botón después de la animación
-		setTimeout(() => {
-			setIsSubmitting(false);
-		}, 1000); // 1 segundo para que la animación se complete
 	};
 
 	return (
 		<div className="pt-6 pb-8 relative">
 			<Button
-				onClick={handleSubmit}
+				onClick={handleRegistration}
 				className="w-full py-4 rounded-2xl font-medium shadow-lg transform active:scale-95 duration-150 disabled:opacity-50 disabled:cursor-not-allowed ronded-lg"
-				disabled={isSubmitting}
+				disabled={isSubmitting || status === 'success'}
 			>
-				{children}
+				{getButtonContent(status)}
 			</Button>
 		</div>
 	);

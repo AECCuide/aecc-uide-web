@@ -207,7 +207,7 @@ export default function CuarentaPage() {
 							color: 'var(--text-color)',
 						}}
 					>
-						Ciencias de la Computación
+						Escuela de Ciencias de la Computación
 					</p>
 
 					<div
@@ -225,13 +225,13 @@ export default function CuarentaPage() {
 									className="text-2xl sm:text-7xl font-bold mb-1"
 									style={{ color: 'var(--text-color-icon)' }}
 								>
-									23
+									2
 								</div>
 								<div
 									className="text-sm sm:text-xl uppercase tracking-wider"
 									style={{ color: 'var(--text-color-secondary)' }}
 								>
-									Noviembre
+									Diciembre
 								</div>
 							</div>
 
@@ -269,7 +269,7 @@ export default function CuarentaPage() {
 									className="text-3xl sm:text-7xl font-bold mb-1"
 									style={{ color: 'var(--text-color-icon)' }}
 								>
-									5$
+									3$
 								</div>
 								<div
 									className="text-xs sm:text-lg uppercase tracking-wider"
@@ -349,7 +349,7 @@ export default function CuarentaPage() {
 							{splitText('¡TE ESPERAMOS!')}
 						</h2>
 						<Link href="/cuarenta/forms">
-							<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg">
+							<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg p-10">
 								INSCRÍBETE AHORA
 							</Button>
 						</Link>
