@@ -3,13 +3,13 @@
 import React from 'react';
 import Image from 'next/image';
 import {
-	X,
 	Phone,
 	BookOpen,
 	Users,
 	CreditCard,
 	Calendar,
-	Check,
+	CheckCircle2,
+	AlertCircle,
 } from 'lucide-react';
 import { TeamData } from '@/modules/sheets/usegrup';
 
@@ -22,7 +22,6 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 	team,
 	onClose,
 }) => {
-	// Cerrar al hacer clic en el backdrop
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (e.target === e.currentTarget) {
 			onClose();
@@ -31,49 +30,54 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 
 	return (
 		<div
-			className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+			className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300"
 			onClick={handleBackdropClick}
 		>
-			<div className="bg-card border border-border rounded-xl w-full sm:w-auto sm:min-w-[600px] max-w-2xl max-h-[90vh] overflow-y-auto shadow-lg animate-in zoom-in-95 duration-200">
-				{/* Header */}
-				<div className="flex items-start justify-between p-6 border-b border-border sticky top-0 bg-card z-10">
-					<div className="flex items-center gap-4">
-						{team.ImageUrl && (
-							<div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
-								<Image
-									src={team.ImageUrl}
-									alt={team.teamName}
-									fill
-									className="object-cover"
-								/>
+			<div className="bg-background w-full sm:w-auto sm:min-w-[650px] max-w-3xl max-h-[92vh] overflow-hidden rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300">
+				{/* Header con imagen de fondo */}
+				<div className="relative overflow-hidden">
+					{/* Gradiente de fondo */}
+					<div className="absolute inset-0 bg-linear-to-br from-yellow-400/20 via-transparent to-red-900/20 dark:from-yellow-500/10 dark:to-red-900/30" />
+
+					<div className="relative flex items-start justify-between p-6 sm:p-8">
+						<div className="flex items-center gap-4 sm:gap-6">
+							{team.ImageUrl && (
+								<div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shrink-0 ring-4 ring-white/10 shadow-xl">
+									<Image
+										src={team.ImageUrl}
+										alt={team.teamName}
+										fill
+										className="object-cover"
+									/>
+								</div>
+							)}
+							<div>
+								<h2 className="text-(--text-color) font-bold text-2xl sm:text-3xl tracking-tight mb-1">
+									{team.teamName}
+								</h2>
+								<p className="text-(--text-color-muted) text-xs sm:text-sm font-mono bg-black/5 dark:bg-white/5 px-3 py-1 rounded-full inline-block">
+									ID:{' '}
+									{typeof team.id === 'string'
+										? team.id.slice(0, 8)
+										: String(team.id).slice(0, 8)}
+								</p>
 							</div>
-						)}
-						<div>
-							<h2 className="text-foreground font-bold text-xl">
-								{team.teamName}
-							</h2>
-							<p className="text-muted-foreground text-sm font-mono">
-								ID: {team.id.slice(0, 8)}
-							</p>
 						</div>
 					</div>
-					<button
-						onClick={onClose}
-						className="p-2 hover:bg-muted rounded-lg transition-colors"
-						aria-label="Cerrar modal"
-					>
-						<X className="w-5 h-5 text-muted-foreground" />
-					</button>
 				</div>
 
 				{/* Content */}
-				<div className="p-6 space-y-6">
+				<div className="bg-background p-6 sm:p-6 space-y-6 overflow-y-auto max-h-[calc(92vh-200px)]">
 					{/* Participantes */}
 					<div className="space-y-4">
-						<h3 className="text-foreground font-semibold text-lg flex items-center gap-2">
-							<Users className="w-5 h-5" />
-							Participantes
-						</h3>
+						<div className="flex items-center gap-2 mb-4">
+							<div className="p-2 bg-(--text-color-icon)/10 rounded-xl">
+								<Users className="w-5 h-5 text-(--text-color-icon)" />
+							</div>
+							<h3 className="text-(--text-color) font-semibold text-lg">
+								Participantes
+							</h3>
+						</div>
 
 						{[1, 2].map((num) => {
 							const key = `participant${String(num)}` as
@@ -83,24 +87,30 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 							return (
 								<div
 									key={num}
-									className="bg-muted/30 rounded-lg p-4 space-y-3 hover:bg-muted/40 transition-colors"
+									className="group bg-(--background-input) rounded-2xl p-5 hover:shadow-lg transition-all duration-300 border border-transparent hover:border-(--text-color-icon)/20"
 								>
-									<div className="flex items-center gap-2">
-										<div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold text-sm">
+									<div className="flex items-center gap-3 mb-4">
+										<div className="w-10 h-10 rounded-full bg-linear-to-br from-(--text-color-icon) to-yellow-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
 											{num}
 										</div>
-										<h4 className="text-foreground font-semibold">
+										<h4 className="text-(--text-color) font-semibold text-lg">
 											{participant.name}
 										</h4>
 									</div>
-									<div className="space-y-2 text-sm ml-10">
-										<div className="flex items-center gap-2 text-muted-foreground">
-											<BookOpen className="w-4 h-4" />
-											<span>{participant.course}</span>
+									<div className="space-y-3 ml-13">
+										<div className="flex items-center gap-3 text-(--text-color-secondary)">
+											<div className="p-2 bg-black/5 dark:bg-white/5 rounded-lg">
+												<BookOpen className="w-4 h-4" />
+											</div>
+											<span className="text-sm">{participant.course}</span>
 										</div>
-										<div className="flex items-center gap-2 text-muted-foreground">
-											<Phone className="w-4 h-4" />
-											<span className="font-mono">{participant.phone}</span>
+										<div className="flex items-center gap-3 text-(--text-color-secondary)">
+											<div className="p-2 bg-black/5 dark:bg-white/5 rounded-lg">
+												<Phone className="w-4 h-4" />
+											</div>
+											<span className="text-sm font-mono">
+												{participant.phone}
+											</span>
 										</div>
 									</div>
 								</div>
@@ -110,34 +120,39 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 
 					{/* Info adicional */}
 					<div className="space-y-4">
-						<h3 className="text-foreground font-semibold text-lg">
-							Información del registro
-						</h3>
+						<div className="flex items-center gap-2 mb-4">
+							<div className="p-2 bg-(--text-color-icon)/10 rounded-xl">
+								<Calendar className="w-5 h-5 text-(--text-color-icon)" />
+							</div>
+							<h3 className="text-(--text-color) font-semibold text-lg">
+								Información del registro
+							</h3>
+						</div>
 
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-							<div className="bg-muted/30 rounded-lg p-4 hover:bg-muted/40 transition-colors">
-								<div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+							<div className="bg-(--background-input) rounded-2xl p-5 hover:shadow-lg transition-all duration-300 border border-transparent hover:border-(--text-color-icon)/20">
+								<div className="flex items-center gap-2 text-(--text-color-muted) text-xs uppercase tracking-wider mb-3">
 									<CreditCard className="w-4 h-4" />
 									Método de pago
 								</div>
-								<p className="text-foreground font-medium">
+								<p className="text-(--text-color) font-semibold text-lg">
 									{team.paymentMethod}
 								</p>
 							</div>
 
-							<div className="bg-muted/30 rounded-lg p-4 hover:bg-muted/40 transition-colors">
-								<div className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+							<div className="bg-(--background-input) rounded-2xl p-5 hover:shadow-lg transition-all duration-300 border border-transparent hover:border-(--text-color-icon)/20">
+								<div className="flex items-center gap-2 text-(--text-color-muted) text-xs uppercase tracking-wider mb-3">
 									<Calendar className="w-4 h-4" />
 									Fecha de registro
 								</div>
-								<p className="text-foreground font-medium">
+								<p className="text-(--text-color) font-semibold text-base">
 									{new Date(team.timestamp).toLocaleDateString('es-EC', {
 										day: 'numeric',
 										month: 'long',
 										year: 'numeric',
 									})}
 								</p>
-								<p className="text-muted-foreground text-xs mt-1">
+								<p className="text-(--text-color-muted) text-sm mt-1">
 									{new Date(team.timestamp).toLocaleTimeString('es-EC', {
 										hour: '2-digit',
 										minute: '2-digit',
@@ -147,54 +162,48 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 						</div>
 					</div>
 
-					{/* Estado de pago */}
+					{/* Estado de pago - Rediseñado */}
 					<div
-						className={`rounded-lg p-4 flex items-center gap-3 ${
+						className={`rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 ${
 							team.pagado
-								? 'bg-green-500/10 border border-green-500/20'
-								: 'bg-destructive/10 border border-destructive/20'
+								? 'bg-green-500/10 border-2 border-green-500/30 shadow-green-500/10 shadow-lg'
+								: 'bg-red-500/10 border-2 border-red-500/30 shadow-red-500/10 shadow-lg'
 						}`}
 					>
-						{team.pagado ? (
-							<>
-								<div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-									<Check className="w-5 h-5 text-green-600 dark:text-green-400" />
-								</div>
-								<div>
-									<p className="text-green-600 dark:text-green-400 font-semibold text-sm">
-										Pago confirmado
-									</p>
-									<p className="text-green-600/70 dark:text-green-400/70 text-xs">
-										El equipo está registrado correctamente
-									</p>
-								</div>
-							</>
-						) : (
-							<>
-								<div className="w-8 h-8 rounded-full bg-destructive/20 flex items-center justify-center">
-									<X className="w-5 h-5 text-destructive" />
-								</div>
-								<div>
-									<p className="text-destructive font-semibold text-sm">
-										Pago pendiente
-									</p>
-									<p className="text-destructive/70 text-xs">
-										Esperando confirmación de pago
-									</p>
-								</div>
-							</>
-						)}
+						<div
+							className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
+								team.pagado ? 'bg-green-500/20' : 'bg-red-500/20'
+							}`}
+						>
+							{team.pagado ? (
+								<CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+							) : (
+								<AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+							)}
+						</div>
+						<div className="flex-1">
+							<p
+								className={`font-bold text-base mb-1 ${
+									team.pagado
+										? 'text-green-600 dark:text-green-400'
+										: 'text-red-600 dark:text-red-400'
+								}`}
+							>
+								{team.pagado ? 'Pago confirmado' : 'Pago pendiente'}
+							</p>
+							<p
+								className={`text-sm ${
+									team.pagado
+										? 'text-green-600/80 dark:text-green-400/80'
+										: 'text-red-600/80 dark:text-red-400/80'
+								}`}
+							>
+								{team.pagado
+									? 'El equipo está registrado correctamente'
+									: 'Esperando confirmación de pago'}
+							</p>
+						</div>
 					</div>
-				</div>
-
-				{/* Footer */}
-				<div className="p-6 border-t border-border bg-muted/20">
-					<button
-						onClick={onClose}
-						className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
-					>
-						Cerrar
-					</button>
 				</div>
 			</div>
 		</div>

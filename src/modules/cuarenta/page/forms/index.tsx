@@ -334,6 +334,7 @@ export default function TeamRegistration() {
 					<SubmitButton
 						validateForm={validateForm}
 						getRegistrationData={getRegistrationData}
+						redirectUrl="/cuarenta/groups"
 					>
 						Registrar equipo
 					</SubmitButton>

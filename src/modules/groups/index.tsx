@@ -32,7 +32,7 @@ function TeamsViewPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-background p-6 flex justify-center">
+		<div className="min-h-screen bg-background p-4 md:p-6 flex justify-center">
 			<div className="w-full max-w-7xl mx-auto">
 				{/* Grid de Cards */}
 				{teams.length === 0 ? (
