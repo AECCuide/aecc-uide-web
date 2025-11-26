@@ -1,20 +1,24 @@
-export async function submitCuarentaRegistration(
-	registrationData: object
-): Promise<unknown> {
-	// TODO: Reemplaza '/api/cuarenta/register' con tu endpoint real.
-	const endpoint = '/api/cuarenta/register';
+import { supabase } from '@/lib/supabase';
+import { RegistrationData } from '../types/registration';
 
-	const response = await fetch(endpoint, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(registrationData),
+export async function submitCuarentaRegistration(
+	registrationData: RegistrationData
+): Promise<unknown> {
+	const { error } = await supabase.from('cuarenta_registrations').insert({
+		team_name: registrationData.teamName,
+		participant1_name: registrationData.participants.participant1.name,
+		participant1_course: registrationData.participants.participant1.course,
+		participant1_phone: registrationData.participants.participant1.phone,
+		participant2_name: registrationData.participants.participant2.name,
+		participant2_course: registrationData.participants.participant2.course,
+		participant2_phone: registrationData.participants.participant2.phone,
+		carrera: registrationData.carrera,
+		payment_method: registrationData.paymentMethod,
 	});
 
-	if (!response.ok) {
-		throw new Error(`Error en el servidor: ${response.statusText}`);
+	if (error) {
+		throw new Error(`Error en el servidor: ${error.message}`);
 	}
 
-	return response.json();
+	return { success: true };
 }

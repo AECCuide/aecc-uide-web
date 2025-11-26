@@ -12,11 +12,10 @@ const PAYMENT_METHODS = ['Efectivo', 'Transferencia'];
 const CARRERAS = ['Sistemas', 'Mecatrónica'];
 
 // --- Types ---
-export interface Participant {
-	name: string;
-	course: string;
-	phone: string;
-}
+import {
+	Participant,
+	RegistrationData,
+} from '@/modules/cuarenta/types/registration';
 
 interface State {
 	teamName: string;
@@ -165,7 +164,7 @@ export default function TeamRegistration() {
 		}
 	};
 
-	const getRegistrationData = () => {
+	const getRegistrationData = (): RegistrationData => {
 		return {
 			teamName: state.teamName,
 			participants: {
