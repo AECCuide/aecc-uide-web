@@ -1,8 +1,150 @@
 'use client';
 
 import React from 'react';
-import { Check, X, Trash2 } from 'lucide-react';
-import { useGrup } from './usegrup';
+import { Check, X, Trash2, Phone as PhoneIcon } from 'lucide-react';
+import { useGrup, TeamData } from './usegrup';
+
+// --- Componentes de Celdas Reutilizables ---
+
+const getInitials = (name: string) => {
+	const parts = name.split(' ');
+	return parts.length >= 2
+		? `${parts[0][0]}${parts[1][0]}`.toUpperCase()
+		: name.substring(0, 2).toUpperCase();
+};
+
+const getAvatarColor = (name: string) => {
+	const colors = [
+		'bg-blue-500',
+		'bg-purple-500',
+		'bg-pink-500',
+		'bg-green-500',
+		'bg-yellow-500',
+		'bg-red-500',
+		'bg-indigo-500',
+		'bg-teal-500',
+	];
+	return colors[name.charCodeAt(0) % colors.length];
+};
+
+const TeamNameCell: React.FC<{ team: TeamData }> = ({ team }) => (
+	<div className="flex flex-col">
+		<span className="text-text-color font-semibold text-sm transition-colors">
+			{team.teamName}
+		</span>
+		<span className="text-text-color-muted text-xs font-mono transition-colors">
+			{team.id}
+		</span>
+	</div>
+);
+
+const ParticipantCell: React.FC<{ name: string }> = ({ name }) => (
+	<div className="flex items-center gap-3">
+		<div
+			className={`w-10 h-10 rounded-full ${getAvatarColor(name)} flex items-center justify-center text-white font-semibold text-sm`}
+		>
+			{getInitials(name)}
+		</div>
+		<span className="text-text-color text-sm font-medium transition-colors">
+			{name}
+		</span>
+	</div>
+);
+
+const CourseCell: React.FC<{ course: string }> = ({ course }) => (
+	<span className="text-(--text-color-secondary) text-sm transition-colors">
+		<span className="text-text-color-secondary text-sm transition-colors">
+			{course}
+		</span>
+	</span>
+);
+
+const ContactCell: React.FC<{ phone: string }> = ({ phone }) => (
+	<div className="flex items-center gap-1.5 text-text-color-secondary text-xs transition-colors">
+		<PhoneIcon className="w-3.5 h-3.5" />
+		<span className="font-mono">{phone}</span>
+	</div>
+);
+
+const PaymentMethodCell: React.FC<{ method: string }> = ({ method }) => (
+	<span className="inline-flex items-center px-2.5 py-1 rounded-md bg-background-input text-text-color text-xs font-medium transition-colors">
+		{method}
+	</span>
+);
+
+const DateCell: React.FC<{
+	timestamp: string;
+	formatDate: (ts: string) => string;
+}> = ({ timestamp, formatDate }) => (
+	<span className="text-text-color-secondary text-xs whitespace-nowrap transition-colors">
+		{formatDate(timestamp)}
+	</span>
+);
+
+const StatusCell: React.FC<{
+	team: TeamData;
+	onToggle: (id: string) => void;
+}> = ({ team, onToggle }) => (
+	<button
+		onClick={() => {
+			onToggle(team.id);
+		}}
+		className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+			team.pagado
+				? 'bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900'
+				: 'bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900'
+		}`}
+	>
+		{team.pagado ? (
+			<>
+				<Check className="w-3.5 h-3.5" /> Pagado
+			</>
+		) : (
+			<>
+				<X className="w-3.5 h-3.5" /> Pendiente
+			</>
+		)}
+	</button>
+);
+
+const ActionsCell: React.FC<{
+	team: TeamData;
+	onToggle: (id: string) => void;
+	onDelete: (id: string) => void;
+}> = ({ team, onToggle, onDelete }) => (
+	<div className="flex items-center justify-center gap-2">
+		<button
+			onClick={() => {
+				onToggle(team.id);
+			}}
+			className={`p-1.5 rounded-md transition-all ${
+				team.pagado
+					? 'bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900'
+					: 'bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900'
+			}`}
+			title={team.pagado ? 'Marcar como no pagado' : 'Marcar como pagado'}
+		>
+			{team.pagado ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}
+		</button>
+		<button
+			onClick={() => {
+				if (
+					window.confirm(
+						`¿Estás seguro de eliminar al equipo "${team.teamName}"?`
+					)
+				) {
+					onDelete(team.id);
+				}
+			}}
+			className="p-1.5 rounded-md bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 transition-all"
+			title="Eliminar equipo"
+		>
+			<Trash2 className="w-4 h-4" />
+		</button>
+	</div>
+);
+
+// --- Componente Principal ---
 
 export default function GrupManagement() {
 	const { teams, loading, togglePayment, deleteTeam, formatDate } = useGrup();
@@ -10,187 +152,139 @@ export default function GrupManagement() {
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-linear-to-br from-stone-50 via-stone-100 to-stone-200 dark:from-zinc-900 dark:via-neutral-900 dark:to-stone-900 flex items-center justify-center transition-colors">
-				<div className="text-(--text-color-secondary) text-lg transition-colors">
+				<div className="text-text-color-secondary text-lg transition-colors">
 					Cargando equipos...
 				</div>
 			</div>
 		);
 	}
 
+	const columns: {
+		header: string;
+		cell: (team: TeamData) => React.ReactNode;
+		textAlign?: 'left' | 'center' | 'right';
+	}[] = [
+		{ header: 'Equipo', cell: (team) => <TeamNameCell team={team} /> },
+		{
+			header: 'Participante 1',
+			cell: (team) => (
+				<ParticipantCell name={team.participants.participant1.name} />
+			),
+		},
+		{
+			header: 'Curso',
+			cell: (team) => (
+				<CourseCell course={team.participants.participant1.course} />
+			),
+		},
+		{
+			header: 'Contacto',
+			cell: (team) => (
+				<ContactCell phone={team.participants.participant1.phone} />
+			),
+		},
+		{
+			header: 'Participante 2',
+			cell: (team) => (
+				<ParticipantCell name={team.participants.participant2.name} />
+			),
+		},
+		{
+			header: 'Curso',
+			cell: (team) => (
+				<CourseCell course={team.participants.participant2.course} />
+			),
+		},
+		{
+			header: 'Contacto',
+			cell: (team) => (
+				<ContactCell phone={team.participants.participant2.phone} />
+			),
+		},
+		{
+			header: 'Método',
+			cell: (team) => <PaymentMethodCell method={team.paymentMethod} />,
+		},
+		{
+			header: 'Fecha',
+			cell: (team) => (
+				<DateCell timestamp={team.timestamp} formatDate={formatDate} />
+			),
+		},
+		{
+			header: 'Estado',
+			cell: (team) => <StatusCell team={team} onToggle={togglePayment} />,
+			textAlign: 'center',
+		},
+		{
+			header: 'Acciones',
+			cell: (team) => (
+				<ActionsCell
+					team={team}
+					onToggle={togglePayment}
+					onDelete={deleteTeam}
+				/>
+			),
+			textAlign: 'center',
+		},
+	];
+
 	return (
-		<div className="min-h-screen bg-linear-to-br from-stone-50 via-stone-100 to-stone-200 dark:from-zinc-900 dark:via-neutral-900 dark:to-stone-900 p-6 transition-colors">
-			<div className="max-w-[1400px] mx-auto">
+		<div className="min-h-screen bg-stone-50 dark:bg-zinc-950 p-6 transition-colors">
+			<div className="max-w-[1600px] mx-auto">
 				{/* Header */}
 				<div className="mb-6">
-					<h1 className="text-3xl md:text-4xl font-bold text-(--text-color) tracking-wider transition-colors">
+					<h1 className="text-2xl font-bold text-text-color transition-colors">
 						Administración de Equipos
 					</h1>
-					<p className="text-(--text-color-secondary) mt-2 transition-colors">
-						Total de equipos registrados: {teams.length}
+					<p className="text-text-color-secondary text-sm mt-1 transition-colors">
+						Total de equipos: {teams.length}
 					</p>
 				</div>
 
 				{/* Table Container */}
-				<div className="bg-(--background) rounded-2xl shadow-lg overflow-hidden transition-colors">
+				<div className="bg-background rounded-xl border border-border overflow-hidden transition-colors">
 					<div className="overflow-x-auto">
-						<table className="w-full border-collapse">
+						<table className="w-full">
 							{/* Table Header */}
 							<thead>
-								<tr className="bg-(--background-input) border-b-2 border-(--border) transition-colors">
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										ID
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Equipo
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Participante 1
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Curso 1
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Teléfono 1
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Participante 2
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Curso 2
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Teléfono 2
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Método de Pago
-									</th>
-									<th className="px-4 py-3 text-left text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Fecha
-									</th>
-									<th className="px-4 py-3 text-center text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Estado Pago
-									</th>
-									<th className="px-4 py-3 text-center text-(--text-color-secondary) text-xs font-semibold uppercase tracking-wider transition-colors">
-										Acciones
-									</th>
+								<tr className="border-b border-border bg-background-input/30 transition-colors">
+									{columns.map((col, index) => (
+										<th
+											key={index}
+											className={`px-6 py-3 text-${col.textAlign ?? 'left'} text-text-color-secondary text-xs font-medium transition-colors`}
+										>
+											{col.header}
+										</th>
+									))}
 								</tr>
 							</thead>
 
 							{/* Table Body */}
-							<tbody>
+							<tbody className="divide-y divide-border transition-colors">
 								{teams.length === 0 ? (
 									<tr>
 										<td
-											colSpan={12}
-											className="px-4 py-12 text-center text-(--text-color-secondary) transition-colors"
+											colSpan={11}
+											className="px-6 py-12 text-center text-text-color-secondary transition-colors"
 										>
 											No hay equipos registrados
 										</td>
 									</tr>
 								) : (
-									teams.map((team, index) => (
+									teams.map((team) => (
 										<tr
 											key={team.id}
-											className={`border-b border-(--border) hover:bg-(--background-input) transition-colors ${
-												index % 2 === 0
-													? 'bg-(--background)'
-													: 'bg-(--background-input)/50'
-											}`}
+											className="hover:bg-background-input/20 transition-colors"
 										>
-											{/* ID */}
-											<td className="px-4 py-3 text-sm text-(--text-color-muted) font-mono transition-colors">
-												{team.id}
-											</td>
-
-											{/* Team Name */}
-											<td className="px-4 py-3 text-sm text-(--text-color) font-semibold transition-colors">
-												{team.teamName}
-											</td>
-
-											{/* Participant 1 Name */}
-											<td className="px-4 py-3 text-sm text-(--text-color) transition-colors">
-												{team.participants.participant1.name}
-											</td>
-
-											{/* Participant 1 Course */}
-											<td className="px-4 py-3 text-sm text-(--text-color-secondary) transition-colors">
-												{team.participants.participant1.course}
-											</td>
-
-											{/* Participant 1 Phone */}
-											<td className="px-4 py-3 text-sm text-(--text-color-secondary) font-mono transition-colors">
-												{team.participants.participant1.phone}
-											</td>
-
-											{/* Participant 2 Name */}
-											<td className="px-4 py-3 text-sm text-(--text-color) transition-colors">
-												{team.participants.participant2.name}
-											</td>
-
-											{/* Participant 2 Course */}
-											<td className="px-4 py-3 text-sm text-(--text-color-secondary) transition-colors">
-												{team.participants.participant2.course}
-											</td>
-
-											{/* Participant 2 Phone */}
-											<td className="px-4 py-3 text-sm text-(--text-color-secondary) font-mono transition-colors">
-												{team.participants.participant2.phone}
-											</td>
-
-											{/* Payment Method */}
-											<td className="px-4 py-3 text-sm text-(--text-color) transition-colors">
-												{team.paymentMethod}
-											</td>
-
-											{/* Timestamp */}
-											<td className="px-4 py-3 text-sm text-(--text-color-secondary) whitespace-nowrap transition-colors">
-												{formatDate(team.timestamp)}
-											</td>
-
-											{/* Payment Status Toggle */}
-											<td className="px-4 py-3 text-center transition-colors">
-												<button
-													onClick={() => {
-														togglePayment(team.id);
-													}}
-													className={`px-4 py-2 rounded-lg font-medium text-sm transition-all inline-flex items-center gap-2 ${
-														team.pagado
-															? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50'
-															: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50'
-													}`}
+											{columns.map((col, index) => (
+												<td
+													key={index}
+													className={`px-6 py-4 transition-colors text-${col.textAlign ?? 'left'}`}
 												>
-													{team.pagado ? (
-														<>
-															<Check className="w-4 h-4" />
-															Pagado
-														</>
-													) : (
-														<>
-															<X className="w-4 h-4" />
-															No
-														</>
-													)}
-												</button>
-											</td>
-
-											{/* Delete Button */}
-											<td className="px-4 py-3 text-center transition-colors">
-												<button
-													onClick={() => {
-														if (
-															window.confirm(
-																`¿Estás seguro de eliminar al equipo "${team.teamName}"?`
-															)
-														) {
-															deleteTeam(team.id);
-														}
-													}}
-													className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-all inline-flex items-center justify-center"
-													title="Eliminar equipo"
-												>
-													<Trash2 className="w-4 h-4" />
-												</button>
-											</td>
+													{col.cell(team)}
+												</td>
+											))}
 										</tr>
 									))
 								)}
@@ -201,15 +295,17 @@ export default function GrupManagement() {
 
 				{/* Summary */}
 				{teams.length > 0 && (
-					<div className="mt-4 flex gap-6 text-sm text-(--text-color-secondary) transition-colors">
-						<div>
-							<span className="font-semibold">
-								Pagados: {teams.filter((team) => team.pagado).length}
+					<div className="mt-4 flex gap-6 text-sm transition-colors">
+						<div className="text-text-color-secondary transition-colors">
+							Pagados:{' '}
+							<span className="font-semibold text-green-600 dark:text-green-400">
+								{teams.filter((team) => team.pagado).length}
 							</span>
 						</div>
-						<div>
-							<span className="font-semibold">
-								Pendientes: {teams.filter((team) => !team.pagado).length}
+						<div className="text-text-color-secondary transition-colors">
+							Pendientes:{' '}
+							<span className="font-semibold text-red-600 dark:text-red-400">
+								{teams.filter((team) => !team.pagado).length}
 							</span>
 						</div>
 					</div>

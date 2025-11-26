@@ -2,13 +2,14 @@
 
 import React from 'react';
 import { useReducer, Reducer } from 'react';
-import { CreditCard, ChevronDown } from 'lucide-react';
+import { CreditCard, ChevronDown, BookMarked } from 'lucide-react';
 import ParticipantCard from '@/modules/cuarenta/components/ParticipantCard';
 import SubmitButton from '@/modules/cuarenta/components/SubmitButton';
 import { validateCuarentaForm } from '@/modules/cuarenta/hooks/validation';
 
 // --- Constants ---
 const PAYMENT_METHODS = ['Efectivo', 'Transferencia'];
+const CARRERAS = ['Sistemas', 'Mecatrónica'];
 
 // --- Types ---
 export interface Participant {
@@ -20,6 +21,7 @@ export interface Participant {
 interface State {
 	teamName: string;
 	participants: [Participant, Participant];
+	carrera: string;
 	paymentMethod: string;
 	activeDropdown: string | null;
 	errors: {
@@ -39,6 +41,7 @@ type Action =
 			type: 'SET_PARTICIPANT_FIELD';
 			payload: { index: number; field: keyof Participant; value: string };
 	  }
+	| { type: 'SET_CARRERA'; payload: string }
 	| { type: 'SET_PAYMENT_METHOD'; payload: string }
 	| { type: 'TOGGLE_DROPDOWN'; payload: string | null }
 	| { type: 'SET_ERRORS'; payload: State['errors'] }
@@ -59,6 +62,7 @@ const initialState: State = {
 		{ name: '', course: '', phone: '' },
 		{ name: '', course: '', phone: '' },
 	],
+	carrera: 'Sistemas',
 	paymentMethod: 'Efectivo',
 	activeDropdown: null,
 	errors: {
@@ -81,6 +85,8 @@ const registrationReducer: Reducer<State, Action> = (state, action) => {
 			newParticipants[index] = { ...newParticipants[index], [field]: value };
 			return { ...state, participants: newParticipants };
 		}
+		case 'SET_CARRERA':
+			return { ...state, carrera: action.payload, activeDropdown: null };
 		case 'SET_PAYMENT_METHOD':
 			return { ...state, paymentMethod: action.payload, activeDropdown: null };
 		case 'TOGGLE_DROPDOWN':
@@ -166,6 +172,7 @@ export default function TeamRegistration() {
 				participant1: state.participants[0],
 				participant2: state.participants[1],
 			},
+			carrera: state.carrera,
 			paymentMethod: state.paymentMethod,
 			timestamp: new Date().toISOString(),
 		};
@@ -236,45 +243,92 @@ export default function TeamRegistration() {
 						<h3 className="text-(--text-color-secondary) text-xs font-medium mb-3 px-1 transition-colors">
 							Información del registro
 						</h3>
-						<FormField>
-							<div className="flex items-center justify-between relative">
-								<div className="flex items-center gap-3">
-									<CreditCard className="w-5 h-5 text-(--text-color-muted) transition-colors" />
-									<span className="text-(--text-color-secondary) text-sm transition-colors">
-										Método de pago
-									</span>
+						<div className="space-y-2">
+							<FormField>
+								<div className="flex items-center justify-between relative">
+									<div className="flex items-center gap-3">
+										<BookMarked className="w-5 h-5 text-(--text-color-muted) transition-colors" />
+										<span className="text-(--text-color-secondary) text-sm transition-colors">
+											Carrera
+										</span>
+									</div>
+									<div className="relative">
+										<button
+											onClick={() => {
+												dispatch({
+													type: 'TOGGLE_DROPDOWN',
+													payload: 'carrera',
+												});
+											}}
+											className="flex items-center gap-2 text-(--text-color-secondary) text-sm transition-colors hover:text-(--text-color)"
+										>
+											<span>{state.carrera}</span>
+											<ChevronDown className="w-4 h-4" />
+										</button>
+										{state.activeDropdown === 'carrera' && (
+											<div className="absolute right-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded shadow-lg overflow-hidden z-10 min-w-[140px] transition-colors">
+												{CARRERAS.map((carrera) => (
+													<button
+														key={carrera}
+														onClick={() => {
+															dispatch({
+																type: 'SET_CARRERA',
+																payload: carrera,
+															});
+														}}
+														className="w-full px-4 py-2.5 text-left text-(--text-color) text-sm hover:bg-(--hover-yellow) dark:hover:bg-(--hover-gray) transition-colors"
+													>
+														{carrera}
+													</button>
+												))}
+											</div>
+										)}
+									</div>
 								</div>
-								<div className="relative">
-									<button
-										onClick={() => {
-											dispatch({ type: 'TOGGLE_DROPDOWN', payload: 'payment' });
-										}}
-										className="flex items-center gap-2 text-(--text-color-secondary) text-sm transition-colors hover:text-(--text-color)"
-									>
-										<span>{state.paymentMethod}</span>
-										<ChevronDown className="w-4 h-4" />
-									</button>
-									{state.activeDropdown === 'payment' && (
-										<div className="absolute right-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded shadow-lg overflow-hidden z-10 min-w-[140px] transition-colors">
-											{PAYMENT_METHODS.map((method) => (
-												<button
-													key={method}
-													onClick={() => {
-														dispatch({
-															type: 'SET_PAYMENT_METHOD',
-															payload: method,
-														});
-													}}
-													className="w-full px-4 py-2.5 text-left text-(--text-color) text-sm hover:bg-(--hover-yellow) dark:hover:bg-(--hover-gray) transition-colors"
-												>
-													{method}
-												</button>
-											))}
-										</div>
-									)}
+							</FormField>
+							<FormField>
+								<div className="flex items-center justify-between relative">
+									<div className="flex items-center gap-3">
+										<CreditCard className="w-5 h-5 text-(--text-color-muted) transition-colors" />
+										<span className="text-(--text-color-secondary) text-sm transition-colors">
+											Método de pago
+										</span>
+									</div>
+									<div className="relative">
+										<button
+											onClick={() => {
+												dispatch({
+													type: 'TOGGLE_DROPDOWN',
+													payload: 'payment',
+												});
+											}}
+											className="flex items-center gap-2 text-(--text-color-secondary) text-sm transition-colors hover:text-(--text-color)"
+										>
+											<span>{state.paymentMethod}</span>
+											<ChevronDown className="w-4 h-4" />
+										</button>
+										{state.activeDropdown === 'payment' && (
+											<div className="absolute right-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded shadow-lg overflow-hidden z-10 min-w-[140px] transition-colors">
+												{PAYMENT_METHODS.map((method) => (
+													<button
+														key={method}
+														onClick={() => {
+															dispatch({
+																type: 'SET_PAYMENT_METHOD',
+																payload: method,
+															});
+														}}
+														className="w-full px-4 py-2.5 text-left text-(--text-color) text-sm hover:bg-(--hover-yellow) dark:hover:bg-(--hover-gray) transition-colors"
+													>
+														{method}
+													</button>
+												))}
+											</div>
+										)}
+									</div>
 								</div>
-							</div>
-						</FormField>
+							</FormField>
+						</div>
 					</div>
 
 					{/* Submit Button */}

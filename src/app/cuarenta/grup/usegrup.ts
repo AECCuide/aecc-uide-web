@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface ParticipantData {
 	name: string;
@@ -17,78 +17,91 @@ export interface TeamData {
 	};
 	paymentMethod: string;
 	pagado: boolean;
-	url: string;
+	ImageUrl: string;
 	timestamp: string;
+}
+
+export async function submitCuarentaRegistration(
+	registrationData: Omit<TeamData, 'id' | 'pagado' | 'timestamp' | 'ImageUrl'>
+): Promise<TeamData> {
+	// TODO: Reemplaza '/api/cuarenta/register' con tu endpoint real.
+	const endpoint = '/api/cuarenta/register';
+
+	const response = await fetch(endpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(registrationData),
+	});
+
+	if (!response.ok) {
+		const errorData = (await response.json()) as { message?: string };
+		throw new Error(
+			errorData.message ?? `Error en el servidor: ${response.statusText}`
+		);
+	}
+
+	return response.json() as Promise<TeamData>;
+}
+
+async function fetchTeams(): Promise<TeamData[]> {
+	// TODO: Reemplaza '/api/cuarenta/teams' con tu endpoint real.
+	const endpoint = '/api/cuarenta/teams';
+	const response = await fetch(endpoint);
+	if (!response.ok) {
+		throw new Error('No se pudieron obtener los equipos');
+	}
+	return response.json() as Promise<TeamData[]>;
 }
 
 export const useGrup = () => {
 	const [teams, setTeams] = useState<TeamData[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+	const [error, setError] = useState<string | null>(null);
 
-	// Cargar datos iniciales (simulado - aquí conectarías tu API)
-	useEffect(() => {
-		// Datos de ejemplo
-		const mockData: TeamData[] = [
-			{
-				id: 'pareja_001',
-				teamName: 'Los Campeones',
-				participants: {
-					participant1: {
-						name: 'Juan Pérez',
-						course: 'Ingeniería en Software',
-						phone: '0991234567',
-					},
-					participant2: {
-						name: 'María López',
-						course: 'Ciencias de Datos',
-						phone: '0987654321',
-					},
-				},
-				paymentMethod: 'Transferencia',
-				pagado: false,
-				url: 'https://tusitio.com/registro/pareja_001',
-				timestamp: '2025-11-25T18:42:53.123Z',
-			},
-			{
-				id: 'pareja_002',
-				teamName: 'Dúo Dinámico',
-				participants: {
-					participant1: {
-						name: 'Carlos Ruiz',
-						course: 'Ingeniería Civil',
-						phone: '0998765432',
-					},
-					participant2: {
-						name: 'Ana García',
-						course: 'Arquitectura',
-						phone: '0991122334',
-					},
-				},
-				paymentMethod: 'Efectivo',
-				pagado: true,
-				url: 'https://tusitio.com/registro/pareja_002',
-				timestamp: '2025-11-25T19:15:30.456Z',
-			},
-		];
-
-		setTimeout(() => {
-			setTeams(mockData);
+	const loadTeams = useCallback(async () => {
+		try {
+			setLoading(true);
+			const data = await fetchTeams();
+			setTeams(data);
+			setError(null);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Ocurrió un error');
+		} finally {
 			setLoading(false);
-		}, 500);
+		}
 	}, []);
 
-	const togglePayment = (id: string) => {
-		setTeams((prevTeams) =>
-			prevTeams.map((team) =>
-				team.id === id ? { ...team, pagado: !team.pagado } : team
-			)
-		);
+	useEffect(() => {
+		loadTeams();
+	}, [loadTeams]);
+
+	const togglePayment = async (id: string) => {
+		const team = teams.find((t) => t.id === id);
+		if (!team) return;
+
+		const response = await fetch(`/api/cuarenta/teams/${id}`, {
+			method: 'PATCH',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ pagado: !team.pagado }),
+		});
+
+		if (response.ok) {
+			const updatedTeam = (await response.json()) as TeamData;
+			setTeams((currentTeams) =>
+				currentTeams.map((t) => (t.id === id ? updatedTeam : t))
+			);
+		}
 	};
 
-	const deleteTeam = (id: string) => {
-		setTeams((prevTeams) => prevTeams.filter((team) => team.id !== id));
-		setSelectedTeam(null);
+	const deleteTeam = async (id: string) => {
+		const response = await fetch(`/api/cuarenta/teams/${id}`, {
+			method: 'DELETE',
+		});
+		if (response.ok) {
+			setTeams((prevTeams) => prevTeams.filter((team) => team.id !== id));
+		}
 	};
 
 	const formatDate = (timestamp: string) => {
@@ -105,10 +118,10 @@ export const useGrup = () => {
 	return {
 		teams,
 		loading,
-		selectedTeam,
-		setSelectedTeam,
+		error,
 		togglePayment,
 		deleteTeam,
 		formatDate,
+		reloadTeams: loadTeams,
 	};
 };
