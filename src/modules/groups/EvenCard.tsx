@@ -14,24 +14,25 @@ export const EventCard: React.FC<EventCardProps> = ({ team, onClick }) => {
 
 	return (
 		<div
-			className="bg-card border border-border rounded-2xl p-6 hover:border-primary/10 transition-all cursor-pointer group"
+			className="bg-card border border-border rounded-2xl p-4 hover:border-primary/10 transition-all cursor-pointer group"
 			onClick={onClick}
 		>
 			<div className="flex items-start justify-between gap-4">
 				{/* Content */}
-				<div className="flex-1 space-y-3">
-					{/* Time */}
-					<span className="text-muted-foreground text-sm">
-						{new Date(team.timestamp).toLocaleTimeString('es-EC', {
-							hour: '2-digit',
-							minute: '2-digit',
-						})}
-					</span>
+				<div className="flex-1 space-y-5">
+					{/* Top-left: Time & Title */}
+					<div className="flex flex-col items-start justify-start text-left">
+						<span className="text-muted-foreground text-sm self-start">
+							{new Date(team.timestamp).toLocaleTimeString('es-EC', {
+								hour: '2-digit',
+								minute: '2-digit',
+							})}
+						</span>
 
-					{/* Title */}
-					<h3 className="text-foreground font-bold text-xl group-hover:text-primary transition-colors">
-						{team.teamName}
-					</h3>
+						<h3 className="text-foreground font-bold text-xl group-hover:text-primary transition-colors mt-1">
+							{team.teamName}
+						</h3>
+					</div>
 
 					{/* Info */}
 					<div className="space-y-2">

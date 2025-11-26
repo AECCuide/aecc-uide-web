@@ -34,7 +34,7 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 			className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
 			onClick={handleBackdropClick}
 		>
-			<div className="bg-card border border-border rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg animate-in zoom-in-95 duration-200">
+			<div className="bg-card border border-border rounded-xl w-full sm:w-auto sm:min-w-[600px] max-w-2xl max-h-[90vh] overflow-y-auto shadow-lg animate-in zoom-in-95 duration-200">
 				{/* Header */}
 				<div className="flex items-start justify-between p-6 border-b border-border sticky top-0 bg-card z-10">
 					<div className="flex items-center gap-4">

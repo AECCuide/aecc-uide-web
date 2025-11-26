@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/buttom';
 import { RegistrationData } from '../types/registration';
 import {
@@ -19,10 +20,22 @@ export default function SubmitButton({
 	getRegistrationData,
 	children,
 }: SubmitButtonProps) {
+	const router = useRouter();
 	const { status, isSubmitting, handleRegistration } = useCuarentaRegistration({
 		validateForm,
 		getRegistrationData,
 	});
+
+	useEffect(() => {
+		if (status === 'success') {
+			const timer = setTimeout(() => {
+				router.push('/cuarenta/groups');
+			}, 1500); // Espera 1.5 segundos antes de redirigir
+			return () => {
+				clearTimeout(timer);
+			};
+		}
+	}, [status, router]);
 
 	const getButtonContent = (status: SubmissionStatus) => {
 		switch (status) {
