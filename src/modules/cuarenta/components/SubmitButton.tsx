@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/buttom';
+import { RegistrationData } from '../types/registration';
 import {
 	useCuarentaRegistration,
 	SubmissionStatus,
@@ -9,7 +10,7 @@ import {
 
 interface SubmitButtonProps {
 	validateForm: () => boolean;
-	getRegistrationData: () => object;
+	getRegistrationData: () => RegistrationData;
 	children: React.ReactNode;
 }
 

@@ -13,11 +13,13 @@ declare global {
 	}
 }
 
+import { RegistrationData } from '../types/registration';
+
 export type SubmissionStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 interface UseCuarentaRegistrationProps {
 	validateForm: () => boolean;
-	getRegistrationData: () => object;
+	getRegistrationData: () => RegistrationData;
 }
 
 export function useCuarentaRegistration({
@@ -46,6 +48,7 @@ export function useCuarentaRegistration({
 
 		try {
 			const registrationData = getRegistrationData();
+			console.log('Enviando datos de registro:', registrationData);
 
 			// 2. Enviar datos al backend
 			await submitCuarentaRegistration(registrationData);
