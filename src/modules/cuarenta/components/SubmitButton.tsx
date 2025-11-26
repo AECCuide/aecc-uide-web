@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/buttom';
 import { RegistrationData } from '../types/registration';
 import {
@@ -12,17 +13,31 @@ interface SubmitButtonProps {
 	validateForm: () => boolean;
 	getRegistrationData: () => RegistrationData;
 	children: React.ReactNode;
+	redirectUrl?: string;
 }
 
 export default function SubmitButton({
 	validateForm,
 	getRegistrationData,
 	children,
+	redirectUrl,
 }: SubmitButtonProps) {
+	const router = useRouter();
 	const { status, isSubmitting, handleRegistration } = useCuarentaRegistration({
 		validateForm,
 		getRegistrationData,
 	});
+
+	useEffect(() => {
+		if (status === 'success' && redirectUrl) {
+			const timer = setTimeout(() => {
+				router.push(redirectUrl);
+			}, 500); // Espera 0.5 segundos antes de redirigir
+			return () => {
+				clearTimeout(timer);
+			};
+		}
+	}, [status, router, redirectUrl]);
 
 	const getButtonContent = (status: SubmissionStatus) => {
 		switch (status) {
