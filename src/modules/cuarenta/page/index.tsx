@@ -253,7 +253,7 @@ export default function CuarentaPage() {
 									className="text-xs sm:text-lg uppercase tracking-wider"
 									style={{ color: 'var(--text-color-secondary)' }}
 								>
-									Coliseo
+									Auditorio galo plaza
 								</div>
 							</div>
 
