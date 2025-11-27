@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 export interface ParticipantData {
 	name: string;
 	course: string;
+	carrera: string;
 	phone: string;
 }
 
@@ -33,6 +34,7 @@ interface DbTeamRecord {
 	participant2_course: string;
 	participant2_phone: string;
 	payment_method: string;
+	carrera: string;
 	pagado: boolean;
 	image_url: string;
 	created_at: string;
@@ -57,11 +59,13 @@ async function fetchTeams(): Promise<TeamData[]> {
 			participant1: {
 				name: team.participant1_name,
 				course: team.participant1_course,
+				carrera: team.carrera,
 				phone: team.participant1_phone,
 			},
 			participant2: {
 				name: team.participant2_name,
 				course: team.participant2_course,
+				carrera: team.carrera,
 				phone: team.participant2_phone,
 			},
 		},
