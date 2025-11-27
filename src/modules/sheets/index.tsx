@@ -23,6 +23,10 @@ const CourseCell: React.FC<{ course: string }> = ({ course }) => (
 	<span className="text-secondary-foreground text-sm">{course}</span>
 );
 
+const CarreraCell: React.FC<{ carrera: string }> = ({ carrera }) => (
+	<span className="text-secondary-foreground text-sm">{carrera}</span>
+);
+
 const ContactCell: React.FC<{ phone: string }> = ({ phone }) => (
 	<div className="flex items-center gap-1.5 text-muted-foreground text-xs">
 		<PhoneIcon className="w-3.5 h-3.5" />
@@ -154,6 +158,12 @@ export default function GrupManagement() {
 					header: 'Curso',
 					cell: (team) => (
 						<CourseCell course={team.participants[participant.key].course} />
+					),
+				},
+				{
+					header: 'Carrera',
+					cell: (team) => (
+						<CarreraCell carrera={team.participants[participant.key].carrera} />
 					),
 				},
 				{
