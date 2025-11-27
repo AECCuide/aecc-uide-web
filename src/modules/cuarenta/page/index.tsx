@@ -225,7 +225,7 @@ export default function CuarentaPage() {
 									className="text-2xl sm:text-7xl font-bold mb-1"
 									style={{ color: 'var(--text-color-icon)' }}
 								>
-									2
+									3
 								</div>
 								<div
 									className="text-sm sm:text-xl uppercase tracking-wider"
