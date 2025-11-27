@@ -247,7 +247,7 @@ export default function CuarentaPage() {
 									className="text-xl sm:text-3xl font-bold mb-1"
 									style={{ color: 'var(--text-color)' }}
 								>
-									9:00 AM
+									14:00
 								</div>
 								<div
 									className="text-xs sm:text-lg uppercase tracking-wider"
