@@ -1,39 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useGrup, TeamData } from '@/modules/sheets/usegrup';
-
-interface Match {
-	mesa: number;
-	pareja1: TeamData;
-	pareja2: TeamData;
-}
+import { useGrup } from '@/modules/sheets/usegrup';
+import {
+	useFirstRoundGenerator,
+	Match,
+} from '@/modules/cuarenta/hooks/useFirstRoundGenerator';
 
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
-
-	// Generar solo primera ronda
-	const firstRound = useMemo(() => {
-		if (teams.length < 2) return [];
-
-		const matches: Match[] = [];
-		const availableTeams = [...teams];
-		let mesaCounter = 1;
-
-		// Crear parejas de 2 en 2
-		for (let i = 0; i < availableTeams.length; i += 2) {
-			if (i + 1 < availableTeams.length) {
-				matches.push({
-					mesa: mesaCounter,
-					pareja1: availableTeams[i],
-					pareja2: availableTeams[i + 1],
-				});
-				mesaCounter++;
-			}
-		}
-
-		return matches;
-	}, [teams]);
+	const firstRound = useFirstRoundGenerator(teams);
 
 	if (loading) {
 		return (
@@ -85,7 +60,7 @@ function TournamentBracket() {
 
 				{/* Grid Brutalista */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-					{firstRound.map((match, index) => (
+					{firstRound.map((match: Match, index: number) => (
 						<div
 							key={match.mesa}
 							className="relative border-4 border-(--text-color) bg-background 
