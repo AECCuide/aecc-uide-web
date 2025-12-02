@@ -7,12 +7,6 @@ export interface Match {
 	pareja2: TeamData;
 }
 
-/**
- * Hook personalizado para generar los enfrentamientos de la primera ronda.
- * Baraja los equipos aleatoriamente y los empareja.
- * @param teams - El array de equipos participantes.
- * @returns Un array de `Match` con los enfrentamientos de la primera ronda.
- */
 export const useFirstRoundGenerator = (teams: TeamData[]): Match[] => {
 	const firstRound = useMemo(() => {
 		// Filtra solo los equipos que han pagado.
