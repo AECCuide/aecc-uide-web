@@ -8,7 +8,8 @@ import {
 
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
-	const firstRound = useFirstRoundGenerator(teams);
+	const seed = 2831;
+	const firstRound = useFirstRoundGenerator(teams, seed);
 
 	if (loading) {
 		return (
