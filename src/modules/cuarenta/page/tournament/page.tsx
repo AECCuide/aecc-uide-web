@@ -10,17 +10,26 @@ import { WinnerDisplay } from '../../components/WinnerDisplay';
 const TOURNAMENT_STORAGE_KEY = 'tournamentBracketState';
 const WINNER_CELEBRATED_KEY = 'winnerCelebrated';
 
+// ✅ CORRECCIÓN: Mover la configuración fuera del componente.
+// Esto asegura que el array no se recree en cada render, evitando bucles infinitos.
+const manualMatchesConfig = [
+	{ team1Name: 'Bugs', team2Name: 'Citaaciegas' },
+	// { team1Name: 'Equipo C', team2Name: 'Equipo D' },
+];
+
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
 	const seed = 2831;
+
 	const {
 		bracketState,
 		setBracketState,
 		handleSelectWinner,
 		handleResetMatch,
-	} = useTournament(teams, seed);
+	} = useTournament(teams, seed, manualMatchesConfig);
 
 	const [isWinnerModalOpen, setWinnerModalOpen] = useState(false);
+
 	// Cargar estado desde localStorage al montar el componente
 	useEffect(() => {
 		const savedState = localStorage.getItem(TOURNAMENT_STORAGE_KEY);
