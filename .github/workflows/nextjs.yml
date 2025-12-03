@@ -1,4 +1,4 @@
-# CICD
+# Deploy Next.js site to GitHub Pages with Supabase environment variables
 
 name: Deploy Next.js site to Pages
 
