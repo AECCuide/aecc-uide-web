@@ -1,17 +1,40 @@
 'use client';
+import { useEffect } from 'react';
 import { useGrup } from '@/modules/sheets/usegrup';
 import {
 	useTournament,
 	type BracketMatch,
 } from '@/modules/cuarenta/hooks/useTournament';
 
+const TOURNAMENT_STORAGE_KEY = 'tournamentBracketState';
+
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
 	const seed = 2831;
-	const { bracketState, handleSelectWinner, handleResetMatch } = useTournament(
-		teams,
-		seed
-	);
+	const {
+		bracketState,
+		setBracketState, // Necesitarás exponer esto desde tu hook
+		handleSelectWinner,
+		handleResetMatch,
+	} = useTournament(teams, seed);
+
+	// Cargar estado desde localStorage al montar el componente
+	useEffect(() => {
+		const savedState = localStorage.getItem(TOURNAMENT_STORAGE_KEY);
+		if (savedState) {
+			setBracketState(JSON.parse(savedState));
+		}
+	}, [setBracketState, teams]); // Recargar si los equipos cambian
+
+	// Guardar estado en localStorage cuando cambia
+	useEffect(() => {
+		if (bracketState.length > 0) {
+			localStorage.setItem(
+				TOURNAMENT_STORAGE_KEY,
+				JSON.stringify(bracketState)
+			);
+		}
+	}, [bracketState]);
 
 	if (loading) {
 		return (
