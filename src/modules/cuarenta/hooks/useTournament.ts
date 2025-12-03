@@ -217,6 +217,7 @@ export const useTournament = (teams: TeamData[], seed: number) => {
 
 	return {
 		bracketState,
+		setBracketState,
 		handleSelectWinner,
 		handleResetMatch,
 	};

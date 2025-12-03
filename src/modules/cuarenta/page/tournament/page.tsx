@@ -1,17 +1,71 @@
 'use client';
+import { useEffect, useMemo, useState } from 'react';
 import { useGrup } from '@/modules/sheets/usegrup';
 import {
 	useTournament,
 	type BracketMatch,
 } from '@/modules/cuarenta/hooks/useTournament';
+import { WinnerDisplay } from '../../components/WinnerDisplay';
+
+const TOURNAMENT_STORAGE_KEY = 'tournamentBracketState';
+const WINNER_CELEBRATED_KEY = 'winnerCelebrated';
 
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
 	const seed = 2831;
-	const { bracketState, handleSelectWinner, handleResetMatch } = useTournament(
-		teams,
-		seed
-	);
+	const {
+		bracketState,
+		setBracketState,
+		handleSelectWinner,
+		handleResetMatch,
+	} = useTournament(teams, seed);
+
+	const [isWinnerModalOpen, setWinnerModalOpen] = useState(false);
+	// Cargar estado desde localStorage al montar el componente
+	useEffect(() => {
+		const savedState = localStorage.getItem(TOURNAMENT_STORAGE_KEY);
+		if (savedState) {
+			setBracketState(JSON.parse(savedState));
+		}
+	}, [setBracketState, teams]); // Recargar si los equipos cambian
+
+	// Guardar estado en localStorage cuando cambia
+	useEffect(() => {
+		if (bracketState.length > 0) {
+			localStorage.setItem(
+				TOURNAMENT_STORAGE_KEY,
+				JSON.stringify(bracketState)
+			);
+		}
+	}, [bracketState]);
+
+	const finalWinner = useMemo(() => {
+		if (bracketState.length === 0) return null;
+
+		const finalRound = bracketState[bracketState.length - 1];
+		if (finalRound.matches.length !== 1) return null;
+
+		const finalMatch = finalRound.matches[0];
+		if (!finalMatch.winner) return null;
+
+		return finalMatch.winner === 1 ? finalMatch.pareja1 : finalMatch.pareja2;
+	}, [bracketState]);
+
+	// Efecto para mostrar el modal del ganador solo la primera vez
+	useEffect(() => {
+		const hasBeenCelebrated = sessionStorage.getItem(WINNER_CELEBRATED_KEY);
+		if (finalWinner && !hasBeenCelebrated) {
+			setWinnerModalOpen(true);
+			sessionStorage.setItem(WINNER_CELEBRATED_KEY, 'true');
+		}
+	}, [finalWinner]);
+
+	const handleCloseWinnerModal = () => {
+		setWinnerModalOpen(false);
+	};
+	const handleFinalWinnerClick = () => {
+		if (finalWinner) setWinnerModalOpen(true);
+	};
 
 	if (loading) {
 		return (
@@ -82,10 +136,16 @@ function TournamentBracket() {
 			{/* Pareja 1 */}
 			<button
 				onClick={() => {
-					handleSelectWinner(roundIndex, globalMatchIndex, 1);
+					if (match.winner) {
+						handleFinalWinnerClick();
+					} else {
+						handleSelectWinner(roundIndex, globalMatchIndex, 1);
+					}
 				}}
 				disabled={
-					match.pareja1.teamName === 'TBD' || !!match.winner || match.isBye
+					match.pareja1.teamName === 'TBD' ||
+					(!!match.winner && roundIndex < bracketState.length - 1) ||
+					match.isBye
 				}
 				className={`w-full h-20 p-3 border-b-2 border-(--text-color-muted) relative overflow-hidden text-left transition-all group ${
 					match.pareja1.teamName !== 'TBD' && !match.winner && !match.isBye
@@ -141,9 +201,16 @@ function TournamentBracket() {
 					{/* Pareja 2 */}
 					<button
 						onClick={() => {
-							handleSelectWinner(roundIndex, globalMatchIndex, 2);
+							if (match.winner) {
+								handleFinalWinnerClick();
+							} else {
+								handleSelectWinner(roundIndex, globalMatchIndex, 2);
+							}
 						}}
-						disabled={match.pareja2.teamName === 'TBD' || !!match.winner}
+						disabled={
+							match.pareja2.teamName === 'TBD' ||
+							(!!match.winner && roundIndex < bracketState.length - 1)
+						}
 						className={`w-full h-20 p-3 relative overflow-hidden text-left transition-all group ${
 							match.pareja2.teamName !== 'TBD' && !match.winner && !match.isBye
 								? 'hover:bg-(--text-color) cursor-pointer'
@@ -378,6 +445,14 @@ function TournamentBracket() {
 						CUARENTA TOURNAMENT / SISTEMA ELIMINACIÓN
 					</p>
 				</div>
+
+				{/* Modal del Ganador */}
+				{finalWinner && isWinnerModalOpen && (
+					<WinnerDisplay
+						winnerTeam={finalWinner}
+						onClose={handleCloseWinnerModal}
+					/>
+				)}
 			</div>
 		</div>
 	);
