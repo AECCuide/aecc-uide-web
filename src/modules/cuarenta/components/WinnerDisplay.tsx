@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { type BracketMatch } from '@/modules/cuarenta/hooks/useTournament';
 
@@ -17,7 +16,7 @@ export function WinnerDisplay({ winnerTeam, onClose }: WinnerDisplayProps) {
 			confetti.shapeFromText({ text: emoji, scalar: 3 })
 		);
 
-		const duration = 15 * 1000; // Duración de la animación en milisegundos
+		const duration = 15 * 1000;
 		const animationEnd = Date.now() + duration;
 
 		const randomInRange = (min: number, max: number) =>
@@ -32,7 +31,6 @@ export function WinnerDisplay({ winnerTeam, onClose }: WinnerDisplayProps) {
 			}
 
 			const particleCount = 50 * (timeLeft / duration);
-			// Lanza confeti desde dos puntos en la parte superior
 			void confetti({
 				startVelocity: 30,
 				spread: 360,
@@ -52,42 +50,36 @@ export function WinnerDisplay({ winnerTeam, onClose }: WinnerDisplayProps) {
 
 	return (
 		<div
-			className="fixed inset-0 bg-background/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm cursor-pointer"
+			className="fixed inset-0 bg-background/95 flex items-center justify-center z-50 cursor-pointer"
 			onClick={onClose}
 		>
 			<div
-				className="bg-background border border-stone-200 dark:border-zinc-700 rounded-3xl p-8 text-center relative shadow-2xl max-w-md w-full animate-fade-in-up cursor-default"
+				className="text-center space-y-8 cursor-default"
 				onClick={(e) => {
 					e.stopPropagation();
 				}}
 			>
-				<button
-					onClick={onClose}
-					className="absolute top-4 right-4 text-(--text-color-muted) hover:text-(--text-color) transition-colors"
-					title="Cerrar"
-				>
-					<X className="w-6 h-6" />
-				</button>
+				{/* Nombre del equipo ganador */}
+				<h2 className="text-6xl md:text-8xl font-black text-(--text-color) uppercase tracking-tighter">
+					{winnerTeam.teamName}
+				</h2>
 
-				<div className="mb-4">
-					<span className="text-2xl font-bold text-(--text-color) tracking-tight">
-						¡GANADORES!
-					</span>
-				</div>
-
-				<div className="mb-8">
-					<h2 className="text-4xl md:text-5xl font-bold text-(--text-color) tracking-tighter break-word">
-						{winnerTeam.teamName}
-					</h2>
-				</div>
-
+				{/* Participantes */}
 				<div className="space-y-2">
 					{winnerTeam.participants.map((participant, index) => (
-						<p key={index} className="text-lg text-(--text-color-secondary)">
+						<p
+							key={index}
+							className="text-xl md:text-2xl font-mono text-(--text-color-secondary) tracking-wide"
+						>
 							{participant.name}
 						</p>
 					))}
 				</div>
+
+				{/* Indicador sutil para cerrar */}
+				<p className="text-xs font-mono text-(--text-color-muted) uppercase tracking-widest mt-12">
+					CLICK PARA CERRAR
+				</p>
 			</div>
 		</div>
 	);
