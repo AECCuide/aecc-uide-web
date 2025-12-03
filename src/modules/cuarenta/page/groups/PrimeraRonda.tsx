@@ -2,14 +2,27 @@
 
 import { useGrup } from '@/modules/sheets/usegrup';
 import {
+	ManualMatchConfig,
 	useFirstRoundGenerator,
 	Match,
 } from '@/modules/cuarenta/hooks/useFirstRoundGenerator';
 
+// ✅ CORRECCIÓN: Mover la configuración fuera del componente.
+// Esto asegura que el array no se recree en cada render, evitando bucles infinitos.
+const manualMatchesConfig: ManualMatchConfig[] = [
+	{ team1Name: 'Bugs', team2Name: 'Citaaciegas' },
+	// { team1Name: 'Equipo C', team2Name: 'Equipo D' },
+];
+
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
-	const seed = 2831;
-	const firstRound = useFirstRoundGenerator(teams, seed);
+	const seed = 2831; // Semilla para la aleatoriedad
+
+	const firstRound = useFirstRoundGenerator({
+		teams,
+		seed,
+		manualMatchesConfig,
+	});
 
 	if (loading) {
 		return (

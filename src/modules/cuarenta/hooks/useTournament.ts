@@ -1,5 +1,8 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useFirstRoundGenerator } from './useFirstRoundGenerator';
+import { useState, useEffect } from 'react';
+import {
+	useFirstRoundGenerator,
+	ManualMatchConfig,
+} from './useFirstRoundGenerator';
 import type { TeamData } from '@/modules/sheets/usegrup';
 
 export interface BracketMatch {
@@ -23,12 +26,20 @@ export interface Round {
 	matches: BracketMatch[];
 }
 
-export const useTournament = (teams: TeamData[], seed: number) => {
-	const firstRound = useFirstRoundGenerator(teams, seed);
+export const useTournament = (
+	teams: TeamData[],
+	seed: number,
+	manualMatchesConfig: ManualMatchConfig[] = []
+) => {
+	const firstRound = useFirstRoundGenerator({
+		teams,
+		seed,
+		manualMatchesConfig,
+	});
 	const [bracketState, setBracketState] = useState<Round[]>([]);
 
 	// Inicializar el bracket
-	useMemo(() => {
+	useEffect(() => {
 		if (firstRound.length === 0) {
 			setBracketState([]);
 			return;
@@ -132,6 +143,13 @@ export const useTournament = (teams: TeamData[], seed: number) => {
 				const newBracketState = JSON.parse(
 					JSON.stringify(currentBracket)
 				) as Round[];
+
+				// ✅ CORRECCIÓN: Asegurarse de que la ronda actual y la siguiente existan.
+				// Esto previene el error si el bracket aún no está completamente inicializado.
+				if (!newBracketState[roundIndex] || !newBracketState[roundIndex + 1]) {
+					return newBracketState;
+				}
+
 				const match = newBracketState[roundIndex].matches[matchIndex];
 				match.winner = 1;
 
