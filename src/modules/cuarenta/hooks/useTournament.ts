@@ -111,36 +111,42 @@ export const useTournament = (teams: TeamData[], seed: number) => {
 	useEffect(() => {
 		if (bracketState.length === 0) return;
 
-		/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-		let needsUpdate = false;
-		const newBracketState = JSON.parse(JSON.stringify(bracketState)) as Round[];
+		// Encontrar el primer BYE que necesita ser avanzado
+		let byeToAdvance = null;
+		for (let r = 0; r < bracketState.length - 1; r++) {
+			const round = bracketState[r];
+			const matchIndex = round.matches.findIndex(
+				(m) => m.isBye && m.winner === undefined && m.pareja1.teamName !== 'TBD'
+			);
 
-		for (
-			let roundIndex = 0;
-			roundIndex < newBracketState.length - 1;
-			roundIndex++
-		) {
-			const round = newBracketState[roundIndex];
-
-			round.matches.forEach((match, matchIndex) => {
-				if (match.isBye && !match.winner && match.pareja1.teamName !== 'TBD') {
-					match.winner = 1;
-					needsUpdate = true;
-
-					const nextRoundMatchIndex = Math.floor(matchIndex / 2);
-					const nextRound = newBracketState[roundIndex + 1];
-					const nextRoundMatch = nextRound.matches[nextRoundMatchIndex];
-
-					if (matchIndex % 2 === 0) {
-						nextRoundMatch.pareja1 = { ...match.pareja1 };
-					} else {
-						nextRoundMatch.pareja2 = { ...match.pareja1 };
-					}
-				}
-			});
+			if (matchIndex !== -1) {
+				byeToAdvance = { roundIndex: r, matchIndex };
+				break;
+			}
 		}
 
-		setBracketState(newBracketState);
+		// Si encontramos uno, lo procesamos y actualizamos el estado
+		if (byeToAdvance) {
+			const { roundIndex, matchIndex } = byeToAdvance;
+			setBracketState((currentBracket) => {
+				const newBracketState = JSON.parse(
+					JSON.stringify(currentBracket)
+				) as Round[];
+				const match = newBracketState[roundIndex].matches[matchIndex];
+				match.winner = 1;
+
+				const nextRoundMatchIndex = Math.floor(matchIndex / 2);
+				const nextRoundMatch =
+					newBracketState[roundIndex + 1].matches[nextRoundMatchIndex];
+
+				if (matchIndex % 2 === 0) {
+					nextRoundMatch.pareja1 = { ...match.pareja1 };
+				} else {
+					nextRoundMatch.pareja2 = { ...match.pareja1 };
+				}
+				return newBracketState;
+			});
+		}
 	}, [bracketState]);
 
 	const handleSelectWinner = (
