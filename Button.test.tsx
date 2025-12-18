@@ -1,43 +1,50 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Button } from './Button';
+import type { ButtonProps } from './Button';
 
-// Describe un conjunto de pruebas para el componente Button
 describe('Button Component', () => {
-	// Prueba 1: Verificar que el botón se renderiza correctamente con su texto.
-	test('debe renderizar el botón con el texto proporcionado', () => {
-		render(<Button>Haz clic aquí</Button>);
+	// Pruebas combinatorias para renderizado y atributos
+	const testCases: ButtonProps[] = [
+		{ variant: 'primary', size: 'small', disabled: true },
+		{ variant: 'primary', size: 'medium', disabled: false },
+		{ variant: 'primary', size: 'large', disabled: true },
+		{ variant: 'secondary', size: 'small', disabled: false },
+		{ variant: 'secondary', size: 'medium', disabled: true },
+		{ variant: 'secondary', size: 'large', disabled: false },
+		{ variant: 'danger', size: 'small', disabled: true },
+		{ variant: 'danger', size: 'medium', disabled: false },
+		{ variant: 'danger', size: 'large', disabled: true },
+	];
 
-		// Busca el botón por el texto que contiene.
-		// La 'i' hace que la búsqueda no distinga entre mayúsculas y minúsculas.
-		const buttonElement = screen.getByText(/haz clic aquí/i);
+	test.each(testCases)(
+		'debe renderizar correctamente con variant=$variant, size=$size, y disabled=$disabled',
+		({ variant, size, disabled }) => {
+			render(
+				<Button variant={variant} size={size} disabled={disabled}>
+					Test Button
+				</Button>
+			);
 
-		// Afirmación: Esperamos que el elemento del botón esté en el documento.
-		expect(buttonElement).toBeInTheDocument();
-	});
+			const button = screen.getByRole('button', { name: /Test Button/i });
 
-	// Prueba 2: Verificar que la función onClick se llama cuando se hace clic en el botón.
+			// 1. Verificar que el botón se renderiza
+			expect(button).toBeInTheDocument();
+
+			// 2. Verificar el estado 'disabled'
+			if (disabled) {
+				expect(button).toBeDisabled();
+			} else {
+				expect(button).not.toBeDisabled();
+			}
+		}
+	);
+
+	// Prueba de funcionalidad (onClick)
 	test('debe llamar a la función onClick cuando se hace clic', () => {
-		// jest.fn() crea una función "mock" o simulada para rastrear las llamadas.
 		const handleClick = jest.fn();
-
 		render(<Button onClick={handleClick}>Haz clic aquí</Button>);
-
 		const buttonElement = screen.getByText(/haz clic aquí/i);
-
-		// Simula un evento de clic en el botón.
 		fireEvent.click(buttonElement);
-
-		// Afirmación: Esperamos que la función simulada haya sido llamada una vez.
 		expect(handleClick).toHaveBeenCalledTimes(1);
-	});
-
-	// Prueba 3: Verificar que el botón está deshabilitado cuando se pasa la prop `disabled`.
-	test('debe estar deshabilitado si la prop disabled es verdadera', () => {
-		render(<Button disabled>No se puede hacer clic</Button>);
-
-		const buttonElement = screen.getByText(/no se puede hacer clic/i);
-
-		// Afirmación: Esperamos que el botón tenga el atributo 'disabled'.
-		expect(buttonElement).toBeDisabled();
 	});
 });
