@@ -1,39 +1,28 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useGrup, TeamData } from '@/modules/sheets/usegrup';
+import { useGrup } from '@/modules/sheets/usegrup';
+import {
+	ManualMatchConfig,
+	useFirstRoundGenerator,
+	Match,
+} from '@/modules/cuarenta/hooks/useFirstRoundGenerator';
 
-interface Match {
-	mesa: number;
-	pareja1: TeamData;
-	pareja2: TeamData;
-}
+// ✅ CORRECCIÓN: Mover la configuración fuera del componente.
+// Esto asegura que el array no se recree en cada render, evitando bucles infinitos.
+const manualMatchesConfig: ManualMatchConfig[] = [
+	{ team1Name: 'Bugs', team2Name: 'Citaaciegas' },
+	// { team1Name: 'Equipo C', team2Name: 'Equipo D' },
+];
 
 function TournamentBracket() {
 	const { teams, loading, error } = useGrup();
+	const seed = 2831; // Semilla para la aleatoriedad
 
-	// Generar solo primera ronda
-	const firstRound = useMemo(() => {
-		if (teams.length < 2) return [];
-
-		const matches: Match[] = [];
-		const availableTeams = [...teams];
-		let mesaCounter = 1;
-
-		// Crear parejas de 2 en 2
-		for (let i = 0; i < availableTeams.length; i += 2) {
-			if (i + 1 < availableTeams.length) {
-				matches.push({
-					mesa: mesaCounter,
-					pareja1: availableTeams[i],
-					pareja2: availableTeams[i + 1],
-				});
-				mesaCounter++;
-			}
-		}
-
-		return matches;
-	}, [teams]);
+	const firstRound = useFirstRoundGenerator({
+		teams,
+		seed,
+		manualMatchesConfig,
+	});
 
 	if (loading) {
 		return (
@@ -85,7 +74,7 @@ function TournamentBracket() {
 
 				{/* Grid Brutalista */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-					{firstRound.map((match, index) => (
+					{firstRound.map((match: Match, index: number) => (
 						<div
 							key={match.mesa}
 							className="relative border-4 border-(--text-color) bg-background 
@@ -138,51 +127,63 @@ function TournamentBracket() {
 									</div>
 								</div>
 
-								{/* Separador VS Brutalista */}
-								<div className="relative my-6 h-12 flex items-center justify-center">
-									<div className="absolute inset-0 flex items-center">
-										<div className="w-full border-t-2 border-dashed border-(--text-color-muted) group-hover:border-background" />
-									</div>
-									<div className="relative bg-background px-4 group-hover:bg-(--text-color)">
-										<span className="text-2xl font-black text-(--text-color) group-hover:text-background tracking-widest">
-											VS
-										</span>
-									</div>
-								</div>
-
-								{/* Pareja 2 */}
-								<div className="relative">
-									<div className="absolute -right-6 top-0 w-1 h-full bg-(--text-color) group-hover:bg-background" />
-
-									<div className="flex items-start justify-between gap-4">
-										<div className="flex-1">
-											<div className="flex items-baseline gap-2 mb-3">
-												<span className="text-3xl font-black text-(--text-color) group-hover:text-background">
-													02
-												</span>
-												<h3 className="text-lg font-bold text-(--text-color) uppercase tracking-tight group-hover:text-background break-word">
-													{match.pareja2.teamName}
-												</h3>
+								{match.pareja2 ? (
+									<>
+										{/* Separador VS Brutalista */}
+										<div className="relative my-6 h-12 flex items-center justify-center">
+											<div className="absolute inset-0 flex items-center">
+												<div className="w-full border-t-2 border-dashed border-(--text-color-muted) group-hover:border-background" />
 											</div>
-											<div className="space-y-1 pl-12 border-l-2 border-(--text-color-muted) group-hover:border-background">
-												<p className="text-xs font-mono text-(--text-color-secondary) group-hover:text-background opacity-70">
-													{match.pareja2.participants.participant1.name}
-												</p>
-												<p className="text-xs font-mono text-(--text-color-secondary) group-hover:text-background opacity-70">
-													{match.pareja2.participants.participant2.name}
-												</p>
+											<div className="relative bg-background px-4 group-hover:bg-(--text-color)">
+												<span className="text-2xl font-black text-(--text-color) group-hover:text-background tracking-widest">
+													VS
+												</span>
 											</div>
 										</div>
 
-										{match.pareja2.pagado && (
-											<div className="w-6 h-6 bg-(--color) dark:bg-(--button-hover-bg) flex items-center justify-center">
-												<span className="text-background text-xs font-black">
-													✓
-												</span>
+										{/* Pareja 2 */}
+										<div className="relative">
+											<div className="absolute -right-6 top-0 w-1 h-full bg-(--text-color) group-hover:bg-background" />
+
+											<div className="flex items-start justify-between gap-4">
+												<div className="flex-1">
+													<div className="flex items-baseline gap-2 mb-3">
+														<span className="text-3xl font-black text-(--text-color) group-hover:text-background">
+															02
+														</span>
+														<h3 className="text-lg font-bold text-(--text-color) uppercase tracking-tight group-hover:text-background break-word">
+															{match.pareja2.teamName}
+														</h3>
+													</div>
+													<div className="space-y-1 pl-12 border-l-2 border-(--text-color-muted) group-hover:border-background">
+														<p className="text-xs font-mono text-(--text-color-secondary) group-hover:text-background opacity-70">
+															{match.pareja2.participants.participant1.name}
+														</p>
+														<p className="text-xs font-mono text-(--text-color-secondary) group-hover:text-background opacity-70">
+															{match.pareja2.participants.participant2.name}
+														</p>
+													</div>
+												</div>
+
+												{match.pareja2.pagado && (
+													<div className="w-6 h-6 bg-(--color) dark:bg-(--button-hover-bg) flex items-center justify-center">
+														<span className="text-background text-xs font-black">
+															✓
+														</span>
+													</div>
+												)}
 											</div>
-										)}
+										</div>
+									</>
+								) : (
+									<div className="relative my-6 h-12 flex items-center justify-center">
+										<div className="relative bg-background px-4 group-hover:bg-(--text-color)">
+											<span className="text-sm font-bold text-(--text-color) group-hover:text-background tracking-widest">
+												AVANZA DIRECTO
+											</span>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
 						</div>
 					))}

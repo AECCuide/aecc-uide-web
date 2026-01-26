@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { useReducer, Reducer } from 'react';
 import { CreditCard, ChevronDown, BookMarked } from 'lucide-react';
 import ParticipantCard from '@/modules/cuarenta/components/ParticipantCard';
 import SubmitButton from '@/modules/cuarenta/components/SubmitButton';
 import { validateCuarentaForm } from '@/modules/cuarenta/hooks/validation';
+import { Button } from '@/components/ui/buttom';
 
 // --- Constants ---
 const PAYMENT_METHODS = ['Efectivo', 'Transferencia'];
@@ -119,6 +121,7 @@ const FormField = ({ children }: { children: React.ReactNode }) => (
 
 export default function TeamRegistration() {
 	const [state, dispatch] = useReducer(registrationReducer, initialState);
+	const router = useRouter();
 
 	const handleParticipantChange = (
 		index: number,
@@ -329,6 +332,16 @@ export default function TeamRegistration() {
 							</FormField>
 						</div>
 					</div>
+
+					{/* Ir a ver los equipos (sin lógica de envío) */}
+					<Button
+						onClick={() => {
+							router.push('/cuarenta/groups');
+						}}
+						className="w-full py-4 rounded-2xl font-medium shadow-lg transform active:scale-95 duration-150 disabled:opacity-50 disabled:cursor-not-allowed ronded-lg"
+					>
+						Ver grupos
+					</Button>
 
 					{/* Submit Button */}
 					<SubmitButton

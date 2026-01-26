@@ -4,7 +4,7 @@ import { RegistrationData } from '../types/registration';
 export async function submitCuarentaRegistration(
 	registrationData: RegistrationData
 ): Promise<unknown> {
-	//	const { error } = await supabase.from('cuarenta_registrations').insert({
+	//	const { error } = await supabase.from('cuarenta_registrations').insert({ //<-- valor correcto
 	const { error } = await supabase.from('cuarenta_registration').insert({
 		team_name: registrationData.teamName,
 		participant1_name: registrationData.participants.participant1.name,
