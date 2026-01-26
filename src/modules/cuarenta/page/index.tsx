@@ -346,7 +346,7 @@ export default function CuarentaPage() {
 							className="text-4xl md:text-8xl font-bold mb-8 text-center"
 							style={{ color: 'var(--text-color)' }}
 						>
-							{splitText('¡TE ESPERAMOS!')}
+							{splitText('¡Gracias por venir!')}
 						</h2>
 						<Link href="/cuarenta/forms">
 							<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg p-10">
