@@ -4,6 +4,7 @@ export default defineConfig({
 	testDir: './',
 	fullyParallel: true,
 	reporter: 'html',
+	testMatch: '**/*.spec.ts',
 
 	use: {
 		// ⚠️ CORRIGE ESTO: Agrega la ruta base completa
