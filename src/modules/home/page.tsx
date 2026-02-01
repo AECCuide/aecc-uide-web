@@ -12,7 +12,7 @@ const cardsData = [
 		title: 'Cuarenta',
 		description:
 			'Por fiestas de quito se organiza el evento de Cuarenta para la Escuela de Ciencias de la Computación.',
-		tags: ['math', 'advanced reasoning', 'chat'],
+		tags: ['Event', 'Cuarenta', 'Fiestas de quito', 'AECC', 'UIDE'],
 		slug: 'cuarenta',
 	},
 
