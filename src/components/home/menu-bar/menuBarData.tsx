@@ -1,7 +1,7 @@
 'use client';
 
 import { type Variants, type Transition } from 'framer-motion';
-import { Club } from 'lucide-react';
+import { Club, Ham } from 'lucide-react';
 import { MenuItem } from './menuBarTypes';
 /*
 export const menuItems: MenuItem[] = [
@@ -31,6 +31,14 @@ export const menuItems: MenuItem[] = [
 		gradient:
 			'radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(37,99,235,0.06) 50%, rgba(30,64,175,0) 100%)',
 		iconColor: 'text-blue-500',
+	},
+	{
+		icon: <Ham className="h-5 w-5" />,
+		label: 'Merch',
+		href: '/aecc-uide-web/comida',
+		gradient:
+			'radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)',
+		iconColor: 'text-orange-500',
 	},
 ];
 
