@@ -8,12 +8,15 @@ import { MenuBar } from '@/components/home/menu-bar/menuBar';
 import Footer from '@/components/home/footer/footer';
 import { Metadata } from 'next';
 const inter = Inter({ subsets: ['latin'] });
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://aecc.com';
+
 export const metadata: Metadata = {
 	title: 'AECC',
 	description:
 		'Asociación de Estudiantes de Ciencias de la Computación de la Universidad Internacional del Ecuador UIDE Quito', // Implement Meta Description
 	alternates: {
-		canonical: 'https://aecc-uide.vercel.app', // Implement Canonical URL
+		canonical: BASE_URL, // Implement Canonical URL
 	},
 	openGraph: {
 		title: 'AECC', // Implement OG Title
