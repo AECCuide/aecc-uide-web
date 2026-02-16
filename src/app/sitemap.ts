@@ -2,7 +2,9 @@ import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://aecc.com';
+const BASE_URL =
+	process.env.NEXT_PUBLIC_BASE_URL ??
+	'https://aeccuide.github.io/aecc-uide-web';
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	const now = new Date();
