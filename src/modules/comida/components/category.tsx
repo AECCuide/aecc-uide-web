@@ -13,8 +13,7 @@ export const CategoryMenu = ({ items }: { items: CategoryItem[] }) => {
 		<div className="w-full">
 			<div
 				className={cn(
-					// justify-start asegura que se peguen a la izquierda uno tras otro
-					'flex flex-nowrap items-center justify-start',
+					'flex flex-nowrap items-center justify-start md:justify-center',
 					'overflow-x-auto no-scrollbar',
 					'gap-4 px-6 md:px-16 lg:px-20 py-6',
 					'scroll-smooth'

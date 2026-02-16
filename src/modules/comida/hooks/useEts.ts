@@ -61,7 +61,7 @@ export const categories = [
 	{
 		name: 'Comida',
 		imageUrl:
-			'https://static.vecteezy.com/system/resources/previews/009/349/667/non_2x/3d-food-icons-sandwich-png.png',
+			'https://cdn3d.iconscout.com/3d/premium/thumb/comida-3d-icon-png-download-6169043.png',
 		link: '/categorias/comida',
 	},
 	{
@@ -84,7 +84,7 @@ export const categories = [
 	{
 		name: 'Saludable',
 		imageUrl:
-			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvDMJp4uQNt7sgqGzKiuT2UcorLwn0ynpPEw&s',
+			'https://cdn3d.iconscout.com/3d/premium/thumb/ensalada-3d-icon-png-download-12484164.png',
 		link: '/categorias/saludable',
 	},
 ];
