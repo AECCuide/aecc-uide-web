@@ -21,9 +21,11 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 	// Si es un array, renderizamos una lista de cards
 	if (Array.isArray(cardData)) {
 		return (
-			<div className="flex flex-wrap gap-6">
+			<div className="flex overflow-x-auto pb-4 gap-6 snap-x snap-mandatory scrollbar-hide">
 				{cardData.map((item, index) => (
-					<Card key={item.slug ?? index} cardData={item} />
+					<div key={item.slug ?? index} className="snap-center flex-none">
+						<Card cardData={item} />
+					</div>
 				))}
 			</div>
 		);
