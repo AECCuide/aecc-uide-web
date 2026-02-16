@@ -1,3 +1,5 @@
+import piazImage from './piaz.webp';
+
 export const cafeteriasData = [
 	{
 		image:
@@ -29,7 +31,7 @@ export const restaurantsData = [
 		slug: 'Papas Cargo',
 	},
 	{
-		image: '@/modules/comida/hooks/piaz',
+		image: piazImage,
 		badge: '$2 - $20',
 		title: 'Piazza',
 		description: 'Coliseo • Horario 9:00-16:00',

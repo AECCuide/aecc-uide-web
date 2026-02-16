@@ -1,10 +1,10 @@
 // components/ui/Card.tsx
 import React from 'react';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 
 // Definir interfaz para los datos de la tarjeta
 export interface CardData {
-	image?: string;
+	image?: string | StaticImageData;
 	badge?: string;
 	provider?: string;
 	title?: string;
