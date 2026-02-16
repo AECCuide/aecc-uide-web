@@ -3,20 +3,32 @@ import React from 'react';
 import Image from 'next/image';
 
 // Definir interfaz para los datos de la tarjeta
-interface CardData {
+export interface CardData {
 	image?: string;
 	badge?: string;
 	provider?: string;
 	title?: string;
 	description?: string;
 	tags?: string[];
+	slug?: string;
 }
 
 interface CardProps {
-	cardData: CardData;
+	cardData: CardData | CardData[];
 }
 
 const Card: React.FC<CardProps> = ({ cardData }) => {
+	// Si es un array, renderizamos una lista de cards
+	if (Array.isArray(cardData)) {
+		return (
+			<div className="flex flex-wrap gap-6">
+				{cardData.map((item, index) => (
+					<Card key={item.slug ?? index} cardData={item} />
+				))}
+			</div>
+		);
+	}
+
 	// Desestructuración de los datos del JSON
 	const { image, badge, provider, title, description, tags } = cardData;
 
@@ -53,9 +65,11 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 
 			{/* Text content */}
 			<div className="py-3">
-				<div className="text-(--color-muted-foreground) text-sm mb-1">
-					{provider ?? 'provider'}
-				</div>
+				{provider && (
+					<div className="text-(--color-muted-foreground) text-sm mb-1">
+						{provider}
+					</div>
+				)}
 				<h3 className="text-xl font-bold mb-2 text-(--color-foreground)">
 					{title ?? 'Title'}
 				</h3>

@@ -1,7 +1,7 @@
 // src/modules/comida/index.tsx
 'use client';
 
-import CardContainer from './components/cardEats';
+import CardContainer from '@/components/ui/card';
 import { CategoryMenu } from './components/category';
 import {
 	cafeteriasData,
@@ -20,17 +20,17 @@ export default function ComidaModule() {
 			<div className="flex-1 px-6 md:px-16 lg:px-20 py-8">
 				<section>
 					<h2 className="title-h1 mb-6">Cafeterías</h2>
-					<CardContainer cardsData={cafeteriasData} />
+					<CardContainer cardData={cafeteriasData} />
 				</section>
 
 				<section>
 					<h2 className="title-h1 mb-6">Restaurantes</h2>
-					<CardContainer cardsData={restaurantsData} />
+					<CardContainer cardData={restaurantsData} />
 				</section>
 
 				<section>
 					<h2 className="title-h1 mb-6">Tiendas</h2>
-					<CardContainer cardsData={snacksData} />
+					<CardContainer cardData={snacksData} />
 				</section>
 
 				<hr className="opacity-10" />
