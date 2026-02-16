@@ -1,5 +1,3 @@
-'use client';
-
 import Script from 'next/script';
 import '@/app/globals.css';
 import { Inter } from 'next/font/google';
@@ -8,9 +6,28 @@ import type React from 'react';
 import { RenderMounted } from '@/components/render-mounted';
 import { MenuBar } from '@/components/home/menu-bar/menuBar';
 import Footer from '@/components/home/footer/footer';
-
+import { Metadata } from 'next';
 const inter = Inter({ subsets: ['latin'] });
-
+export const metadata: Metadata = {
+	title: 'AECC',
+	description:
+		'Asociación de Estudiantes de Ciencias de la Computación de la Universidad Internacional del Ecuador UIDE Quito', // Implement Meta Description
+	alternates: {
+		canonical: 'https://aecc-uide.vercel.app', // Implement Canonical URL
+	},
+	openGraph: {
+		title: 'AECC', // Implement OG Title
+		description:
+			'Asociación de Estudiantes de Ciencias de la Computación de la Universidad Internacional del Ecuador UIDE Quito', // Implement OG Description
+		images: [
+			{
+				url: '/favicon.ico', // Implement OG Image
+				width: 1200,
+				height: 630,
+			},
+		],
+	},
+};
 export default function RootLayout({
 	children,
 }: {
@@ -18,7 +35,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head>
+			<body className={inter.className}>
 				{/* Google Tag Manager */}
 				<Script id="google-tag-manager" strategy="afterInteractive">
 					{`
@@ -39,14 +56,10 @@ export default function RootLayout({
 						window.dataLayer = window.dataLayer || [];
 						function gtag(){dataLayer.push(arguments);}
 						gtag('js', new Date());
-
 						gtag('config', 'G-CPME5D45X1');
 					`}
 				</Script>
 				{/* End Google Tag Manager */}
-				<title>AECC</title>
-			</head>
-			<body className={inter.className}>
 				{/* Google Tag Manager (noscript) */}
 				<noscript>
 					<iframe
@@ -65,7 +78,6 @@ export default function RootLayout({
 					>
 						<MenuBar />
 						<div className="mt-10">{children}</div>
-
 						<Footer />
 					</ThemeProvider>
 				</RenderMounted>

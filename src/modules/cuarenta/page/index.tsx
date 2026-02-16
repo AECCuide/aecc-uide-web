@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import FallingCardsAnimation from '@/modules/cuarenta/animation/animacionCartas';
 import { Button } from '@/components/ui/buttom';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -181,7 +182,7 @@ export default function CuarentaPage() {
 	return (
 		<FallingCardsAnimation cardCount={60}>
 			<div className="text-center" style={{ color: 'var(--text-color)' }}>
-				{/* Sección 1 - Información del Torneo */}
+				{/* Información del Torneo */}
 				<section className="min-h-screen w-full flex flex-col items-center justify-center px-4 box-border overflow-hidden">
 					<h1
 						ref={titleRef}
@@ -225,7 +226,7 @@ export default function CuarentaPage() {
 									className="text-2xl sm:text-7xl font-bold mb-1"
 									style={{ color: 'var(--text-color-icon)' }}
 								>
-									3
+									-
 								</div>
 								<div
 									className="text-sm sm:text-xl uppercase tracking-wider"
@@ -289,54 +290,7 @@ export default function CuarentaPage() {
 					</p>
 				</section>
 
-				{/* Sección 2 - Reglas del Juego
-				<section
-					ref={section2Ref}
-					className="min-h-screen flex flex-col items-center justify-center px-4 box-border overflow-hidden"
-				>
-					<div 
-						className="w-full max-w-xl sm:max-w-3xl mx-auto backdrop-blur-lg rounded-3xl p-4 sm:p-12 shadow-2xl overflow-hidden"
-						style={{
-							backgroundColor: 'var(--card)',
-							border: '4px solid var(--border)',
-						}}
-					>
-						<h2 
-							className="text-2xl sm:text-6xl font-bold mb-6 text-center sm:text-left leading-tight wrap-break-word"
-							style={{ color: 'var(--text-color)' }}
-						>
-							🃏 ¿Listo para Jugar?
-						</h2>
-						<div className="space-y-4 text-sm sm:text-2xl text-left">
-							<p className="flex items-start gap-3 min-w-0">
-								<span className="text-2xl sm:text-4xl shrink-0">♠</span>
-								<span className="flex-1 whitespace-normal wrap-break-word">
-									Forma tu equipo de 2 jugadores
-								</span>
-							</p>
-							<p className="flex items-start gap-3 min-w-0">
-								<span className="text-2xl sm:text-4xl shrink-0">♥</span>
-								<span className="flex-1 whitespace-normal wrap-break-word">
-									Demuestra tu estrategia y habilidad
-								</span>
-							</p>
-							<p className="flex items-start gap-3 min-w-0">
-								<span className="text-2xl sm:text-4xl shrink-0">♦</span>
-								<span className="flex-1 whitespace-normal wrap-break-word">
-									Compite por premios increíbles
-								</span>
-							</p>
-							<p className="flex items-start gap-3 min-w-0">
-								<span className="text-2xl sm:text-4xl shrink-0">♣</span>
-								<span className="flex-1 whitespace-normal wrap-break-word">
-									¡Diviértete al máximo!
-								</span>
-							</p>
-						</div>
-					</div>
-				</section>
- */}
-				{/* Sección 3 - Llamado a la Acción */}
+				{/* Llamado a la Acción */}
 				<section
 					ref={section3Ref}
 					className="min-h-screen flex flex-col items-center justify-center px-4"
@@ -362,13 +316,13 @@ export default function CuarentaPage() {
 					</div>
 				</section>
 
-				{/* Sección Final */}
+				{/* Sección Final de agradecimiento */}
 				<section className="min-h-screen flex flex-col items-center justify-center px-4">
 					<h2
 						className="text-4xl md:text-7xl font-bold mb-8"
 						style={{ color: 'var(--text-color)' }}
 					>
-						🏆 Nos Vemos en el Torneo 🏆
+						🏆 Nos Vemos en el próximo Torneo 🏆
 					</h2>
 					<p
 						className="text-xl md:text-3xl max-w-2xl"
@@ -376,6 +330,30 @@ export default function CuarentaPage() {
 					>
 						Organizado por estudiantes de Ciencias de la Computación
 					</p>
+				</section>
+
+				{/* Sección de fotos */}
+				<section className="py-20 px-4 max-w-5xl mx-auto">
+					<div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+						{[1, 2, 3, 4, 5, 6].map((num) => (
+							<div
+								key={num}
+								className="aspect-square overflow-hidden rounded-2xl shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer border-2 relative"
+								style={{
+									borderColor: 'var(--border)',
+									backgroundColor: 'var(--card)',
+								}}
+							>
+								<Image
+									src={`/${process.env.NEXT_PUBLIC_BASE_PATH ?? 'aecc-uide-web'}/img/${String(num)}.webp`}
+									alt={`Galería Torneo ${String(num)}`}
+									className="object-cover"
+									fill
+									sizes="(max-width: 768px) 50vw, 33vw"
+								/>
+							</div>
+						))}
+					</div>
 				</section>
 			</div>
 		</FallingCardsAnimation>

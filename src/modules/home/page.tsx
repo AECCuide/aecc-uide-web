@@ -7,12 +7,12 @@ const cardsData = [
 	{
 		image:
 			'https://i.pinimg.com/736x/94/e4/5d/94e45d12c714cd677f6d1d89f44b0b46.jpg',
-		badge: 'Fiestas de quito',
+		badge: 'Fiestas de Quito',
 		provider: 'Anual Event',
 		title: 'Cuarenta',
 		description:
 			'Por fiestas de quito se organiza el evento de Cuarenta para la Escuela de Ciencias de la Computación.',
-		tags: ['math', 'advanced reasoning', 'chat'],
+		tags: ['Event', 'Cuarenta', 'Fiestas de quito', 'AECC', 'UIDE'],
 		slug: 'cuarenta',
 	},
 
