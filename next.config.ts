@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
 	images: {
 		// Vercel optimiza imágenes automáticamente; GitHub Pages requiere desactivarlo
 		unoptimized: isGithubPages,
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'i.pinimg.com',
+			},
+		],
 	},
 };
 
