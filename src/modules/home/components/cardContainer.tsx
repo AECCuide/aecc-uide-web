@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Card from '@/components/ui/card';
+import Card, { CardData } from '@/components/ui/card';
 
 // Definir interfaces para el tipado
-interface CardData {
-	image?: string;
-	badge?: string;
-	provider?: string;
-	title?: string;
-	description?: string;
-	tags?: string[];
-	slug?: string; // Usamos slug en lugar de url
-}
 
 interface CardContainerProps {
 	cardsData: CardData[];
@@ -28,7 +19,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 	// Función para manejar el clic en una card
 	const handleCardClick = (slug?: string) => {
 		if (slug) {
-			const fullUrl = `/aecc-uide-web/${slug}`; // Construimos la URL
+			const fullUrl = `/${slug}`; // Construimos la URL
 			window.open(fullUrl, '_blank'); // Abre en una nueva pestaña
 		}
 	};

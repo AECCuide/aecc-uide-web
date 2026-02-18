@@ -21,6 +21,26 @@ const nextConfig: NextConfig = {
 				protocol: 'https',
 				hostname: 'i.pinimg.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'www.uide.edu.ec',
+			},
+			{
+				protocol: 'https',
+				hostname: 'encrypted-tbn0.gstatic.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'linktr.ee',
+			},
+			{
+				protocol: 'https',
+				hostname: 'cdn3d.iconscout.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'img.pikbest.com',
+			},
 		],
 	},
 };
