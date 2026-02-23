@@ -10,6 +10,14 @@ const firebaseConfig = {
 	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Inicializar para evitar errores en Hot Reload
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-export const auth = getAuth(app);
+// Inicializar para evitar errores en Hot Reload y builds donde faltan las variables (e.g. Vercel)
+const app =
+	typeof window !== 'undefined' &&
+	getApps().length === 0 &&
+	firebaseConfig.apiKey
+		? initializeApp(firebaseConfig)
+		: getApps().length > 0
+			? getApp()
+			: null;
+
+export const auth = app ? getAuth(app) : null;

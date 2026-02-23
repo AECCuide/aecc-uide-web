@@ -18,6 +18,10 @@ export default function LoginPage() {
 	const [error, setError] = useState('');
 
 	useEffect(() => {
+		if (!auth) {
+			setLoading(false);
+			return;
+		}
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 			setUser(currentUser);
 			setLoading(false);
@@ -26,6 +30,10 @@ export default function LoginPage() {
 	}, []);
 
 	const handleGoogleLogin = async () => {
+		if (!auth) {
+			setError('La configuración de Firebase está incompleta.');
+			return;
+		}
 		setError('');
 		setIsLoggingIn(true);
 		const provider = new GoogleAuthProvider();
@@ -40,6 +48,7 @@ export default function LoginPage() {
 	};
 
 	const handleLogout = async () => {
+		if (!auth) return;
 		try {
 			await signOut(auth);
 		} catch (error) {
