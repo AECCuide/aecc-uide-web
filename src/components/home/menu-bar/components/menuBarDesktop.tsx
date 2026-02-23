@@ -1,4 +1,9 @@
+'use client';
+
 import { motion, type Transition, type Variants } from 'framer-motion';
+import { useAuth } from '@/components/auth-provider';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
 import {
 	menuItems,
@@ -9,6 +14,9 @@ import {
 } from '../menuBarData.tsx';
 
 export function MenuBarDesktop() {
+	const { user } = useAuth();
+	const pathname = usePathname();
+	const isActive = pathname === '/perfil';
 	return (
 		<ul className="hidden sm:flex items-center gap-2 relative z-10 px-4 justify-between w-full">
 			<div className="flex items-center">
@@ -75,8 +83,18 @@ export function MenuBarDesktop() {
 				</div>
 			</div>
 
-			<div className="flex items-center">
+			<div className="flex items-center gap-2">
 				<ThemeToggle />
+				{user?.photoURL && (
+					<Image
+						src={user.photoURL}
+						alt="Perfil"
+						width={24}
+						height={24}
+						className={`h-7 w-7 rounded-full object-cover border-2 shadow-sm ${isActive ? 'border-[var(--sidebar-primary)]' : 'border-transparent'}`}
+						referrerPolicy="no-referrer"
+					/>
+				)}
 			</div>
 		</ul>
 	);
