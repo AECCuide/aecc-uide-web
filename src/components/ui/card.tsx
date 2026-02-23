@@ -1,21 +1,36 @@
 // components/ui/Card.tsx
 import React from 'react';
+import Image, { StaticImageData } from 'next/image';
 
 // Definir interfaz para los datos de la tarjeta
-interface CardData {
-	image?: string;
+export interface CardData {
+	image?: string | StaticImageData;
 	badge?: string;
 	provider?: string;
 	title?: string;
 	description?: string;
 	tags?: string[];
+	slug?: string;
 }
 
 interface CardProps {
-	cardData: CardData;
+	cardData: CardData | CardData[];
 }
 
 const Card: React.FC<CardProps> = ({ cardData }) => {
+	// Si es un array, renderizamos una lista de cards
+	if (Array.isArray(cardData)) {
+		return (
+			<div className="flex overflow-x-auto pb-4 gap-6 snap-x snap-mandatory scrollbar-hide">
+				{cardData.map((item, index) => (
+					<div key={item.slug ?? index} className="snap-center flex-none">
+						<Card cardData={item} />
+					</div>
+				))}
+			</div>
+		);
+	}
+
 	// Desestructuración de los datos del JSON
 	const { image, badge, provider, title, description, tags } = cardData;
 
@@ -29,20 +44,21 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 		// Establecemos el ancho fijo del componente Card aquí
 		<div className="w-80">
 			{/* Image visualization */}
-			<div className="relative bg-[var(--color-card)] rounded-3xl overflow-hidden">
+			<div className="relative bg-(--color-card) rounded-3xl overflow-hidden">
 				{/* Contenedor de la imagen ajustado */}
 				<div className="w-full h-32 relative">
-					<img
-						src={image || '/api/placeholder/300/120'}
-						alt={title || 'Network visualization'}
-						className="absolute inset-0 w-full h-full object-cover"
+					<Image
+						src={image ?? '/api/placeholder/300/120'}
+						alt={title ?? 'Network visualization'}
+						fill
+						className="object-cover"
 					/>
 				</div>
 
 				{/* Badge overlay - solo se muestra si hay un badge */}
 				{badge && (
 					<div className="absolute top-4 left-4">
-						<span className="bg-[var(--color-sidebar-primary)] text-[var(--text-color)] text-xs px-3 py-1 rounded-md font-semibold tracking-wide">
+						<span className="bg-(--color-sidebar-primary) text-(--text-color) text-xs px-3 py-1 rounded-md font-semibold tracking-wide">
 							{badge}
 						</span>
 					</div>
@@ -51,14 +67,16 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 
 			{/* Text content */}
 			<div className="py-3">
-				<div className="text-[var(--color-muted-foreground)] text-sm mb-1">
-					{provider || 'provider'}
-				</div>
-				<h3 className="text-xl font-bold mb-2 text-[var(--color-foreground)]">
-					{title || 'Title'}
+				{provider && (
+					<div className="text-(--color-muted-foreground) text-sm mb-1">
+						{provider}
+					</div>
+				)}
+				<h3 className="text-xl font-bold mb-2 text-(--color-foreground)">
+					{title ?? 'Title'}
 				</h3>
-				<p className="text-[var(--color-muted-foreground)] text-sm mb-4">
-					{description || 'Description goes here'}
+				<p className="text-(--color-muted-foreground) text-sm mb-4">
+					{description ?? 'Description goes here'}
 				</p>
 
 				{/* Tags dinámicos con límite y contador */}
@@ -66,13 +84,13 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 					{visibleTags.map((tag, index) => (
 						<span
 							key={index}
-							className="bg-[var(--color-accent)] text-[var(--color-accent-foreground)] px-2 py-1 rounded-full text-xs"
+							className="bg-(--color-accent) text-(--color-accent-foreground) px-2 py-1 rounded-full text-xs"
 						>
 							{tag}
 						</span>
 					))}
 					{hiddenTagsCount > 0 && (
-						<span className="bg-[var(--color-accent)] text-[var(--color-accent-foreground)] px-2 py-1 rounded-full text-xs">
+						<span className="bg-(--color-accent) text-(--color-accent-foreground) px-2 py-1 rounded-full text-xs">
 							+{hiddenTagsCount}
 						</span>
 					)}

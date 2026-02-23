@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running Biome on TSX files..."
+
+npx biome check --staged
+
+echo "✅ Pre-commit checks completed!"

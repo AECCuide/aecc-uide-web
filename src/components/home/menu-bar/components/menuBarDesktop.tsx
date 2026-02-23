@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type Transition, type Variants } from 'framer-motion';
 import { ThemeToggle } from '@/components/theme-toggle';
 import {
 	menuItems,
@@ -14,7 +13,7 @@ export function MenuBarDesktop() {
 		<ul className="hidden sm:flex items-center gap-2 relative z-10 px-4 justify-between w-full">
 			<div className="flex items-center">
 				<div className="text-lg font-bold">
-					<a href="/aecc-uide-web">AECC</a>
+					<a href="/.">AECC</a>
 				</div>
 
 				<div className="ml-8 flex items-center">
@@ -28,7 +27,7 @@ export function MenuBarDesktop() {
 							>
 								<motion.div
 									className="absolute inset-0 z-0 pointer-events-none"
-									variants={glowVariants}
+									variants={glowVariants as Variants}
 									style={{
 										background: item.gradient,
 										opacity: 0,
@@ -39,7 +38,7 @@ export function MenuBarDesktop() {
 									href={item.href}
 									className="flex items-center gap-2 px-4 relative z-10 bg-transparent text-muted-foreground group-hover:text-foreground transition-colors rounded-xl"
 									variants={itemVariants}
-									transition={sharedTransition}
+									transition={sharedTransition as Transition}
 									style={{
 										transformStyle: 'preserve-3d',
 										transformOrigin: 'center bottom',
@@ -56,7 +55,7 @@ export function MenuBarDesktop() {
 									href={item.href}
 									className="flex items-center gap-2 px-4 py-2 absolute inset-0 z-10 bg-transparent text-muted-foreground group-hover:text-foreground transition-colors rounded-xl"
 									variants={backVariants}
-									transition={sharedTransition}
+									transition={sharedTransition as Transition}
 									style={{
 										transformStyle: 'preserve-3d',
 										transformOrigin: 'center top',

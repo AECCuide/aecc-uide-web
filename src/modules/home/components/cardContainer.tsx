@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Card from '@/components/ui/card';
+import Card, { CardData } from '@/components/ui/card';
 
 // Definir interfaces para el tipado
-interface CardData {
-	image?: string;
-	badge?: string;
-	provider?: string;
-	title?: string;
-	description?: string;
-	tags?: string[];
-	slug?: string; // Usamos slug en lugar de url
-}
 
 interface CardContainerProps {
 	cardsData: CardData[];
@@ -28,7 +19,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 	// Función para manejar el clic en una card
 	const handleCardClick = (slug?: string) => {
 		if (slug) {
-			const fullUrl = `/aecc-uide-web/details/${slug}`; // Construimos la URL
+			const fullUrl = `/${slug}`; // Construimos la URL
 			window.open(fullUrl, '_blank'); // Abre en una nueva pestaña
 		}
 	};
@@ -38,9 +29,11 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 			<div className="flex gap-4 pb-4">
 				{visibleCards.map((cardData, index) => (
 					<div
-						key={`card-${index}`}
-						className="flex-shrink-0 cursor-pointer"
-						onClick={() => handleCardClick(cardData.slug)}
+						key={`card-${String(index)}`}
+						className="cursor-pointer"
+						onClick={() => {
+							handleCardClick(cardData.slug);
+						}}
 					>
 						<Card cardData={cardData} />
 					</div>

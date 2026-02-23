@@ -2,29 +2,18 @@
 'use client';
 import Logo from './components/aeccIcon.tsx';
 import CardContainer from './components/cardContainer.tsx';
-import { YearlyTimeline } from './components/timeLine/index.tsx';
 
 const cardsData = [
 	{
 		image:
-			'https://i.pinimg.com/736x/83/70/f6/8370f63ff294a7582c596621c28a6de8.jpg',
-		badge: 'RUN ANYWHERE',
-		provider: 'deepseek-ai',
-		title: 'deepseek-r1',
+			'https://i.pinimg.com/736x/94/e4/5d/94e45d12c714cd677f6d1d89f44b0b46.jpg',
+		badge: 'Fiestas de Quito',
+		provider: 'Anual Event',
+		title: 'Cuarenta',
 		description:
-			'State-of-the-art, high-efficiency LLM excelling in reasoning, math, and coding.',
-		tags: ['math', 'advanced reasoning', 'chat'],
-		slug: 'ceramic-vase',
-	},
-	{
-		image:
-			'https://i.pinimg.com/736x/88/98/65/889865e2df8b49c05875c62cf9c5670f.jpg',
-		badge: 'NEW',
-		provider: 'anthropic',
-		title: 'claude-3',
-		description: 'Advanced language model with strong reasoning capabilities.',
-		tags: ['reasoning', 'chat', 'document analysis', 'reasoning', 'reasoning'],
-		slug: 'ceramic-vase',
+			'Por fiestas de quito se organiza el evento de Cuarenta para la Escuela de Ciencias de la Computación.',
+		tags: ['Event', 'Cuarenta', 'Fiestas de quito', 'AECC', 'UIDE'],
+		slug: 'cuarenta',
 	},
 
 	// Puedes añadir más objetos para crear más tarjetas
@@ -38,7 +27,7 @@ export default function Home() {
 			</div>
 			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
 				<div className="mb-3">
-					<h1 className="title-h1">Titulo </h1>
+					<h1 className="title-h1">Eventos</h1>
 				</div>
 				<CardContainer cardsData={cardsData} />
 			</div>
@@ -47,10 +36,6 @@ export default function Home() {
 				className="mx-8 sm:mx-8 md:mx-16 lg:mx-20 xl:mx-20 my-20"
 				style={{ borderColor: 'var(--border)' }}
 			/>
-			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
-				<h1 className="title-h1">Titulo </h1>
-				<YearlyTimeline />
-			</div>
 		</div>
 	);
 }
