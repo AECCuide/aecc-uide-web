@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-echo "🔍 Running ESLint on TSX files..."
+echo "🔍 Running Biome on TSX files..."
 
-npx lint-staged
+npx biome check --staged
 
 echo "✅ Pre-commit checks completed!"
