@@ -1,9 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Club, Ghost, Ham, Home, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/components/auth-provider';
+import Image from 'next/image';
 
 const mobileNavItems = [
 	{ icon: Home, label: 'Inicio', href: '/' },
@@ -15,6 +16,7 @@ const mobileNavItems = [
 
 export function BottomNavMobile() {
 	const pathname = usePathname();
+	const { user } = useAuth();
 
 	return (
 		<nav className="sm:hidden fixed bottom-0 left-0 right-0 backdrop-blur-xl bg-background/80 border-t border-white/10 z-50">
@@ -34,18 +36,22 @@ export function BottomNavMobile() {
 										: 'text-[var(--text-color-secondary)] hover:text-[var(--text-color)]'
 								}`}
 							>
-								{isActive && (
-									<motion.div
-										layoutId="bottom-nav-indicator"
-										className="absolute top-0 w-8 h-1 bg-[var(--sidebar-primary)] rounded-full"
-										transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+								{item.label === 'Perfil' && user?.photoURL ? (
+									<Image
+										src={user.photoURL}
+										alt="Perfil"
+										width={24}
+										height={24}
+										className={`h-7 w-7 rounded-full object-cover border-2 shadow-sm ${isActive ? 'border-[var(--sidebar-primary)]' : 'border-transparent'}`}
+										referrerPolicy="no-referrer"
+									/>
+								) : (
+									<Icon
+										className="h-6 w-6 mb-1 mt-1"
+										strokeWidth={isActive ? 2.5 : 2}
+										aria-hidden="true"
 									/>
 								)}
-								<Icon
-									className="h-6 w-6 mb-1 mt-1"
-									strokeWidth={isActive ? 2.5 : 2}
-									aria-hidden="true"
-								/>
 								<span className="sr-only">{item.label}</span>
 							</Link>
 						</li>

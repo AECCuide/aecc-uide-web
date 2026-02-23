@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useTheme } from 'next-themes';
 import footerData from './footerData';
 
@@ -22,9 +21,9 @@ export default function CustomFooter() {
 				<div className="flex flex-col gap-2">
 					<h3 className="font-bold text-lg">{footerData.titleFollow}</h3>
 					<div className="flex gap-3">
-						{footerData.socials.map((social, index) => (
+						{footerData.socials.map((social) => (
 							<a
-								key={index}
+								key={social.href}
 								href={social.href}
 								target="_blank"
 								rel="noopener noreferrer"
@@ -46,7 +45,7 @@ export default function CustomFooter() {
 			{/* Línea divisoria */}
 			<hr className="my-4" style={{ borderColor: 'var(--border)' }} />
 			{/* Segunda fila */}
-			<div className="flex items-center gap-6">
+			<div className="flex items-center gap-6 pb-10">
 				<h3 className="font-bold text-lg">{footerData.title}</h3>
 				<div className="flex gap-6">
 					{footerData.authors.map((author, index) => (

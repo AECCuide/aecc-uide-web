@@ -16,7 +16,7 @@ const buttonVariants = cva(
 				default:
 					'bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover-bg)] hover:text-[var(--button-hover-text)] active:scale-95',
 				destructive:
-					'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+					'bg-destructive/15 text-destructive hover:bg-destructive/25 dark:bg-destructive dark:text-destructive-foreground dark:hover:bg-destructive/90',
 				white:
 					'bg-white text-primary-foreground hover:bg-white/90 text-primary-black',
 				baricon: 'bg-transparent hover:bg-transparent',
