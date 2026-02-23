@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import { navGlowVariants } from './menuBarData';

@@ -10,10 +10,21 @@
 		"indentStyle": "tab",
 		"lineWidth": 80
 	},
+	"assist": {
+		"enabled": false
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useIframeTitle": "off",
+				"useValidAnchor": "off"
+			},
+			"style": {
+				"useImportType": "off"
+			}
 		}
 	},
 	"javascript": {
@@ -22,5 +33,9 @@
 			"trailingCommas": "es5",
 			"semicolons": "always"
 		}
+	},
+	"files": {
+		"includes": ["**/*.{js,jsx,ts,tsx,json,css}"],
+		"ignoreUnknown": true
 	}
 }

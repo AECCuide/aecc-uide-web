@@ -3,5 +3,6 @@
 echo "🔍 Running Biome on TSX files..."
 
 npx biome check --staged
+git add .
 
 echo "✅ Pre-commit checks completed!"

@@ -6,6 +6,7 @@ import type React from 'react';
 import { RenderMounted } from '@/components/render-mounted';
 import { MenuBar } from '@/components/home/menu-bar/menuBar';
 import Footer from '@/components/home/footer/footer';
+import { BottomNavMobile } from '@/components/home/menu-bar/components/bottomNavMobile';
 import { Metadata } from 'next';
 const inter = Inter({ subsets: ['latin'] });
 
@@ -82,6 +83,7 @@ export default function RootLayout({
 						<MenuBar />
 						<div className="mt-10">{children}</div>
 						<Footer />
+						<BottomNavMobile />
 					</ThemeProvider>
 				</RenderMounted>
 			</body>
