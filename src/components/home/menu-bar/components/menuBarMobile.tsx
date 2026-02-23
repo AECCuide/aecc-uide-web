@@ -1,6 +1,5 @@
-import React from 'react';
 import { ThemeToggle } from '@/components/theme-toggle';
-// import { AlignJustify } from 'lucide-react';
+import Link from 'next/link';
 
 export function MenuBarMobile() {
 	return (
@@ -9,7 +8,7 @@ export function MenuBarMobile() {
 			<div className="flex justify-between w-full items-center">
 				{/* Nombre en la izquierda */}
 				<div className="text-lg font-bold">
-					<a href="">AECC</a>
+					<Link href="/">AECC</Link>
 				</div>
 
 				{/* Botón y color a la derecha */}

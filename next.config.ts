@@ -41,6 +41,10 @@ const nextConfig: NextConfig = {
 				protocol: 'https',
 				hostname: 'img.pikbest.com',
 			},
+			{
+				protocol: 'https',
+				hostname: 'lh3.googleusercontent.com',
+			},
 		],
 	},
 };
