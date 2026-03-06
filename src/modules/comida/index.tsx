@@ -14,25 +14,48 @@ import {
 
 export default function ComidaModule() {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [activeCategory, setActiveCategory] = useState<string>('Comida');
 
 	const filterData = <
 		T extends { title: string; description: string; tags?: string[] },
 	>(
-		data: T[]
+		data: T[],
+		isTienda: boolean = false
 	) => {
-		if (!searchQuery) return data;
-		const lowerQuery = searchQuery.toLowerCase();
-		return data.filter(
-			(item) =>
-				item.title.toLowerCase().includes(lowerQuery) ||
-				item.description.toLowerCase().includes(lowerQuery) ||
-				item.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery))
-		);
+		let filtered = data;
+
+		// Filtro por categoría
+		if (activeCategory && activeCategory !== 'Comida') {
+			if (activeCategory === 'Tiendas') {
+				filtered = isTienda ? data : [];
+			} else {
+				const lowerCat = activeCategory.toLowerCase();
+				filtered = filtered.filter(
+					(item) =>
+						item.tags?.some((tag) => tag.toLowerCase() === lowerCat) ||
+						(activeCategory === 'Café' &&
+							item.tags?.some((tag) => tag.toLowerCase() === 'cafe'))
+				);
+			}
+		}
+
+		// Filtro por búsqueda de texto
+		if (searchQuery) {
+			const lowerQuery = searchQuery.toLowerCase();
+			filtered = filtered.filter(
+				(item) =>
+					item.title.toLowerCase().includes(lowerQuery) ||
+					item.description.toLowerCase().includes(lowerQuery) ||
+					item.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery))
+			);
+		}
+
+		return filtered;
 	};
 
 	const filteredCafeterias = filterData(cafeteriasData);
 	const filteredRestaurants = filterData(restaurantsData);
-	const filteredSnacks = filterData(snacksData);
+	const filteredSnacks = filterData(snacksData, true);
 
 	return (
 		<div className="min-h-screen flex flex-col bg-background">
@@ -43,7 +66,11 @@ export default function ComidaModule() {
 			</div>
 
 			<nav className="w-full">
-				<CategoryMenu items={categories} />
+				<CategoryMenu
+					items={categories}
+					activeCategory={activeCategory}
+					onSelectCategory={setActiveCategory}
+				/>
 			</nav>
 
 			<div className="flex-1 px-6 md:px-16 lg:px-20 py-8">
@@ -72,7 +99,9 @@ export default function ComidaModule() {
 					filteredRestaurants.length === 0 &&
 					filteredSnacks.length === 0 && (
 						<div className="text-center text-muted-foreground py-10">
-							No se encontraron resultados para "{searchQuery}"
+							No se encontraron resultados para "{searchQuery}"{' '}
+							{activeCategory !== 'Comida' &&
+								`en la categoría ${activeCategory}`}
 						</div>
 					)}
 

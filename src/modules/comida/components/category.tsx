@@ -8,7 +8,15 @@ interface CategoryItem {
 	link: string;
 }
 
-export const CategoryMenu = ({ items }: { items: CategoryItem[] }) => {
+export const CategoryMenu = ({
+	items,
+	activeCategory,
+	onSelectCategory,
+}: {
+	items: CategoryItem[];
+	activeCategory?: string;
+	onSelectCategory?: (name: string) => void;
+}) => {
 	return (
 		<div className="w-full">
 			<div
@@ -19,12 +27,14 @@ export const CategoryMenu = ({ items }: { items: CategoryItem[] }) => {
 					'scroll-smooth'
 				)}
 			>
-				{items.map((item, index) => (
+				{items.map((item) => (
 					<ButtonCategory
-						key={index}
+						key={item.name}
 						name={item.name}
 						imageUrl={item.imageUrl}
 						link={item.link}
+						isActive={activeCategory === item.name}
+						onClick={() => onSelectCategory?.(item.name)}
 					/>
 				))}
 			</div>
