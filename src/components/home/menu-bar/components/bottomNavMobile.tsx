@@ -9,7 +9,7 @@ import Image from 'next/image';
 const mobileNavItems = [
 	{ icon: Home, label: 'Inicio', href: '/' },
 	{ icon: Club, label: 'Cuarenta', href: '/cuarenta' },
-	{ icon: Ham, label: 'Comida', href: '/comida' },
+	{ icon: Ham, label: 'Comida', href: '/eat' },
 	{ icon: Ghost, label: 'Tutorias', href: '/tutorias' },
 	{ icon: User, label: 'Perfil', href: '/perfil' },
 ];

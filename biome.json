@@ -34,6 +34,12 @@
 			"semicolons": "always"
 		}
 	},
+	"css": {
+		"parser": {
+			"cssModules": true,
+			"tailwindDirectives": true
+		}
+	},
 	"files": {
 		"includes": ["**/*.{js,jsx,ts,tsx,json,css}"],
 		"ignoreUnknown": true

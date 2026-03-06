@@ -173,7 +173,8 @@ export default function CuarentaPage() {
 
 	const splitText = (text: string) => {
 		return text.split('').map((char, index) => (
-			<span key={index} className="letter inline-block">
+			// biome-ignore lint/suspicious/noArrayIndexKey: the order of characters in the split text is static
+			<span key={`${char}-${index}`} className="letter inline-block">
 				{char === ' ' ? '\u00A0' : char}
 			</span>
 		));
@@ -345,7 +346,7 @@ export default function CuarentaPage() {
 								}}
 							>
 								<Image
-									src={`/${process.env.NEXT_PUBLIC_BASE_PATH ?? 'aecc-uide-web'}/img/${String(num)}.webp`}
+									src={`/img/${String(num)}.webp`}
 									alt={`Galería Torneo ${String(num)}`}
 									className="object-cover"
 									fill

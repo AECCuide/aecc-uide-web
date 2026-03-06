@@ -7,7 +7,7 @@ export const cafeteriasData = [
 		badge: '$2 - $20',
 		title: 'Piedra Negra',
 		description: 'Marcelo Fernández • Horario 8:00- 16:00.',
-		tags: ['Café', 'Barato', 'Café', 'Sanduches'],
+		tags: ['Café', 'Barato', 'cafe', 'Sanduches'],
 		slug: 'Piedra Negra',
 	},
 	{
