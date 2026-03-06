@@ -22,7 +22,7 @@ export const CategoryMenu = ({
 			<div
 				className={cn(
 					'flex flex-nowrap items-center justify-start md:justify-center',
-					'overflow-x-auto no-scrollbar',
+					'overflow-x-auto no-scrollbar [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
 					'gap-4 px-6 md:px-16 lg:px-20 py-6',
 					'scroll-smooth'
 				)}

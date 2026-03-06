@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { type BracketMatch } from '@/modules/cuarenta/hooks/useTournament';
 
@@ -49,16 +49,16 @@ export function WinnerDisplay({ winnerTeam, onClose }: WinnerDisplayProps) {
 	}, []);
 
 	return (
-		<div
-			className="fixed inset-0 bg-background/95 flex items-center justify-center z-50 cursor-pointer"
-			onClick={onClose}
+		<button
+			type="button"
+			className="fixed inset-0 w-full h-full bg-background/95 flex items-center justify-center z-50 cursor-pointer border-none outline-none"
+			onClick={(e) => {
+				if (e.target === e.currentTarget) {
+					onClose();
+				}
+			}}
 		>
-			<div
-				className="text-center space-y-8 cursor-default"
-				onClick={(e) => {
-					e.stopPropagation();
-				}}
-			>
+			<div className="text-center space-y-8 cursor-default">
 				{/* Nombre del equipo ganador */}
 				<h2 className="text-6xl md:text-8xl font-black text-(--text-color) uppercase tracking-tighter">
 					{winnerTeam.teamName}
@@ -66,9 +66,9 @@ export function WinnerDisplay({ winnerTeam, onClose }: WinnerDisplayProps) {
 
 				{/* Participantes */}
 				<div className="space-y-2">
-					{winnerTeam.participants.map((participant, index) => (
+					{winnerTeam.participants.map((participant) => (
 						<p
-							key={index}
+							key={participant.name}
 							className="text-xl md:text-2xl font-mono text-(--text-color-secondary) tracking-wide"
 						>
 							{participant.name}
@@ -81,6 +81,6 @@ export function WinnerDisplay({ winnerTeam, onClose }: WinnerDisplayProps) {
 					CLICK PARA CERRAR
 				</p>
 			</div>
-		</div>
+		</button>
 	);
 }

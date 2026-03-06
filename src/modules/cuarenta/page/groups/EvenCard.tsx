@@ -13,8 +13,9 @@ export const EventCard: React.FC<EventCardProps> = ({ team, onClick }) => {
 	const participantCount = 2; // Siempre son 2 participantes
 
 	return (
-		<div
-			className="bg-card border border-border rounded-2xl p-4 hover:border-primary/10 transition-all cursor-pointer group"
+		<button
+			type="button"
+			className="w-full text-left bg-card border border-border rounded-2xl p-4 hover:border-primary/10 transition-all cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
 			onClick={onClick}
 		>
 			<div className="flex items-start justify-between gap-4">
@@ -50,6 +51,6 @@ export const EventCard: React.FC<EventCardProps> = ({ team, onClick }) => {
 					*/}
 				</div>
 			</div>
-		</div>
+		</button>
 	);
 };
