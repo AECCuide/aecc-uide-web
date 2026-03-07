@@ -15,6 +15,16 @@ const cardsData = [
 		tags: ['Event', 'Cuarenta', 'Fiestas de quito', 'AECC', 'UIDE'],
 		slug: 'cuarenta',
 	},
+	{
+		image: 'https://advertise.ieee.org/ieee-og.png',
+		badge: 'IEEE',
+		provider: 'IEEE',
+		title: 'IEEE',
+		description:
+			'IEEE es la asociación técnica profesional más grande del mundo dedicada a fomentar la innovación y la excelencia en beneficio de la humanidad.',
+		tags: ['Event', 'IEEE', 'IEEE Day', 'AECC', 'UIDE'],
+		slug: 'ieee',
+	},
 
 	// Puedes añadir más objetos para crear más tarjetas
 ];
