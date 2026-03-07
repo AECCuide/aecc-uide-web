@@ -2,6 +2,7 @@
 'use client';
 import Logo from './components/aeccIcon.tsx';
 import CardContainer from './components/cardContainer.tsx';
+import EventsCalendar from './components/eventsCalendar';
 
 const cardsData = [
 	{
@@ -35,11 +36,17 @@ export default function Home() {
 			<div className="flex justify-center">
 				<Logo className="w-50 h-70 sm:w-100 sm:h-100 md:w-100 md:h-100 lg:w-140 lg:h-140" />
 			</div>
+
 			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20">
 				<div className="mb-3">
 					<h1 className="title-h1">Eventos</h1>
 				</div>
 				<CardContainer cardsData={cardsData} />
+			</div>
+
+			<div className="px-8 sm:px-8 md:px-16 lg:px-20 xl:px-20 mt-12">
+				<h2 className="title-h1 m-0">Calendario</h2>
+				<EventsCalendar />
 			</div>
 
 			<hr

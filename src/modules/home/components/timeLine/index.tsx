@@ -1,5 +1,4 @@
 // YearlyTimeline.tsx - Componente principal
-import React from 'react';
 import { activities } from './timeLineData';
 import { MonthMarker, ActivityCard } from './timeLine';
 
@@ -17,8 +16,8 @@ export function YearlyTimeline() {
 
 						{/* Actividades del mes */}
 						<div className="space-y-6">
-							{month.activities.map((activity, activityIndex) => (
-								<ActivityCard key={activityIndex} activity={activity} />
+							{month.activities.map((activity) => (
+								<ActivityCard key={activity.name} activity={activity} />
 							))}
 						</div>
 					</div>

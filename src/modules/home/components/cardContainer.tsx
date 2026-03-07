@@ -28,15 +28,16 @@ const CardContainer: React.FC<CardContainerProps> = ({ cardsData }) => {
 		<div className="w-full overflow-x-auto">
 			<div className="flex gap-4 pb-4">
 				{visibleCards.map((cardData, index) => (
-					<div
+					<button
+						type="button"
 						key={`card-${String(index)}`}
-						className="cursor-pointer"
+						className="cursor-pointer p-0 border-none bg-transparent text-left focus:outline-none"
 						onClick={() => {
 							handleCardClick(cardData.slug);
 						}}
 					>
 						<Card cardData={cardData} />
-					</div>
+					</button>
 				))}
 			</div>
 		</div>
