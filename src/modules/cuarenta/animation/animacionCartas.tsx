@@ -84,7 +84,7 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [cardCount, mobileCardCount]);
+	}, [cardCount, mobileCardCount, generateCards]);
 
 	useEffect(() => {
 		if (!cardsContainerRef.current || cards.length === 0) return;

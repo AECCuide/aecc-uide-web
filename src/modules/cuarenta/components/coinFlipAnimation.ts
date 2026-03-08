@@ -191,11 +191,10 @@ export function triggerCoinFlipErrorAnimation() {
 	const flipCoinLoop = () => {
 		moveLoopCount++;
 		const percentageCompleted = moveLoopCount / maxMoveLoopCount;
-		const angle =
-			-maxFlipAngle * Math.pow(percentageCompleted - 1, 2) + maxFlipAngle;
+		const angle = -maxFlipAngle * (percentageCompleted - 1) ** 2 + maxFlipAngle;
 
 		// Calcular posición y escala (parábola para el salto)
-		const coinYMultiplier = -11 * Math.pow(percentageCompleted * 2 - 1, 4) + 11;
+		const coinYMultiplier = -11 * (percentageCompleted * 2 - 1) ** 4 + 11;
 		const coinScaleMultiplier = percentageCompleted * 0.6;
 		const coinRotationMultiplier = percentageCompleted * sideRotationCount;
 

@@ -36,7 +36,7 @@ function TournamentBracket() {
 		if (savedState) {
 			setBracketState(JSON.parse(savedState));
 		}
-	}, [setBracketState, teams]); // Recargar si los equipos cambian
+	}, [setBracketState]); // Recargar si los equipos cambian
 
 	// Guardar estado en localStorage cuando cambia
 	useEffect(() => {
@@ -305,14 +305,14 @@ function TournamentBracket() {
 						{bracketState.map((round, roundIndex) => {
 							const topOffset =
 								roundIndex > 0
-									? ((MATCH_HEIGHT + MATCH_GAP) * Math.pow(2, roundIndex - 1) -
+									? ((MATCH_HEIGHT + MATCH_GAP) * 2 ** (roundIndex - 1) -
 											MATCH_HEIGHT) /
 										2
 									: 0;
 
 							const leftMatches = round.matches.slice(
 								0,
-								halfMatchesCount / Math.pow(2, roundIndex)
+								halfMatchesCount / 2 ** roundIndex
 							);
 
 							if (leftMatches.length === 0) return null;
@@ -340,8 +340,7 @@ function TournamentBracket() {
 										{leftMatches.map((match, matchIndex) => {
 											const spaceBetween =
 												roundIndex > 0
-													? (MATCH_HEIGHT + MATCH_GAP) *
-															Math.pow(2, roundIndex) -
+													? (MATCH_HEIGHT + MATCH_GAP) * 2 ** roundIndex -
 														MATCH_HEIGHT -
 														MATCH_GAP
 													: 0;
@@ -377,13 +376,13 @@ function TournamentBracket() {
 						{bracketState.map((round, roundIndex) => {
 							const topOffset =
 								roundIndex > 0
-									? ((MATCH_HEIGHT + MATCH_GAP) * Math.pow(2, roundIndex - 1) -
+									? ((MATCH_HEIGHT + MATCH_GAP) * 2 ** (roundIndex - 1) -
 											MATCH_HEIGHT) /
 										2
 									: 0;
 
 							const rightMatches = round.matches.slice(
-								halfMatchesCount / Math.pow(2, roundIndex)
+								halfMatchesCount / 2 ** roundIndex
 							);
 
 							if (rightMatches.length === 0) return null;
@@ -411,14 +410,13 @@ function TournamentBracket() {
 										{rightMatches.map((match, matchIndex) => {
 											const spaceBetween =
 												roundIndex > 0
-													? (MATCH_HEIGHT + MATCH_GAP) *
-															Math.pow(2, roundIndex) -
+													? (MATCH_HEIGHT + MATCH_GAP) * 2 ** roundIndex -
 														MATCH_HEIGHT -
 														MATCH_GAP
 													: 0;
 
 											const globalMatchIndex =
-												Math.floor(halfMatchesCount / Math.pow(2, roundIndex)) +
+												Math.floor(halfMatchesCount / 2 ** roundIndex) +
 												matchIndex;
 
 											return (

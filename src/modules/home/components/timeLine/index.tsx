@@ -1,5 +1,3 @@
-// YearlyTimeline.tsx - Componente principal
-import React from 'react';
 import { activities } from './timeLineData';
 import { MonthMarker, ActivityCard } from './timeLine';
 
