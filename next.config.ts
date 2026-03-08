@@ -61,6 +61,10 @@ const nextConfig: NextConfig = {
 				protocol: 'https',
 				hostname: 'r9.ieee.org',
 			},
+			{
+				protocol: 'https',
+				hostname: 'images.lumacdn.com',
+			},
 		],
 	},
 };
