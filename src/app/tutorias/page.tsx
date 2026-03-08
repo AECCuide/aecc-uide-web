@@ -1,4 +1,4 @@
-import TutoriasPage from '@/modules/tutorias/page';
+import TutoriasPage from '@/modules/tutorias';
 
 export default function Tutorias() {
 	return <TutoriasPage />;

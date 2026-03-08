@@ -55,19 +55,13 @@ export default function SubjectsSection() {
 	const [selectedSubject, setSelectedSubject] = useState<CardData | null>(null);
 
 	return (
-		<section className="py-16 px-4 md:px-8 max-w-7xl mx-auto relative">
-			<h2
-				className="text-3xl md:text-5xl font-bold mb-10 text-center"
-				style={{ color: 'var(--text-color)' }}
-			>
-				Materias
-			</h2>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
-				{subjectsData.map((subject) => (
+		<section>
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center w-full">
+				{subjectsData.map((subject, index) => (
 					<motion.div
-						key={(subject.title || 'materia')
+						key={`${(subject.title || 'materia')
 							.replace(/\s+/g, '-')
-							.toLowerCase()}
+							.toLowerCase()}-${index}`}
 						className="w-full flex justify-center cursor-pointer"
 						onClick={() => setSelectedSubject(subject)}
 						whileHover={{ y: -8, scale: 1.02 }}

@@ -52,7 +52,18 @@ export interface ButtonProps
 
 // Creamos el componente `Button` usando `forwardRef`
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, loading = false, ...props }, ref) => {
+	(
+		{
+			className,
+			variant,
+			size,
+			loading = false,
+			lefticon,
+			rightIcon,
+			...props
+		},
+		ref
+	) => {
 		// Si el botón está en estado de "cargando"
 		if (loading) {
 			return (
@@ -100,10 +111,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 				{...props}
 			>
 				{/* Si se pasa un icono a la izquierda, lo renderizamos */}
-				{props.lefticon && <span className="mr-2">{props.lefticon}</span>}
+				{lefticon && <span className="mr-2">{lefticon}</span>}
 				{props.children}
 				{/* Si se pasa un icono a la derecha, lo renderizamos */}
-				{props.rightIcon && <span className="ml-2">{props.rightIcon}</span>}
+				{rightIcon && <span className="ml-2">{rightIcon}</span>}
 			</button>
 		);
 	}
