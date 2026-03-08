@@ -5,6 +5,8 @@ import { useState } from 'react';
 import CardContainer from '@/components/ui/card';
 import { CategoryMenu } from './components/category';
 import { SearchBar } from './components/searchBar'; // Importación del nuevo componente
+import ComidaDetailsModal from './components/ComidaDetailsModal'; // Nuevo modal
+import { CardData } from '@/components/ui/card';
 import {
 	cafeteriasData,
 	restaurantsData,
@@ -15,6 +17,7 @@ import {
 export default function ComidaModule() {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [activeCategory, setActiveCategory] = useState<string>('Comida');
+	const [selectedItem, setSelectedItem] = useState<CardData | null>(null);
 
 	const filterData = <
 		T extends { title: string; description: string; tags?: string[] },
@@ -77,21 +80,30 @@ export default function ComidaModule() {
 				{filteredCafeterias.length > 0 && (
 					<section className="mb-10">
 						<h2 className="title-h1 mb-6">Cafeterías</h2>
-						<CardContainer cardData={filteredCafeterias} />
+						<CardContainer
+							cardData={filteredCafeterias}
+							onClick={setSelectedItem}
+						/>
 					</section>
 				)}
 
 				{filteredRestaurants.length > 0 && (
 					<section className="mb-10">
 						<h2 className="title-h1 mb-6">Restaurantes</h2>
-						<CardContainer cardData={filteredRestaurants} />
+						<CardContainer
+							cardData={filteredRestaurants}
+							onClick={setSelectedItem}
+						/>
 					</section>
 				)}
 
 				{filteredSnacks.length > 0 && (
 					<section className="mb-10">
 						<h2 className="title-h1 mb-6">Tiendas</h2>
-						<CardContainer cardData={filteredSnacks} />
+						<CardContainer
+							cardData={filteredSnacks}
+							onClick={setSelectedItem}
+						/>
 					</section>
 				)}
 
@@ -107,6 +119,12 @@ export default function ComidaModule() {
 
 				<hr className="opacity-10" style={{ borderColor: 'var(--border)' }} />
 			</div>
+
+			<ComidaDetailsModal
+				comida={selectedItem}
+				isOpen={!!selectedItem}
+				onClose={() => setSelectedItem(null)}
+			/>
 		</div>
 	);
 }

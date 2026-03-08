@@ -15,18 +15,34 @@ export interface CardData {
 
 interface CardProps {
 	cardData: CardData | CardData[];
+	onClick?: (card: CardData) => void;
 }
 
-const Card: React.FC<CardProps> = ({ cardData }) => {
+const Card: React.FC<CardProps> = ({ cardData, onClick }) => {
 	// Si es un array, renderizamos una lista de cards
 	if (Array.isArray(cardData)) {
 		return (
 			<div className="flex overflow-x-auto pb-4 gap-6 snap-x snap-mandatory scrollbar-hide">
-				{cardData.map((item, index) => (
-					<div key={item.slug ?? index} className="snap-center flex-none">
-						<Card cardData={item} />
-					</div>
-				))}
+				{cardData.map((item, index) => {
+					return (
+						// biome-ignore lint/a11y/noStaticElementInteractions: dynamic role
+						<div
+							key={item.slug ?? index}
+							className={`snap-center flex-none ${onClick ? 'cursor-pointer' : ''}`}
+							onClick={() => onClick?.(item)}
+							onKeyDown={(e) => {
+								if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+									e.preventDefault();
+									onClick(item);
+								}
+							}}
+							role={onClick ? 'button' : undefined}
+							tabIndex={onClick ? 0 : undefined}
+						>
+							<Card cardData={item} onClick={onClick} />
+						</div>
+					);
+				})}
 			</div>
 		);
 	}
@@ -41,8 +57,19 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 		tags && tags.length > maxVisibleTags ? tags.length - maxVisibleTags : 0;
 
 	return (
-		// Establecemos el ancho fijo del componente Card aquí
-		<div className="w-80">
+		// biome-ignore lint/a11y/noStaticElementInteractions: dynamic role
+		<div
+			className={`w-80 ${onClick ? 'cursor-pointer transition-transform hover:scale-[1.02]' : ''}`}
+			onClick={() => onClick?.(cardData as CardData)}
+			onKeyDown={(e) => {
+				if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+					e.preventDefault();
+					onClick(cardData as CardData);
+				}
+			}}
+			role={onClick ? 'button' : undefined}
+			tabIndex={onClick ? 0 : undefined}
+		>
 			{/* Image visualization */}
 			<div className="relative bg-(--color-card) rounded-3xl overflow-hidden">
 				{/* Contenedor de la imagen ajustado */}
@@ -83,7 +110,8 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
 				<div className="flex gap-1 mb-4 flex-wrap">
 					{visibleTags.map((tag, index) => (
 						<span
-							key={index}
+							// biome-ignore lint/suspicious/noArrayIndexKey: tags array order is static and can contain duplicate strings
+							key={`${tag}-${index}`}
 							className="bg-(--color-accent) text-(--color-accent-foreground) px-2 py-1 rounded-full text-xs"
 						>
 							{tag}

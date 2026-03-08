@@ -49,6 +49,17 @@ const subjectsData: CardData[] = [
 			'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80',
 		slug: '#',
 	},
+	{
+		title: 'Gestión Cloud',
+		description:
+			'Despliegue, escalabilidad y servicios en la nube (AWS, Azure, GCP).',
+		badge: 'Tutoría',
+		provider: 'Profesor / Estudiante',
+		tags: ['AWS', 'Cloud computing', 'DevOps'],
+		image:
+			'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80',
+		slug: '#',
+	},
 ];
 
 export default function SubjectsSection() {
@@ -56,7 +67,7 @@ export default function SubjectsSection() {
 
 	return (
 		<section>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center w-full">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center w-full">
 				{subjectsData.map((subject, index) => (
 					<motion.div
 						key={`${(subject.title || 'materia')
