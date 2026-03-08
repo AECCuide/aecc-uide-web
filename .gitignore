@@ -42,6 +42,6 @@ next-env.d.ts
 
 # biome
 node_modules/
-public/
+# public/
 dist/
 build/
