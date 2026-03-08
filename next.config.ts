@@ -49,6 +49,10 @@ const nextConfig: NextConfig = {
 				protocol: 'https',
 				hostname: 'advertise.ieee.org',
 			},
+			{
+				protocol: 'https',
+				hostname: 'images.unsplash.com',
+			},
 		],
 	},
 };

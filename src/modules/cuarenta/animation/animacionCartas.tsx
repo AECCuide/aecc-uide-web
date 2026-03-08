@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useEffect, useRef, useState, type ReactNode } from 'react';
+import React, {
+	useEffect,
+	useRef,
+	useState,
+	useCallback,
+	type ReactNode,
+} from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -19,6 +25,29 @@ interface FallingCardsAnimationProps {
 	mobileCardCount?: number;
 }
 
+const suits = [
+	{ symbol: '♠', name: 'spades', color: '#000' },
+	{ symbol: '♥', name: 'hearts', color: '#e63946' },
+	{ symbol: '♦', name: 'diamonds', color: '#e63946' },
+	{ symbol: '♣', name: 'clubs', color: '#000' },
+];
+
+const values = [
+	'A',
+	'2',
+	'3',
+	'4',
+	'5',
+	'6',
+	'7',
+	'8',
+	'9',
+	'10',
+	'J',
+	'Q',
+	'K',
+];
+
 const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 	children,
 	cardCount = 50,
@@ -29,46 +58,21 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 	const [isMobile, setIsMobile] = useState(false);
 	const [cards, setCards] = useState<Card[]>([]);
 
-	// Palos y valores de las cartas
-	const suits = [
-		{ symbol: '♠', name: 'spades', color: '#000' },
-		{ symbol: '♥', name: 'hearts', color: '#e63946' },
-		{ symbol: '♦', name: 'diamonds', color: '#e63946' },
-		{ symbol: '♣', name: 'clubs', color: '#000' },
-	];
-
-	const values = [
-		'A',
-		'2',
-		'3',
-		'4',
-		'5',
-		'6',
-		'7',
-		'8',
-		'9',
-		'10',
-		'J',
-		'Q',
-		'K',
-	];
-
 	// Generar cartas aleatorias
-	const generateCards = (count: number): Card[] => {
-		const cards: Card[] = [];
+	const generateCards = useCallback((count: number): Card[] => {
+		const newCards: Card[] = [];
 		for (let i = 0; i < count; i++) {
 			const suit = suits[Math.floor(Math.random() * suits.length)];
 			const value = values[Math.floor(Math.random() * values.length)];
-			cards.push({
+			newCards.push({
 				id: i,
 				suit: suit.symbol,
 				value: value,
 				color: suit.color,
 			});
 		}
-		return cards;
-	};
-
+		return newCards;
+	}, []);
 	// Detectar cambios de tamaño de pantalla
 	useEffect(() => {
 		const handleResize = () => {
@@ -84,7 +88,7 @@ const FallingCardsAnimation: React.FC<FallingCardsAnimationProps> = ({
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [cardCount, mobileCardCount]);
+	}, [cardCount, mobileCardCount, generateCards]);
 
 	useEffect(() => {
 		if (!cardsContainerRef.current || cards.length === 0) return;

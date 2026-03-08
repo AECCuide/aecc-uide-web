@@ -317,22 +317,6 @@ export default function CuarentaPage() {
 					</div>
 				</section>
 
-				{/* Sección Final de agradecimiento */}
-				<section className="min-h-screen flex flex-col items-center justify-center px-4">
-					<h2
-						className="text-4xl md:text-7xl font-bold mb-8"
-						style={{ color: 'var(--text-color)' }}
-					>
-						🏆 Nos Vemos en el próximo Torneo 🏆
-					</h2>
-					<p
-						className="text-xl md:text-3xl max-w-2xl"
-						style={{ color: 'var(--text-color-secondary)' }}
-					>
-						Organizado por estudiantes de Ciencias de la Computación
-					</p>
-				</section>
-
 				{/* Sección de fotos */}
 				<section className="py-20 px-4 max-w-5xl mx-auto">
 					<div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
