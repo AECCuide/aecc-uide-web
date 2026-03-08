@@ -1,18 +1,10 @@
 'use client';
 
 import { type Variants, type Transition } from 'framer-motion';
-import { Club, Ham, Ghost } from 'lucide-react';
+import { Ham, Ghost } from 'lucide-react';
 import { MenuItem } from './menuBarTypes';
 
 export const menuItems: MenuItem[] = [
-	{
-		icon: <Club className="h-5 w-5" />,
-		label: 'Cuarenta',
-		href: '/cuarenta',
-		gradient:
-			'radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(37,99,235,0.06) 50%, rgba(30,64,175,0) 100%)',
-		iconColor: 'text-blue-500',
-	},
 	{
 		icon: <Ham className="h-5 w-5" />,
 		label: 'Comida',

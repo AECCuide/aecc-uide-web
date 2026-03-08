@@ -1,13 +1,13 @@
 /* Importa Tailwind CSS para utilizar su sistema de clases y estilos  Siempre usamos Neumorphism*/
 /*temporal*/
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import 'tailwindcss';
-@plugin 'tailwindcss-animate'; /* Agrega el plugin 'tailwindcss-animate' para animaciones en Tailwind */
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import "tailwindcss";
+@plugin "tailwindcss-animate"; /* Agrega el plugin 'tailwindcss-animate' para animaciones en Tailwind */
 /*Define una variante personalizada llamada 'dark' que se aplica a elementos dentro de .dark */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--font-TitleH1: 'Roboto', sans-serif;
+	--font-TitleH1: "Roboto", sans-serif;
 }
 
 .title-h1 {

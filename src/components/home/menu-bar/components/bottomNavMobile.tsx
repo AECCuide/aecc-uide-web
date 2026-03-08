@@ -1,6 +1,6 @@
 'use client';
 
-import { Club, Ghost, Ham, Home, User } from 'lucide-react';
+import { Ghost, Ham, Home, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
@@ -8,7 +8,6 @@ import Image from 'next/image';
 
 const mobileNavItems = [
 	{ icon: Home, label: 'Inicio', href: '/' },
-	{ icon: Club, label: 'Cuarenta', href: '/cuarenta' },
 	{ icon: Ham, label: 'Comida', href: '/eat' },
 	{ icon: Ghost, label: 'Tutorias', href: '/tutorias' },
 	{ icon: User, label: 'Perfil', href: '/perfil' },
