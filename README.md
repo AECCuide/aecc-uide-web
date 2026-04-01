@@ -12,8 +12,6 @@ git clone https://github.com/AECCuide/aecc-uide-web.git
 npm install
 ```
 
-asdasdad
-
 ## Ejecutar Proyecto
 
 ```bash
