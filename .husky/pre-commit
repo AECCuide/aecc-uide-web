@@ -2,7 +2,14 @@
 
 echo "🔍 Running Biome on TSX files..."
 
-npx biome check --staged
-git add .
+STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACMR)"
+
+if [ -z "$STAGED_FILES" ]; then
+	echo "ℹ️ No staged files. Skipping Biome check."
+	exit 0
+fi
+
+npx biome check --staged --no-errors-on-unmatched
+git add --update
 
 echo "✅ Pre-commit checks completed!"
