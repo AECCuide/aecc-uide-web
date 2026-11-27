@@ -5,9 +5,10 @@ import { ThemeProvider } from '@/components/theme-provider';
 import type React from 'react';
 import { MenuBar } from '@/components/home/menu-bar/menuBar';
 import Footer from '@/components/home/footer/footer';
-import { BottomNavMobile } from '@/components/home/menu-bar/components/bottomNavMobile';
 import { AuthProvider } from '@/components/auth-provider';
 import { Metadata } from 'next';
+import { buildMetadata } from '@/lib/metadata';
+import { SITE_URL, asset } from '@/lib/site';
 const inter = Inter({ subsets: ['latin'] });
 
 // Serif de alto contraste para los titulares de la portada del torneo.
@@ -19,28 +20,43 @@ const bodoni = Bodoni_Moda({
 	display: 'swap',
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://aecc.com';
+const DESCRIPTION =
+	'Asociación de Estudiantes de Ciencias de la Computación de la Universidad Internacional del Ecuador UIDE Quito';
 
 export const metadata: Metadata = {
-	title: 'AECC',
-	description:
-		'Asociación de Estudiantes de Ciencias de la Computación de la Universidad Internacional del Ecuador UIDE Quito', // Implement Meta Description
-	alternates: {
-		canonical: BASE_URL, // Implement Canonical URL
-	},
-	openGraph: {
-		title: 'AECC', // Implement OG Title
-		description:
-			'Asociación de Estudiantes de Ciencias de la Computación de la Universidad Internacional del Ecuador UIDE Quito', // Implement OG Description
-		images: [
+	// Sin metadataBase, Next no puede resolver rutas relativas en los
+	// metadatos y lo avisa en cada build.
+	metadataBase: new URL(SITE_URL),
+	...buildMetadata({
+		title: 'AECC',
+		description: DESCRIPTION,
+		path: '/',
+		image: '/og-aecc.png',
+		imageAlt:
+			'AECC UIDE · Asociación de Estudiantes de Ciencias de la Computación',
+	}),
+	// Las paginas hijas que definan un title lo reciben con este sufijo.
+	title: { default: 'AECC', template: '%s · AECC' },
+	icons: {
+		// El navegador elige por media query: el icono blanco cuando la
+		// interfaz esta en oscuro y el oscuro cuando esta en claro.
+		// favicon.ico sigue sirviendo de respaldo por convencion de archivo.
+		icon: [
 			{
-				url: '/favicon.ico', // Implement OG Image
-				width: 1200,
-				height: 630,
+				url: asset('/iconAeccLight.svg'),
+				type: 'image/svg+xml',
+				media: '(prefers-color-scheme: light)',
+			},
+			{
+				url: asset('/iconAeccDark.svg'),
+				type: 'image/svg+xml',
+				media: '(prefers-color-scheme: dark)',
 			},
 		],
+		apple: asset('/apple-touch-icon.png'),
 	},
 };
+
 export default function RootLayout({
 	children,
 }: {
@@ -92,7 +108,6 @@ export default function RootLayout({
 						<MenuBar />
 						<div className="mt-10">{children}</div>
 						<Footer />
-						<BottomNavMobile />
 					</ThemeProvider>
 				</AuthProvider>
 			</body>

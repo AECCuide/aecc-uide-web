@@ -1,15 +1,18 @@
 'use client';
 
-import { Ghost, Ham, Home, User } from 'lucide-react';
+import { Home, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import Image from 'next/image';
 
+// Mismas secciones ocultas que en menuBarData.tsx: sin esto, en movil se
+// seguia pudiendo entrar a las paginas sin terminar desde la barra inferior.
+// Para reactivarlas, volve a agregar la entrada y su icono al import:
+//   { icon: Ham, label: 'Comida', href: '/eat' }
+//   { icon: Ghost, label: 'Tutorias', href: '/tutorias' }
 const mobileNavItems = [
 	{ icon: Home, label: 'Inicio', href: '/' },
-	{ icon: Ham, label: 'Comida', href: '/eat' },
-	{ icon: Ghost, label: 'Tutorias', href: '/tutorias' },
 	{ icon: User, label: 'Perfil', href: '/perfil' },
 ];
 
