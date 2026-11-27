@@ -341,18 +341,22 @@ export default function V0ParticleAnimation() {
 		<div
 			ref={containerRef}
 			className="relative flex items-center justify-center min-h-screen w-full h-screen"
-			onMouseDown={handleMouseDown}
-			onMouseMove={handleMouseMoveDrag}
-			onMouseUp={handleMouseUp}
-			onMouseLeave={handleMouseUp}
-			onTouchStart={handleTouchStart}
-			onTouchMove={handleTouchMove}
-			onTouchEnd={handleTouchEnd}
 		>
+			{/* Los handlers viven en el canvas (role="img"): es una escena
+			    decorativa que se puede arrastrar, no un control. */}
 			<canvas
 				ref={canvasRef}
-				className="block"
+				role="img"
+				aria-label="Escena 3D decorativa de página no encontrada"
+				className="block touch-none"
 				style={{ width: '100%', height: '100%' }}
+				onMouseDown={handleMouseDown}
+				onMouseMove={handleMouseMoveDrag}
+				onMouseUp={handleMouseUp}
+				onMouseLeave={handleMouseUp}
+				onTouchStart={handleTouchStart}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}
 			/>
 		</div>
 	);

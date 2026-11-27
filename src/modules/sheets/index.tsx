@@ -54,6 +54,7 @@ const StatusCell: React.FC<{
 	onToggle: (id: string, pagado: boolean) => void;
 }> = ({ team, onToggle }) => (
 	<button
+		type="button"
 		onClick={() => {
 			onToggle(team.id, team.pagado);
 		}}
@@ -82,6 +83,7 @@ const ActionsCell: React.FC<{
 }> = ({ team, onToggle, onDelete }) => (
 	<div className="flex items-center justify-center gap-2">
 		<button
+			type="button"
 			onClick={() => {
 				onToggle(team.id, team.pagado);
 			}}
@@ -95,6 +97,7 @@ const ActionsCell: React.FC<{
 			{team.pagado ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}
 		</button>
 		<button
+			type="button"
 			onClick={() => {
 				if (
 					window.confirm(
@@ -115,6 +118,7 @@ const ActionsCell: React.FC<{
 // --- Tipos y Configuración ---
 
 interface ColumnConfig {
+	id: string;
 	header: string;
 	cell: (team: TeamData) => React.ReactNode;
 	textAlign?: 'left' | 'center' | 'right';
@@ -140,6 +144,7 @@ export default function GrupManagement() {
 	const generateColumns = (): ColumnConfig[] => {
 		const columns: ColumnConfig[] = [
 			{
+				id: 'equipo',
 				header: 'Equipo',
 				cell: (team) => <TeamNameCell team={team} />,
 			},
@@ -149,24 +154,28 @@ export default function GrupManagement() {
 		participants.forEach((participant) => {
 			columns.push(
 				{
+					id: `${participant.key}-nombre`,
 					header: participant.label,
 					cell: (team) => (
 						<ParticipantCell name={team.participants[participant.key].name} />
 					),
 				},
 				{
+					id: `${participant.key}-curso`,
 					header: 'Curso',
 					cell: (team) => (
 						<CourseCell course={team.participants[participant.key].course} />
 					),
 				},
 				{
+					id: `${participant.key}-carrera`,
 					header: 'Carrera',
 					cell: (team) => (
 						<CarreraCell carrera={team.participants[participant.key].carrera} />
 					),
 				},
 				{
+					id: `${participant.key}-contacto`,
 					header: 'Contacto',
 					cell: (team) => (
 						<ContactCell phone={team.participants[participant.key].phone} />
@@ -178,10 +187,12 @@ export default function GrupManagement() {
 		// Agregar columnas finales
 		columns.push(
 			{
+				id: 'metodo',
 				header: 'Método',
 				cell: (team) => <PaymentMethodCell method={team.paymentMethod} />,
 			},
 			{
+				id: 'imagen',
 				header: 'Imagen',
 				cell: (team) =>
 					team.ImageUrl ? (
@@ -199,17 +210,20 @@ export default function GrupManagement() {
 					),
 			},
 			{
+				id: 'fecha',
 				header: 'Fecha',
 				cell: (team) => (
 					<DateCell timestamp={team.timestamp} formatDate={formatDate} />
 				),
 			},
 			{
+				id: 'estado',
 				header: 'Estado',
 				cell: (team) => <StatusCell team={team} onToggle={togglePayment} />,
 				textAlign: 'center',
 			},
 			{
+				id: 'acciones',
 				header: 'Acciones',
 				cell: (team) => (
 					<ActionsCell
@@ -261,9 +275,9 @@ export default function GrupManagement() {
 							{/* Table Header */}
 							<thead>
 								<tr className="border-b border-border bg-muted/30">
-									{columns.map((col, index) => (
+									{columns.map((col) => (
 										<th
-											key={index}
+											key={col.id}
 											className={`px-6 py-3 text-${col.textAlign ?? 'left'} text-muted-foreground text-xs font-medium uppercase tracking-wider`}
 										>
 											{col.header}
@@ -292,9 +306,9 @@ export default function GrupManagement() {
 											key={team.id}
 											className="hover:bg-muted/20 transition-colors"
 										>
-											{columns.map((col, index) => (
+											{columns.map((col) => (
 												<td
-													key={index}
+													key={col.id}
 													className={`px-6 py-4 text-${col.textAlign ?? 'left'}`}
 												>
 													{col.cell(team)}

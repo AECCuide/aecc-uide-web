@@ -4,8 +4,10 @@ import { RegistrationData } from '../types/registration';
 export async function submitCuarentaRegistration(
 	registrationData: RegistrationData
 ): Promise<unknown> {
-	//	const { error } = await supabase.from('cuarenta_registrations').insert({ //<-- valor correcto
-	const { error } = await supabase.from('cuarenta_registration').insert({
+	// La tabla es 'cuarenta_registrations' (plural): es la misma de la que lee
+	// el dashboard en modules/sheets/usegrup.ts. Antes se insertaba en
+	// 'cuarenta_registration' (singular), asi que los registros no llegaban.
+	const { error } = await supabase.from('cuarenta_registrations').insert({
 		team_name: registrationData.teamName,
 		participant1_name: registrationData.participants.participant1.name,
 		participant1_course: registrationData.participants.participant1.course,
@@ -15,6 +17,7 @@ export async function submitCuarentaRegistration(
 		participant2_phone: registrationData.participants.participant2.phone,
 		carrera: registrationData.carrera,
 		payment_method: registrationData.paymentMethod,
+		turno: registrationData.turno,
 	});
 
 	if (error) {

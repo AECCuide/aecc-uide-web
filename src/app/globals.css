@@ -165,3 +165,43 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+/* Flotado suave de la carta de presentacion del torneo de Cuarenta.
+   Va en un contenedor aparte del que aplica la inclinacion, para que las dos
+   transformaciones no se pisen. */
+@keyframes card-float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-14px);
+	}
+}
+
+.animate-card-float {
+	animation: card-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-card-float {
+		animation: none;
+	}
+}
+
+/* Giro lento del indicador "click and drag" de la portada de Cuarenta. */
+@keyframes spin-slow {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.animate-spin-slow {
+	animation: spin-slow 18s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-spin-slow {
+		animation: none;
+	}
+}

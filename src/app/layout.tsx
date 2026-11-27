@@ -1,15 +1,23 @@
 import Script from 'next/script';
 import '@/app/globals.css';
-import { Inter } from 'next/font/google';
+import { Bodoni_Moda, Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import type React from 'react';
-import { RenderMounted } from '@/components/render-mounted';
 import { MenuBar } from '@/components/home/menu-bar/menuBar';
 import Footer from '@/components/home/footer/footer';
 import { BottomNavMobile } from '@/components/home/menu-bar/components/bottomNavMobile';
 import { AuthProvider } from '@/components/auth-provider';
 import { Metadata } from 'next';
 const inter = Inter({ subsets: ['latin'] });
+
+// Serif de alto contraste para los titulares de la portada del torneo.
+// Se expone como variable CSS y se usa solo donde hace falta, asi el resto
+// del sitio sigue con Inter.
+const bodoni = Bodoni_Moda({
+	subsets: ['latin'],
+	variable: '--font-display',
+	display: 'swap',
+});
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://aecc.com';
 
@@ -40,7 +48,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="es" suppressHydrationWarning>
-			<body className={inter.className}>
+			<body className={`${inter.className} ${bodoni.variable}`}>
 				<AuthProvider>
 					{/* Google Tag Manager */}
 					<Script id="google-tag-manager" strategy="afterInteractive">
@@ -76,18 +84,16 @@ export default function RootLayout({
 						></iframe>
 					</noscript>
 					{/* End Google Tag Manager (noscript) */}
-					<RenderMounted>
-						<ThemeProvider
-							attribute="class"
-							defaultTheme="dark"
-							enableSystem={false}
-						>
-							<MenuBar />
-							<div className="mt-10">{children}</div>
-							<Footer />
-							<BottomNavMobile />
-						</ThemeProvider>
-					</RenderMounted>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="dark"
+						enableSystem={false}
+					>
+						<MenuBar />
+						<div className="mt-10">{children}</div>
+						<Footer />
+						<BottomNavMobile />
+					</ThemeProvider>
 				</AuthProvider>
 			</body>
 		</html>

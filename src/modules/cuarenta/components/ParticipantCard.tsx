@@ -111,6 +111,7 @@ const Dropdown = ({
 	return (
 		<div className="relative w-full" ref={dropdownRef}>
 			<button
+				type="button"
 				onClick={onToggle}
 				className={`w-full text-left bg-transparent ${StylesTextForms.textSize} focus:outline-none flex items-center justify-between ${
 					error ? 'text-(--text-color-error)' : ''
@@ -142,6 +143,7 @@ const Dropdown = ({
 				<div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-zinc-800 rounded shadow-lg border border-stone-200 dark:border-zinc-700 overflow-hidden z-10 max-h-48 overflow-y-auto transition-colors">
 					{options.map((option) => (
 						<button
+							type="button"
 							key={option}
 							onClick={() => {
 								onSelect(option);

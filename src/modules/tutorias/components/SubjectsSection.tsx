@@ -62,17 +62,24 @@ const subjectsData: CardData[] = [
 	},
 ];
 
+// Ids estables calculados una sola vez: hay títulos repetidos, así que el
+// título por sí solo no sirve como key.
+const subjectEntries = subjectsData.map((subject, index) => ({
+	id: `${(subject.title ?? 'materia')
+		.replace(/\s+/g, '-')
+		.toLowerCase()}-${(index + 1).toString()}`,
+	subject,
+}));
+
 export default function SubjectsSection() {
 	const [selectedSubject, setSelectedSubject] = useState<CardData | null>(null);
 
 	return (
 		<section>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-items-center w-full">
-				{subjectsData.map((subject, index) => (
+				{subjectEntries.map(({ id, subject }) => (
 					<motion.div
-						key={`${(subject.title || 'materia')
-							.replace(/\s+/g, '-')
-							.toLowerCase()}-${index}`}
+						key={id}
 						className="w-full flex justify-center cursor-pointer"
 						onClick={() => setSelectedSubject(subject)}
 						whileHover={{ y: -8, scale: 1.02 }}
