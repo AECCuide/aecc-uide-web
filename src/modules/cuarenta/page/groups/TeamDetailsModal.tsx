@@ -22,18 +22,36 @@ export const TeamDetailsModal: React.FC<TeamDetailsModalProps> = ({
 	team,
 	onClose,
 }) => {
-	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (e.target === e.currentTarget) {
-			onClose();
-		}
-	};
+	// Cerrar con Escape: el clic en el fondo por sí solo deja fuera
+	// a quien navega con teclado.
+	React.useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				onClose();
+			}
+		};
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [onClose]);
 
 	return (
-		<div
-			className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300"
-			onClick={handleBackdropClick}
-		>
-			<div className="bg-background w-full sm:w-auto sm:min-w-[650px] max-w-3xl max-h-[92vh] overflow-hidden rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300">
+		<div className="fixed inset-0 flex items-center justify-center p-4 z-50">
+			{/* Fondo como botón real: accesible por teclado y sin handlers
+			    sobre un elemento estático. */}
+			<button
+				type="button"
+				aria-label="Cerrar detalles del equipo"
+				onClick={onClose}
+				className="absolute inset-0 h-full w-full cursor-default bg-black/50 backdrop-blur-md animate-in fade-in duration-300"
+			/>
+			<div
+				role="dialog"
+				aria-modal="true"
+				aria-label={`Detalles del equipo ${team.teamName}`}
+				className="relative z-10 bg-background w-full sm:w-auto sm:min-w-[650px] max-w-3xl max-h-[92vh] overflow-hidden rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300"
+			>
 				{/* Header con imagen de fondo */}
 				<div className="relative overflow-hidden">
 					{/* Gradiente de fondo */}

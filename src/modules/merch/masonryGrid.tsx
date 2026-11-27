@@ -36,7 +36,7 @@ const TrueMasonryGallery: React.FC<MasonryGalleryProps> = ({
 	}, [initialColumns]);
 
 	// Distribuir productos en columnas para Masonry Grid
-	const getColumnProducts = (): Product[][] => {
+	const getColumnProducts = (): { id: string; items: Product[] }[] => {
 		const columnProducts: Product[][] = Array.from(
 			{ length: columns },
 			() => []
@@ -46,7 +46,10 @@ const TrueMasonryGallery: React.FC<MasonryGalleryProps> = ({
 			columnProducts[index % columns].push(product);
 		});
 
-		return columnProducts;
+		return columnProducts.map((items, columnIndex) => ({
+			id: `columna-${(columnIndex + 1).toString()}`,
+			items,
+		}));
 	};
 
 	return (
@@ -55,9 +58,9 @@ const TrueMasonryGallery: React.FC<MasonryGalleryProps> = ({
 
 			{/* Masonry Grid usando flex en columnas */}
 			<div className="flex space-x-4">
-				{getColumnProducts().map((columnProducts, columnIndex) => (
-					<div key={columnIndex} className="flex-1 space-y-4">
-						{columnProducts.map((product) => (
+				{getColumnProducts().map((column) => (
+					<div key={column.id} className="flex-1 space-y-4">
+						{column.items.map((product) => (
 							<ProductCard key={product.id} product={product} />
 						))}
 					</div>

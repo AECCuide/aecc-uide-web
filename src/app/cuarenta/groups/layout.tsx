@@ -27,6 +27,7 @@ export default function GroupsLayout({
 			<div className="flex justify-center my-8">
 				<div className="flex space-x-2 bg-muted p-1 rounded-xl">
 					<button
+						type="button"
 						id="inscritos-btn"
 						onClick={() => {
 							handleViewChange('Inscritos');
@@ -36,6 +37,7 @@ export default function GroupsLayout({
 						Inscritos
 					</button>
 					<button
+						type="button"
 						id="primera-ronda-btn"
 						onClick={() => {
 							handleViewChange('Primera ronda');
@@ -45,6 +47,7 @@ export default function GroupsLayout({
 						Primera Ronda
 					</button>
 					<button
+						type="button"
 						id="podios-btn"
 						onClick={() => {
 							handleViewChange('Podios');
