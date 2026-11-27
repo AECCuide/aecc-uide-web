@@ -1,27 +1,18 @@
 'use client';
 
 import { type Variants, type Transition } from 'framer-motion';
-import { Ham, Ghost } from 'lucide-react';
 import { MenuItem } from './menuBarTypes';
 
-export const menuItems: MenuItem[] = [
-	{
-		icon: <Ham className="h-5 w-5" />,
-		label: 'Comida',
-		href: '/eat',
-		gradient:
-			'radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)',
-		iconColor: 'text-orange-500',
-	},
-	{
-		icon: <Ghost className="h-5 w-5" />,
-		label: 'Tutorias',
-		href: '/tutorias',
-		gradient:
-			'radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)',
-		iconColor: 'text-orange-500',
-	},
-];
+// Secciones ocultas hasta terminarlas. Para reactivar una, volve a agregar su
+// entrada aqui y su icono al import de 'lucide-react':
+//
+//   { icon: <Ham className="h-5 w-5" />,   label: 'Comida',   href: '/eat' }
+//   { icon: <Ghost className="h-5 w-5" />, label: 'Tutorias', href: '/tutorias' }
+//
+// Las dos usaban:
+//   gradient: 'radial-gradient(circle, rgba(249,115,22,0.15) 0%, rgba(234,88,12,0.06) 50%, rgba(194,65,12,0) 100%)'
+//   iconColor: 'text-orange-500'
+export const menuItems: MenuItem[] = [];
 
 export const itemVariants: Variants = {
 	initial: { rotateX: 0, opacity: 1 },
