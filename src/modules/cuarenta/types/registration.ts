@@ -1,3 +1,5 @@
+import { ShiftId } from '../config/tournament';
+
 export interface Participant {
 	name: string;
 	course: string;
@@ -12,5 +14,7 @@ export interface RegistrationData {
 	};
 	carrera: string;
 	paymentMethod: string;
+	/** Turno elegido para el dia del torneo. */
+	turno: ShiftId;
 	timestamp: string;
 }

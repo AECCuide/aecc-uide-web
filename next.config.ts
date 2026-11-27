@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
 	// Necesario para que las rutas funcionen en el servidor estático de GitHub
 	trailingSlash: true,
 
+	// Permite abrir el dev server desde otros equipos de la red local.
+	// Sin esto Next bloquea /_next/hmr y los recursos de desarrollo cuando
+	// se entra por la IP en lugar de localhost. Solo aplica en `next dev`.
+	// El comodín cubre toda la subred, así que no se rompe si cambia la IP.
+	allowedDevOrigins: ['192.168.100.*', '192.168.1.*'],
+
 	images: {
 		// Vercel optimiza imágenes automáticamente; GitHub Pages requiere desactivarlo
 		unoptimized: isGithubPages,

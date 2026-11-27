@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SHIFT_IDS, ShiftId } from '../config/tournament';
 
 // --- Zod Schemas ---
 export const participantSchema = z.object({
@@ -19,6 +20,9 @@ export const cuarentaFormSchema = z.object({
 		.min(1, 'El nombre del equipo es requerido')
 		.max(12, 'El nombre del equipo no debe exceder los 12 caracteres'),
 	participants: z.array(participantSchema).min(2).max(2),
+	turno: z.enum(SHIFT_IDS, {
+		error: 'Debes elegir un turno para el dia del torneo',
+	}),
 });
 
 // --- Types ---
@@ -26,6 +30,7 @@ type Participant = z.infer<typeof participantSchema>;
 
 export interface CuarentaFormErrors {
 	teamName?: string;
+	turno?: string;
 	participants: [
 		Partial<Record<keyof Participant, string>>,
 		Partial<Record<keyof Participant, string>>,
@@ -36,6 +41,7 @@ export interface CuarentaFormErrors {
 export const validateCuarentaForm = (data: {
 	teamName: string;
 	participants: [Participant, Participant];
+	turno: ShiftId | null;
 }): { success: boolean; errors?: CuarentaFormErrors } => {
 	const result = cuarentaFormSchema.safeParse(data);
 
@@ -52,6 +58,10 @@ export const validateCuarentaForm = (data: {
 
 		if (path[0] === 'teamName') {
 			newErrors.teamName = err.message;
+		}
+
+		if (path[0] === 'turno') {
+			newErrors.turno = err.message;
 		}
 
 		if (path[0] === 'participants' && typeof path[1] === 'number') {

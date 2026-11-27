@@ -2,15 +2,33 @@
 
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 import { Switch } from '@/components/ui/switch';
 
 export function ThemeToggle() {
 	const { theme, setTheme } = useTheme();
 
+	// Este control si necesita conocer el tema, y el servidor no lo sabe.
+	// Hasta que monta se reserva el espacio, para no provocar un desajuste
+	// de hidratacion ni un salto de layout.
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
 	const toggleTheme = () => {
 		setTheme(theme === 'light' ? 'dark' : 'light');
 	};
+
+	if (!mounted) {
+		return (
+			<div
+				aria-hidden="true"
+				className="flex items-center space-x-2 h-[1.2rem] w-[5.5rem]"
+			/>
+		);
+	}
 
 	return (
 		<div className="flex items-center space-x-2 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]">

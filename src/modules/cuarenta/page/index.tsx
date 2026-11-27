@@ -1,346 +1,116 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/all';
-import FallingCardsAnimation from '@/modules/cuarenta/animation/animacionCartas';
-import { Button } from '@/components/ui/buttom';
-import Image from 'next/image';
+import { EventCard3D } from '@/components/cuarenta/EventCard3D';
+import { SHIFTS, TOURNAMENT } from '@/modules/cuarenta/config/tournament';
 
-gsap.registerPlugin(ScrollTrigger);
+/**
+ * Portada del torneo de Cuarenta.
+ *
+ * Composicion minimalista alrededor de una sola carta: titulares serif en
+ * esquinas opuestas, una marca de agua detras, los datos del evento en las
+ * otras dos esquinas y dos barras finas arriba y abajo. Los colores salen de
+ * las variables de la pagina, asi que el modo claro y el oscuro funcionan sin
+ * reglas aparte.
+ */
+
+const DISPLAY = 'font-[family-name:var(--font-display)]';
+const HAIRLINE = 'text-[0.62rem] uppercase tracking-[0.22em]';
 
 export default function CuarentaPage() {
-	const titleRef = useRef<HTMLHeadingElement>(null);
-	const subtitleRef = useRef<HTMLParagraphElement>(null);
-	const infoBoxRef = useRef<HTMLDivElement>(null);
-	const section2Ref = useRef<HTMLElement>(null);
-	const section3Ref = useRef<HTMLElement>(null);
-
-	useEffect(() => {
-		// Animación del título principal
-		if (titleRef.current) {
-			gsap.fromTo(
-				titleRef.current,
-				{
-					scale: 0.8,
-					opacity: 0,
-					rotationX: -90,
-				},
-				{
-					scale: 1,
-					opacity: 1,
-					rotationX: 0,
-					duration: 1.5,
-					ease: 'back.out(1.7)',
-					scrollTrigger: {
-						trigger: titleRef.current,
-						start: 'top 80%',
-						toggleActions: 'play none none reverse',
-					},
-				}
-			);
-		}
-
-		// Animación del subtítulo
-		if (subtitleRef.current) {
-			gsap.fromTo(
-				subtitleRef.current,
-				{
-					y: 50,
-					opacity: 0,
-				},
-				{
-					y: 0,
-					opacity: 1,
-					duration: 1,
-					delay: 0.5,
-					ease: 'power3.out',
-					scrollTrigger: {
-						trigger: subtitleRef.current,
-						start: 'top 80%',
-						toggleActions: 'play none none reverse',
-					},
-				}
-			);
-		}
-
-		// Animación del cuadro de información
-		if (infoBoxRef.current) {
-			const infoItems = infoBoxRef.current.querySelectorAll('.info-item');
-
-			gsap.fromTo(
-				infoBoxRef.current,
-				{
-					scale: 0.9,
-					opacity: 0,
-				},
-				{
-					scale: 1,
-					opacity: 1,
-					duration: 0.8,
-					delay: 1,
-					ease: 'power2.out',
-					scrollTrigger: {
-						trigger: infoBoxRef.current,
-						start: 'top 80%',
-						toggleActions: 'play none none reverse',
-					},
-				}
-			);
-
-			// Animar cada item de información
-			infoItems.forEach((item, index) => {
-				gsap.fromTo(
-					item,
-					{
-						x: index % 2 === 0 ? -100 : 100,
-						opacity: 0,
-					},
-					{
-						x: 0,
-						opacity: 1,
-						duration: 0.8,
-						delay: 1.3 + index * 0.2,
-						ease: 'power3.out',
-						scrollTrigger: {
-							trigger: infoBoxRef.current,
-							start: 'top 80%',
-							toggleActions: 'play none none reverse',
-						},
-					}
-				);
-			});
-		}
-
-		// Animación de la sección 2
-		if (section2Ref.current) {
-			gsap.fromTo(
-				section2Ref.current,
-				{
-					y: 100,
-					opacity: 0,
-					rotation: -5,
-				},
-				{
-					y: 0,
-					opacity: 1,
-					rotation: 0,
-					duration: 1.2,
-					ease: 'power4.out',
-					scrollTrigger: {
-						trigger: section2Ref.current,
-						start: 'top 70%',
-						toggleActions: 'play none none reverse',
-					},
-				}
-			);
-		}
-
-		// Animación de la sección 3
-		if (section3Ref.current) {
-			const letters = section3Ref.current.querySelectorAll('.letter');
-
-			gsap.fromTo(
-				letters,
-				{
-					y: 100,
-					opacity: 0,
-					rotationX: 90,
-				},
-				{
-					y: 0,
-					opacity: 1,
-					rotationX: 0,
-					duration: 0.8,
-					stagger: 0.05,
-					ease: 'back.out(1.7)',
-					scrollTrigger: {
-						trigger: section3Ref.current,
-						start: 'top 70%',
-						toggleActions: 'play none none reverse',
-					},
-				}
-			);
-		}
-
-		return () => {
-			ScrollTrigger.getAll().forEach((trigger) => {
-				trigger.kill();
-			});
-		};
-	}, []);
-
-	const splitText = (text: string) => {
-		return text.split('').map((char, index) => (
-			// biome-ignore lint/suspicious/noArrayIndexKey: the order of characters in the split text is static
-			<span key={`${char}-${index}`} className="letter inline-block">
-				{char === ' ' ? '\u00A0' : char}
-			</span>
-		));
-	};
-
 	return (
-		<FallingCardsAnimation cardCount={60}>
-			<div className="text-center" style={{ color: 'var(--text-color)' }}>
-				{/* Información del Torneo */}
-				<section className="min-h-screen w-full flex flex-col items-center justify-center px-4 box-border overflow-hidden">
-					<h1
-						ref={titleRef}
-						className="text-5xl md:text-8xl font-bold tracking-wider mb-8"
-						style={{
-							color: 'var(--text-color)',
-							textShadow: '4px 4px 12px rgba(0,0,0,0.3)',
-							fontFamily: 'serif',
-							perspective: '1000px',
-						}}
-					>
-						TORNEO
-						<br />
-						DE CUARENTA
-					</h1>
-
-					<p
-						ref={subtitleRef}
-						className="text-xl md:text-3xl uppercase tracking-widest py-3 px-6 md:px-8 mb-12"
-						style={{
-							borderTop: '2px solid var(--border)',
-							borderBottom: '2px solid var(--border)',
-							color: 'var(--text-color)',
-						}}
-					>
-						Escuela de Ciencias de la Computación
-					</p>
-
-					<div
-						ref={infoBoxRef}
-						className="backdrop-blur-md rounded-2xl p-4 sm:p-8 max-w-full overflow-hidden"
-						style={{
-							backgroundColor: 'var(--card)',
-							border: '2px solid var(--border)',
-						}}
-					>
-						<div className="flex items-center justify-center gap-2 sm:gap-10">
-							{/* Fecha */}
-							<div className="px-2 sm:px-4 text-center">
-								<div
-									className="text-2xl sm:text-7xl font-bold mb-1"
-									style={{ color: 'var(--text-color-icon)' }}
-								>
-									-
-								</div>
-								<div
-									className="text-sm sm:text-xl uppercase tracking-wider"
-									style={{ color: 'var(--text-color-secondary)' }}
-								>
-									Diciembre
-								</div>
-							</div>
-
-							{/* Separador */}
-							<div
-								className="h-8 sm:h-16 w-px"
-								style={{ backgroundColor: 'var(--border)' }}
-							></div>
-
-							{/* Hora */}
-							<div className="px-2 sm:px-4 text-center">
-								<div
-									className="text-xl sm:text-3xl font-bold mb-1"
-									style={{ color: 'var(--text-color)' }}
-								>
-									14:00
-								</div>
-								<div
-									className="text-xs sm:text-lg uppercase tracking-wider"
-									style={{ color: 'var(--text-color-secondary)' }}
-								>
-									Auditorio galo plaza
-								</div>
-							</div>
-
-							{/* Separador */}
-							<div
-								className="h-8 sm:h-16 w-px"
-								style={{ backgroundColor: 'var(--border)' }}
-							></div>
-
-							{/* Precio */}
-							<div className="px-2 sm:px-4 text-center">
-								<div
-									className="text-3xl sm:text-7xl font-bold mb-1"
-									style={{ color: 'var(--text-color-icon)' }}
-								>
-									5$
-								</div>
-								<div
-									className="text-xs sm:text-lg uppercase tracking-wider"
-									style={{ color: 'var(--text-color-secondary)' }}
-								>
-									Por Pareja
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<p
-						className="mt-8 text-xl opacity-70 animate-bounce"
-						style={{ color: 'var(--text-color-muted)' }}
-					>
-						Desplázate hacia abajo para ver más ✨
-					</p>
-				</section>
-
-				{/* Llamado a la Acción */}
-				<section
-					ref={section3Ref}
-					className="min-h-screen flex flex-col items-center justify-center px-4"
+		// El layout raiz envuelve las paginas en un div con mt-10, asi que
+		// min-h-screen dejaria 2.5rem de scroll de mas.
+		<div className="relative flex min-h-[calc(100svh-2.5rem)] flex-col overflow-hidden bg-background text-(--text-color)">
+			{/* ---------- Barra superior ---------- */}
+			<header
+				className={`flex items-center justify-between border-b border-(--text-color)/15 px-5 py-3 ${HAIRLINE}`}
+			>
+				<span className="text-(--text-color-secondary)">Menú</span>
+				<span className={`${DISPLAY} tracking-[0.3em] normal-case`}>
+					Cuarenta
+				</span>
+				<Link
+					href="/cuarenta/forms"
+					className="text-(--text-color-secondary) transition-colors hover:text-(--text-color)"
 				>
-					<div className="space-y-12 flex flex-col items-center">
-						<h2
-							className="text-4xl md:text-8xl font-bold mb-8 text-center"
-							style={{ color: 'var(--text-color)' }}
-						>
-							{splitText('¡Gracias por venir!')}
-						</h2>
-						<Link href="/cuarenta/forms">
-							<Button className="mx-auto w-auto md:w-auto flex items-center justify-center rounded-full px-10 py-5 text-2xl md:text-4xl font-bold transform hover:scale-110 transition-transform duration-300 cursor-pointer shadow-lg p-10">
-								Ver
-							</Button>
-						</Link>
-						<p
-							className="text-xl md:text-2xl text-center"
-							style={{ color: 'var(--text-color-secondary)' }}
-						>
-							Cupos limitados - No te quedes fuera
-						</p>
-					</div>
-				</section>
+					Inscripción
+				</Link>
+			</header>
 
-				{/* Sección de fotos */}
-				<section className="py-20 px-4 max-w-5xl mx-auto">
-					<div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-						{[1, 2, 3, 4, 5, 6].map((num) => (
-							<div
-								key={num}
-								className="aspect-square overflow-hidden rounded-2xl shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer border-2 relative"
-								style={{
-									borderColor: 'var(--border)',
-									backgroundColor: 'var(--card)',
-								}}
-							>
-								<Image
-									src={`/img/${String(num)}.webp`}
-									alt={`Galería Torneo ${String(num)}`}
-									className="object-cover"
-									fill
-									sizes="(max-width: 768px) 50vw, 33vw"
-								/>
-							</div>
-						))}
-					</div>
-				</section>
-			</div>
-		</FallingCardsAnimation>
+			{/* ---------- Escena ---------- */}
+			<main className="relative flex flex-1 items-center justify-center">
+				{/* Marca de agua. Decorativa: fuera del arbol de accesibilidad. */}
+				<span
+					aria-hidden="true"
+					className={`${DISPLAY} pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none text-center text-[clamp(4.5rem,18vw,16rem)] leading-none text-(--text-color)/[0.07]`}
+				>
+					CUARENTA
+				</span>
+
+				{/* Titular principal, arriba a la izquierda. */}
+				<h1
+					className={`${DISPLAY} pointer-events-none absolute left-5 top-3 max-w-[52%] text-[clamp(1.9rem,6.4vw,4.75rem)] uppercase leading-[0.92] tracking-tight sm:top-6`}
+				>
+					Torneo de
+					<br />
+					Cuarenta
+				</h1>
+
+				{/* Fecha, abajo a la derecha. */}
+				<p
+					className={`${DISPLAY} pointer-events-none absolute bottom-3 right-5 text-right text-[clamp(1.5rem,5.4vw,4rem)] uppercase leading-[0.92] tracking-tight sm:bottom-6`}
+				>
+					8 de diciembre
+				</p>
+
+				{/* Horarios, arriba a la derecha. */}
+				<div className="pointer-events-none absolute right-5 top-[4.5rem] hidden text-right text-sm leading-relaxed md:block">
+					<p className={`${HAIRLINE} text-(--text-color-secondary)`}>
+						Horarios · {TOURNAMENT.dateLabel}
+					</p>
+					{SHIFTS.map((shift) => (
+						<p key={shift.id} className="mt-1">
+							{shift.label}: {shift.time}
+						</p>
+					))}
+				</div>
+
+				{/* Modalidad, abajo a la izquierda. */}
+				<div className="pointer-events-none absolute bottom-5 left-5 hidden max-w-[27rem] text-sm leading-relaxed md:block">
+					<p>
+						<span className={`${HAIRLINE} text-(--text-color-secondary)`}>
+							Modalidad:
+						</span>{' '}
+						Juego en parejas (2 personas por equipo)
+					</p>
+					<p>
+						{TOURNAMENT.teamsPerTable} parejas por partida ·{' '}
+						{TOURNAMENT.playersPerTable} jugadores por mesa
+					</p>
+					<p>{TOURNAMENT.decksPerTable} baraja de cartas asignada por mesa</p>
+				</div>
+
+				<EventCard3D />
+			</main>
+
+			{/* ---------- Barra inferior ---------- */}
+			<footer
+				className={`flex items-center justify-between border-t border-(--text-color)/15 px-5 py-3 ${HAIRLINE}`}
+			>
+				<Link
+					href="/cuarenta/groups"
+					className="text-(--text-color-secondary) transition-colors hover:text-(--text-color)"
+				>
+					Ver equipos
+				</Link>
+				<Link
+					href="/cuarenta/forms"
+					className="rounded-full bg-(--text-color) px-5 py-2.5 text-(--background) transition-opacity hover:opacity-85"
+				>
+					Registrar pareja
+				</Link>
+			</footer>
+		</div>
 	);
 }

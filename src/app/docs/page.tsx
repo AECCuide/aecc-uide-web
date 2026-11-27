@@ -71,6 +71,7 @@ const DocsPage = () => {
 	const formValidationDemo = validateCuarentaForm({
 		teamName: teamNameDemo,
 		participants: participantsDemo,
+		turno: 'manana',
 	});
 
 	return (
@@ -452,6 +453,7 @@ const DocsPage = () => {
 										},
 										carrera: carreraDemo,
 										paymentMethod: paymentMethodDemo,
+										turno: 'manana',
 										timestamp: new Date().toISOString(),
 									})}
 								>

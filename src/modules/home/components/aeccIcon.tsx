@@ -1,5 +1,5 @@
 import React, { SVGProps as ReactSVGProps } from 'react';
-import { useTheme } from 'next-themes'; // Asumiendo que estás usando next-themes
+import { cn } from '@/lib/utils';
 
 interface SVGProps
 	extends Omit<ReactSVGProps<SVGSVGElement>, 'xmlns' | 'viewBox'> {
@@ -18,20 +18,16 @@ const InlineSVGComponent: React.FC<SVGProps> = ({
 	overrideStrokeColor,
 	overrideGlassesColor,
 	overrideGlassesReflectionColor,
+	className,
 	...props
 }) => {
-	const { theme } = useTheme(); // Obtiene el tema actual
-
-	// Define colores basados en el tema, con opción de anularlos con props
-	const fillColor =
-		overrideFillColor ?? (theme === 'dark' ? '#ffffff' : '#000000');
-	const strokeColor =
-		overrideStrokeColor ?? (theme === 'dark' ? '#ffffff' : '#000000');
-	const glassesColor =
-		overrideGlassesColor ?? (theme === 'dark' ? '#ffd42a' : '#ffd42a');
-	const glassesReflectionColor =
-		overrideGlassesReflectionColor ??
-		(theme === 'dark' ? '#ffffff' : '#ffffff');
+	// El color del tema llega por CSS (`currentColor` + clases `dark:`), no por
+	// JS: así el SVG se puede renderizar en el servidor sin desajustes de
+	// hidratación. Las props de override siguen teniendo prioridad.
+	const fillColor = overrideFillColor ?? 'currentColor';
+	const strokeColor = overrideStrokeColor ?? 'currentColor';
+	const glassesColor = overrideGlassesColor ?? '#ffd42a';
+	const glassesReflectionColor = overrideGlassesReflectionColor ?? '#ffffff';
 
 	return (
 		<svg
@@ -40,6 +36,7 @@ const InlineSVGComponent: React.FC<SVGProps> = ({
 			viewBox="0 0 1080 1080"
 			xmlns="http://www.w3.org/2000/svg"
 			xmlnsXlink="http://www.w3.org/1999/xlink"
+			className={cn('text-black dark:text-white', className)}
 			{...props}
 		>
 			{/* Cola (Tail) Layer */}

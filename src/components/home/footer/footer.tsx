@@ -1,20 +1,10 @@
 'use client';
 
-import { useTheme } from 'next-themes';
 import footerData from './footerData';
 
 export default function CustomFooter() {
-	const { theme } = useTheme();
-	const isDarkTheme = theme === 'dark';
-
 	return (
-		<div
-			className="py-6 px-4 sm:px-8 md:px-26 lg:px-40 transition-colors "
-			style={{
-				backgroundColor: isDarkTheme ? 'var(--background)' : 'var(--card)',
-				color: 'var(--foreground)',
-			}}
-		>
+		<div className="py-6 px-4 sm:px-8 md:px-26 lg:px-40 bg-card dark:bg-background text-foreground transition-colors">
 			{/* Primera fila */}
 			<div className="flex justify-between items-center mb-4">
 				{/* Redes Sociales */}

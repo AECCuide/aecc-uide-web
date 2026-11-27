@@ -8,6 +8,11 @@ import ParticipantCard from '@/modules/cuarenta/components/ParticipantCard';
 import SubmitButton from '@/modules/cuarenta/components/SubmitButton';
 import { validateCuarentaForm } from '@/modules/cuarenta/hooks/validation';
 import { Button } from '@/components/ui/buttom';
+import {
+	SHIFTS,
+	ShiftId,
+	TOURNAMENT,
+} from '@/modules/cuarenta/config/tournament';
 
 // --- Constants ---
 const PAYMENT_METHODS = ['Efectivo', 'Transferencia'];
@@ -31,9 +36,11 @@ interface State {
 	participants: [Participant, Participant];
 	carrera: string;
 	paymentMethod: string;
+	turno: ShiftId | null;
 	activeDropdown: string | null;
 	errors: {
 		teamName?: string;
+		turno?: string;
 		participants: [
 			Partial<Record<keyof Participant, string>>,
 			Partial<Record<keyof Participant, string>>,
@@ -51,6 +58,7 @@ type Action =
 	  }
 	| { type: 'SET_CARRERA'; payload: string }
 	| { type: 'SET_PAYMENT_METHOD'; payload: string }
+	| { type: 'SET_TURNO'; payload: ShiftId }
 	| { type: 'TOGGLE_DROPDOWN'; payload: string | null }
 	| { type: 'SET_ERRORS'; payload: State['errors'] }
 	| {
@@ -72,6 +80,7 @@ const initialState: State = {
 	],
 	carrera: 'Sistemas',
 	paymentMethod: 'Efectivo',
+	turno: null,
 	activeDropdown: null,
 	errors: {
 		participants: [{}, {}],
@@ -97,6 +106,8 @@ const registrationReducer: Reducer<State, Action> = (state, action) => {
 			return { ...state, carrera: action.payload, activeDropdown: null };
 		case 'SET_PAYMENT_METHOD':
 			return { ...state, paymentMethod: action.payload, activeDropdown: null };
+		case 'SET_TURNO':
+			return { ...state, turno: action.payload, activeDropdown: null };
 		case 'TOGGLE_DROPDOWN':
 			return {
 				...state,
@@ -157,6 +168,7 @@ export default function TeamRegistration() {
 		const result = validateCuarentaForm({
 			teamName: state.teamName,
 			participants: state.participants,
+			turno: state.turno,
 		});
 
 		if (result.success) {
@@ -175,6 +187,12 @@ export default function TeamRegistration() {
 	};
 
 	const getRegistrationData = (): RegistrationData => {
+		// validateForm() corre antes y garantiza el turno; esto solo cierra el
+		// tipo y evita guardar un registro sin turno si algo cambia de orden.
+		if (!state.turno) {
+			throw new Error('No se puede registrar sin elegir un turno');
+		}
+
 		return {
 			teamName: state.teamName,
 			participants: {
@@ -183,6 +201,7 @@ export default function TeamRegistration() {
 			},
 			carrera: state.carrera,
 			paymentMethod: state.paymentMethod,
+			turno: state.turno,
 			timestamp: new Date().toISOString(),
 		};
 	};
@@ -213,6 +232,45 @@ export default function TeamRegistration() {
 				</div>
 
 				<div className="px-6 py-6 space-y-6">
+					{/* Turno */}
+					<div>
+						<h3 className="text-(--text-color-secondary) text-xs font-medium mb-3 px-1 transition-colors">
+							Turno del {TOURNAMENT.dateLabel}
+						</h3>
+						<div className="grid grid-cols-2 gap-2">
+							{SHIFTS.map((shift) => {
+								const isSelected = state.turno === shift.id;
+								return (
+									<button
+										key={shift.id}
+										type="button"
+										aria-pressed={isSelected}
+										onClick={() => {
+											dispatch({ type: 'SET_TURNO', payload: shift.id });
+										}}
+										className={`rounded-2xl px-4 py-4 text-left transition-colors ${
+											isSelected
+												? 'bg-(--hover-yellow) dark:bg-(--hover-gray) ring-2 ring-(--text-color)'
+												: 'bg-(--background-input) hover:bg-(--hover-yellow) dark:hover:bg-(--hover-gray)'
+										}`}
+									>
+										<span className="block text-(--text-color) text-sm font-medium">
+											{shift.label}
+										</span>
+										<span className="block text-(--text-color-secondary) text-xs mt-1">
+											{shift.time}
+										</span>
+									</button>
+								);
+							})}
+						</div>
+						{state.errors.turno && state.touched && (
+							<p className="text-(--text-color-error) text-sm mt-2 px-1">
+								{state.errors.turno}
+							</p>
+						)}
+					</div>
+
 					{/* Participants */}
 					<div>
 						<h3 className="text-(--text-color-secondary) text-xs font-medium mb-3 px-1 transition-colors">
